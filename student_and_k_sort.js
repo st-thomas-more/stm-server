@@ -17,28 +17,7 @@ class Student{
         this.potential_delay = parseInt(attributes.potential_delay);
         this.sex = attributes.sex;
     }
-    
-    get dob(){
-        return this.dob;
-    }
-    
-    get dial4(){
-        return this.dial4;
-    }
-    
 
-    get behavior_observation(){
-        return this.behavior_observation;
-    }
-    
-    get potential_delay(){
-        return this.potential_delay;
-    }
-    
-    get sex(){
-        return this.sex;
-    }
-    
     toString(){
         return ("Name: " + this.firstname + " " + this.lastname + " DOB: " + this.dob + " Dial4: " +
                 this.dial4 + " BO: " + this.behavior_observation +
@@ -46,19 +25,6 @@ class Student{
     }
 
 }
-
-/*Find minimum & maximum age of student
-- Get each student’s quantitative score (Dial4 > Birthday)
-    - Dial4 - (given score) - 0.65 weight
-    - Birthday - ((age - minimum) / (max - min)) - 0.35 weight
-- Separate boys & girls
--Add potential delays & behavior observation (specials) > 5 to new stack
--Pop off students into classrooms
--Sort special students based on behavior score
--Pop off special students in classrooms
--Find statistics about each class
--Verify even distributions
-*/
 
 function kindergarten_sort(students, num_classes){
     /*
@@ -112,12 +78,12 @@ function kindergarten_sort(students, num_classes){
         }
     }
     
-    //sort the boy and girl array based off weighted score
-    girl_array.sort(function(a, b){return a.weighted_score - b.weighted_score;});
-    boy_array.sort(function(a, b){return a.weighted_score - b.weighted_score;});
+    //sort the boy and girl array based off weighted score in descending order
+    girl_array.sort(function(a, b){return b.weighted_score - a.weighted_score;});
+    boy_array.sort(function(a, b){return b.weighted_score - a.weighted_score;});
     
     //sort the flagged students array based off behavior
-    flag_array.sort(function(a, b){return a.behavior_observation - b.behavior_observation;});
+    flag_array.sort(function(a, b){return b.behavior_observation - a.behavior_observation;});
     
     //create the correct number of classrooms that will be sorted into
     var classes = [];
@@ -126,11 +92,10 @@ function kindergarten_sort(students, num_classes){
     }
     
     //put the girls into their classrooms using a snake algorithm
-    
     for(var i = 0; i < girl_array.length; i++){
-        var round_num = i / num_classes;
+        var round_num = Math.floor(i / num_classes);
         var index = i % num_classes;
-        if (round_num % 2 == 0) {
+        if (round_num % 2 == 0){
             index = num_classes - index - 1;
         }
         classes[index].push(girl_array[i]);
@@ -138,7 +103,7 @@ function kindergarten_sort(students, num_classes){
     
     //put the boys into their classrooms
     for(var i = 0; i < boy_array.length; i++){
-        var round_num = i / num_classes;
+        var round_num = Math.floor(i / num_classes);
         var index = i % num_classes;
         if (round_num % 2 == 0) {
             index = num_classes - index - 1;
@@ -147,11 +112,12 @@ function kindergarten_sort(students, num_classes){
     }
     
     for(var i = 0; i < flag_array.length; i++){
-        var round_num = i / num_classes;
+        var round_num = Math.floor(i / num_classes);
         var index = i % num_classes;
         if (round_num % 2 == 0) {
             index = num_classes - index - 1;
         }
+        console.log("pushing " + flag_array[i].firstname + " " + flag_array[i].lastname + " with behavior: " + flag_array[i].behavior_observation +" to class " + index);
         classes[index].push(flag_array[i]);
     }
     
@@ -169,7 +135,7 @@ function kindergarten_sort(students, num_classes){
         
         //for now print out the class behavior averages
         //TODO: balance out the behaviors to an acceptable level
-        console.log("class[" + i + "] average behavior = " + classes[i].avg_behavior);
+        console.log("class[" + i + "] size = " + classes[i].length + " average behavior = " + classes[i].avg_behavior);
     }
     
     return classes;
