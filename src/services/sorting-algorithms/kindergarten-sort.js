@@ -5,14 +5,14 @@ export default function placeStudents(){
         sorts students into their classes for the new year
         inputs:
             students: array of pre-k student objects that will be placed into classes
-            num_classes: int value that is the number of kindergarten classes to be made
+            numClasses: int value that is the number of kindergarten classes to be made
         returns:
             array of array of student objects representing the new classes for the new year
             
     */
     //TODO replace num classes and students with calls to database
     //num classes is determined by number of teachers
-    const num_classes = 4
+    const numClasses = 4
 
     let students = []
     for (let student of kindergartenData) {
@@ -32,115 +32,115 @@ export default function placeStudents(){
     }
     
     //constants for the calculating weighted quantitative score
-    const dial4_weight = .65
-    const dob_weight = .35
+    const dial4Weight = .65
+    const dobWeight = .35
      
     //get min and max ages of students   
-    let min_age = students[0].dob
-    let max_age = students[0].dob
+    let minAge = students[0].dob
+    let maxAge = students[0].dob
     
     for(let i = 0; i < students.length; i++){
-        if(students[i].dob > max_age){
-            max_age = students[i].dob
+        if(students[i].dob > maxAge){
+            maxAge = students[i].dob
         }
-        else if(students[i].dob < min_age){
-            min_age = students[i].dob
+        else if(students[i].dob < minAge){
+            minAge = students[i].dob
         }
     }
     
     //convert dob and dial4 to percentage out of 100 for each student
     //then calculate their weighted quantitative score
     for(let i = 0; i < students.length; i++){
-        let dob_percentage = (students[i].dob - min_age)/max_age
-        let dial4_percentage = students[i].dial4 / 105
-        students[i].weighted_score = dial4_weight * dial4_percentage + dob_weight * dob_percentage
+        let dobPercentage = (students[i].dob - minAge)/maxAge
+        let dial4Percentage = students[i].dial4 / 105
+        students[i].weighted_score = dial4Weight * dial4Percentage + dobWeight * dobPercentage
     }
     
-    let girl_array = []
-    let boy_array = []
-    let flag_array = []
+    let girls = []
+    let boys = []
+    let flags = []
     
-    for(let i = 0; i<students.length; i++){
+    for(let i = 0; i < students.length; i++){
         if(students[i].potentialDelay === true || students[i].behavior > 5){
-            flag_array.push(students[i])
+            flags.push(students[i])
         }
         else if(students[i].sex === 'F'){
-            girl_array.push(students[i])
+            girls.push(students[i])
         }
         else{
-            boy_array.push(students[i])
+            boys.push(students[i])
         }
     }
     
     //sort the boy and girl array based off weighted score in descending order
-    girl_array.sort(function(a, b){return b.weighted_score - a.weighted_score})
-    boy_array.sort(function(a, b){return b.weighted_score - a.weighted_score})
+    girls.sort(function(a, b){return b.weighted_score - a.weighted_score})
+    boys.sort(function(a, b){return b.weighted_score - a.weighted_score})
     
     //sort the flagged students array based off behavior
-    flag_array.sort(function(a, b){return b.behaviorObservation - a.behaviorObservation})
+    flags.sort(function(a, b){return b.behaviorObservation - a.behaviorObservation})
     
     //create the correct number of classrooms that will be sorted into
     let classes = []
-    for(let i = 0; i < num_classes; i++){
+    for(let i = 0; i < numClasses; i++){
         classes.push([])
     }
     
     //put the girls into their classrooms using a snake algorithm
-    for(let i = 0; i < girl_array.length; i++){
-        let round_num = Math.floor(i / num_classes)
-        let index = i % num_classes
-        if (round_num % 2 === 0){
-            index = num_classes - index - 1
+    for(let i = 0; i < girls.length; i++){
+        let roundNum = Math.floor(i / numClasses)
+        let index = i % numClasses
+        if (roundNum % 2 === 0){
+            index = numClasses - index - 1
         }
-        classes[index].push(girl_array[i])
+        classes[index].push(girls[i])
     }
     
     //put the boys into their classrooms
-    for(let i = 0; i < boy_array.length; i++){
-        let round_num = Math.floor(i / num_classes)
-        let index = i % num_classes
-        if (round_num % 2 === 0) {
-            index = num_classes - index - 1
+    for(let i = 0; i < boys.length; i++){
+        let roundNum = Math.floor(i / numClasses)
+        let index = i % numClasses
+        if (roundNum % 2 === 0) {
+            index = numClasses - index - 1
         }
-        classes[index].push(boy_array[i])
+        classes[index].push(boys[i])
     }
     
-    for(let i = 0; i < flag_array.length; i++){
-        let round_num = Math.floor(i / num_classes)
-        let index = i % num_classes
-        if (round_num % 2 === 0) {
-            index = num_classes - index - 1
+    for(let i = 0; i < flags.length; i++){
+        let roundNum = Math.floor(i / numClasses)
+        let index = i % numClasses
+        if (roundNum % 2 === 0) {
+            index = numClasses - index - 1
         }
-        classes[index].push(flag_array[i])
+        classes[index].push(flags[i])
     }
     
     //calculate averages
-    for(let i = 0; i < num_classes; i++){
-        let total_behavior = 0.0
-        let total_dial4 = 0.0
+    for(let i = 0; i < numClasses; i++){
+        let totalBehavior = 0.0
+        let totalDial4 = 0.0
         let male_count = 0
-        let potential_delay_count = 0
-        let total_age = 0.0
+        let potentialDelayCount = 0
+        let totalAge = 0.0
         let count = 0.0
         for(let j = 0; j < classes[i].length; j++){
-            total_behavior += classes[i][j].behaviorObservation
-            total_dial4 += classes[i][j].dial4
-            total_age += classes[i][j].dob
+            totalBehavior += classes[i][j].behaviorObservation
+            totalDial4 += classes[i][j].dial4
+            totalAge += classes[i][j].dob
             count++
             if(classes[i][j].sex === 'M')
                 male_count++
             if(classes[i][j].potentialDelay === 1)
-                potential_delay_count++
+                potentialDelayCount++
         }
-        let avg_behavior = total_behavior / count
-        let female_count = count - male_count
-        let avg_dial4 = total_dial4 / count
-        let avg_age = total_age / count
+        let avgBehavior = totalBehavior / count
+        let femaleCount = count - male_count
+        let avgDial4 = totalDial4 / count
+        let avgAge = totalAge / count
 
-        let stats = {'avgBehavior' : avg_behavior, 'femaleCount' : female_count, 
-                     'maleCount' : male_count, 'avgDial4' : avg_dial4, 
-                     'genderRatio' : male_count / female_count, 'avgAge' : avg_age,
-                     'potentialDelays' : potential_delay_count
+        let stats = {'avgBehavior' : avgBehavior, 'femaleCount' : femaleCount, 
+                     'maleCount' : male_count, 'avgDial4' : avgDial4, 
+                     'genderRatio' : male_count / femaleCount, 'avgAge' : avgAge,
+                     'potentialDelays' : potentialDelayCount
                     }
 
         classes[i] = {'stats': stats, 'students': classes[i], 'teacher': 'Placement Teacher'}
