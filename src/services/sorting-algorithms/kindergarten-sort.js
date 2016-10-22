@@ -12,7 +12,7 @@ export default function placeStudents(){
     */
     //TODO replace num classes and students with calls to database
     //num classes is determined by number of teachers
-    let num_classes = 4
+    const num_classes = 4
 
     let students = []
     for (let student of kindergartenData) {
@@ -61,10 +61,10 @@ export default function placeStudents(){
     let flag_array = []
     
     for(let i = 0; i<students.length; i++){
-        if(students[i].potentialDelay == true || students[i].behavior > 5){
+        if(students[i].potentialDelay === true || students[i].behavior > 5){
             flag_array.push(students[i])
         }
-        else if(students[i].sex == 'F'){
+        else if(students[i].sex === 'F'){
             girl_array.push(students[i])
         }
         else{
@@ -89,7 +89,7 @@ export default function placeStudents(){
     for(let i = 0; i < girl_array.length; i++){
         let round_num = Math.floor(i / num_classes)
         let index = i % num_classes
-        if (round_num % 2 == 0){
+        if (round_num % 2 === 0){
             index = num_classes - index - 1
         }
         classes[index].push(girl_array[i])
@@ -99,7 +99,7 @@ export default function placeStudents(){
     for(let i = 0; i < boy_array.length; i++){
         let round_num = Math.floor(i / num_classes)
         let index = i % num_classes
-        if (round_num % 2 == 0) {
+        if (round_num % 2 === 0) {
             index = num_classes - index - 1
         }
         classes[index].push(boy_array[i])
@@ -108,7 +108,7 @@ export default function placeStudents(){
     for(let i = 0; i < flag_array.length; i++){
         let round_num = Math.floor(i / num_classes)
         let index = i % num_classes
-        if (round_num % 2 == 0) {
+        if (round_num % 2 === 0) {
             index = num_classes - index - 1
         }
         classes[index].push(flag_array[i])
@@ -129,7 +129,7 @@ export default function placeStudents(){
             count++
             if(classes[i][j].sex === 'M')
                 male_count++
-            if(classes[i][j].potentialDelay == 1)
+            if(classes[i][j].potentialDelay === 1)
                 potential_delay_count++
         }
         let avg_behavior = total_behavior / count
