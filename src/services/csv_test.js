@@ -6,7 +6,7 @@ console.log("starting");
 
 var students = [];
 csv
- .fromPath("../MockData/kindergarten_data.csv")
+ .fromPath("../mockdata/kindergarten_data.csv")
  .on("data", function(data){
     console.log("Processing: " + data[1] + ' ' + data[2]);
     var sex = data[0];
