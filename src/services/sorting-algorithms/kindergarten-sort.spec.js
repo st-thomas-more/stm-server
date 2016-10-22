@@ -1,42 +1,29 @@
-import csv from 'fast-csv'
 import placeStudents from './kindergarten-sort.js'
 import Student from '../../models/student.js'
+import data from '../../mock-data/kindergarten-data.json'
 
 describe('kindergarten-sort', () => {
   it('runs', () => {
     let students = []
-    csv
-      .fromPath('../../mock-data/kindergarten_data.csv')
-      .on('data', function (data) {
-        console.log('Processing: ' + data[1] + ' ' + data[2])
-        let sex = data[0]
-        let last_name = data[1]
-        let first_name = data[2]
-        let dial4 = data[3]
-        let behavior = data[4]
-        let self_help = data[5]
-        let social_emotional = data[6]
-        let potential_delay = data[7]
-        let age = data[8]
-        potential_delay = (potential_delay === 'X') ? 1 : 0
-        age = age.split(' ')
+    for (let student of data) {
+        console.error(student)
+        let age = student.age.split(' ')
         let year = age[0]
         let month = age[2]
-        age = parseInt(month) + parseInt(year) * 12
+        student.age = parseInt(month) + parseInt(year) * 12
+        student.potentialDelay = (student.potentialDelay === 'X') ? 1 : 0
 
         let attributes = {
-          'sex': sex, 'firstname': first_name, 'lastname': last_name,
-          'dial4': dial4, 'behavior_observation': behavior,
-          'potential_delay': potential_delay, 'dob': age
+          'sex': student.sex, 'firstname': student.firstName, 'lastname': student.lastName,
+          'dial4': student.dial4, 'behavior_observation': student.behavior,
+          'potential_delay': student.potentialDelay, 'dob': age
         }
+
         let temp_student = new Student(attributes)
         students.push(temp_student)
-      })
-      .on('end', function () {
-        console.log('done processing')
-        console.log('length = ' + students.length)
-        placeStudents(students, 4)
-      })
+    }
+    let result = placeStudents(students, 4)
+    // print result output here
   })
 })
 
