@@ -79,18 +79,6 @@ csv
     var sex = data[3];
     var behavior = data[12];
 */
-    if(potential_delay == 'X'){
-        potential_delay = 1;
-    }
-    else{
-        potential_delay = 0;
-    }
-    age = age.split(" ");
-    var year = age[0];
-    var month = age[2];
-    age = parseInt(month) + parseInt(year) * 12;
-    //console.log(sex + ', ' + last_name + ', ' + first_name + ', ' + dial4 +
-    //          ', ' + behavior + ', ' + self_help + ', ' + social_emotional + ', ' + potential_delay + ', ' + age);
     var attributes = {"sex": sex, "firstname": first_name, "lastname": last_name,
                      "behavior": behavior};
     var temp_student = new Student(attributes)
