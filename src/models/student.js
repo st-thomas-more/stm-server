@@ -1,4 +1,4 @@
-class Student{
+export class Student{
 /*
     main object for students
     holds all attributes a student will have even if they are null
@@ -46,4 +46,4 @@ class Student{
 
 }
 
-module.exports.Student = Student
+export default Student

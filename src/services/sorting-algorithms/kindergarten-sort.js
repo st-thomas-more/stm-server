@@ -1,4 +1,4 @@
-function place_students(students, num_classes){
+export function placeStudents(students, num_classes){
     /*
         sorts students into their classes for the new year
         inputs:
@@ -10,14 +10,14 @@ function place_students(students, num_classes){
     */
     
     //constants for the calculating weighted quantitative score
-    var dial4_weight = .65
-    var dob_weight = .35
+    let dial4_weight = .65
+    let dob_weight = .35
      
     //get min and max ages of students   
-    var min_age = students[0].dob
-    var max_age = students[0].dob
+    let min_age = students[0].dob
+    let max_age = students[0].dob
     
-    for(var i = 0; i < students.length; i++){
+    for(let i = 0; i < students.length; i++){
         if(students[i].dob > max_age){
             max_age = students[i].dob
         }
@@ -28,17 +28,17 @@ function place_students(students, num_classes){
     
     //convert dob and dial4 to percentage out of 100 for each student
     //then calculate their weighted quantitative score
-    for(var i = 0; i < students.length; i++){
-        var dob_percentage = (students[i].dob - min_age)/max_age
-        var dial4_percentage = students[i].dial4 / 105
+    for(let i = 0; i < students.length; i++){
+        let dob_percentage = (students[i].dob - min_age)/max_age
+        let dial4_percentage = students[i].dial4 / 105
         students[i].weighted_score = dial4_weight * dial4_percentage + dob_weight * dob_percentage
     }
     
-    var girl_array = []
-    var boy_array = []
-    var flag_array = []
+    let girl_array = []
+    let boy_array = []
+    let flag_array = []
     
-    for(var i = 0; i<students.length; i++){
+    for(let i = 0; i<students.length; i++){
         if(students[i].potential_delay == true || students[i].behavior > 5){
             flag_array.push(students[i])
         }
@@ -58,15 +58,15 @@ function place_students(students, num_classes){
     flag_array.sort(function(a, b){return b.behavior_observation - a.behavior_observation})
     
     //create the correct number of classrooms that will be sorted into
-    var classes = []
-    for(var i = 0; i < num_classes; i++){
+    let classes = []
+    for(let i = 0; i < num_classes; i++){
         classes.push([])
     }
     
     //put the girls into their classrooms using a snake algorithm
-    for(var i = 0; i < girl_array.length; i++){
-        var round_num = Math.floor(i / num_classes)
-        var index = i % num_classes
+    for(let i = 0; i < girl_array.length; i++){
+        let round_num = Math.floor(i / num_classes)
+        let index = i % num_classes
         if (round_num % 2 == 0){
             index = num_classes - index - 1
         }
@@ -74,18 +74,18 @@ function place_students(students, num_classes){
     }
     
     //put the boys into their classrooms
-    for(var i = 0; i < boy_array.length; i++){
-        var round_num = Math.floor(i / num_classes)
-        var index = i % num_classes
+    for(let i = 0; i < boy_array.length; i++){
+        let round_num = Math.floor(i / num_classes)
+        let index = i % num_classes
         if (round_num % 2 == 0) {
             index = num_classes - index - 1
         }
         classes[index].push(boy_array[i])
     }
     
-    for(var i = 0; i < flag_array.length; i++){
-        var round_num = Math.floor(i / num_classes)
-        var index = i % num_classes
+    for(let i = 0; i < flag_array.length; i++){
+        let round_num = Math.floor(i / num_classes)
+        let index = i % num_classes
         if (round_num % 2 == 0) {
             index = num_classes - index - 1
         }
@@ -94,11 +94,11 @@ function place_students(students, num_classes){
     }
     
     //make sure the average behavior counts are similar
-    for(var i = 0; i < num_classes; i++){
-        var total_behavior = 0.0
-        var count = 0.0
+    for(let i = 0; i < num_classes; i++){
+        let total_behavior = 0.0
+        let count = 0.0
         console.log('class[' + i + '] student list: ')
-        for(var j = 0; j < classes[i].length; j++){
+        for(let j = 0; j < classes[i].length; j++){
             total_behavior += classes[i][j].behavior_observation
             count++
             console.log(classes[i][j].toString())
@@ -113,4 +113,4 @@ function place_students(students, num_classes){
     return classes
 }
 
-module.exports.place_students = place_students
+export default placeStudents
