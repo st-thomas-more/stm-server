@@ -32,8 +32,8 @@ export default function placeStudents(){
     }
     
     //constants for the calculating weighted quantitative score
-    let dial4_weight = .65
-    let dob_weight = .35
+    const dial4_weight = .65
+    const dob_weight = .35
      
     //get min and max ages of students   
     let min_age = students[0].dob
@@ -111,7 +111,6 @@ export default function placeStudents(){
         if (round_num % 2 == 0) {
             index = num_classes - index - 1
         }
-        //console.log('pushing ' + flag_array[i].firstName + ' ' + flag_array[i].lastName + ' with behavior: ' + flag_array[i].behaviorObservation +' to class ' + index)
         classes[index].push(flag_array[i])
     }
     
@@ -137,12 +136,14 @@ export default function placeStudents(){
         let female_count = count - male_count
         let avg_dial4 = total_dial4 / count
         let avg_age = total_age / count
-        
-        let stats = {'avgBehavior' : avg_behavior, "femaleCount" : female_count, 
-                     'maleCount' : male_count, 'avgDial4' : avg_dial4, 
-                     'genderRatio' : male_count / female_count, "avgAge" : avg_age}
 
-        classes[i] = {"stats": stats, "students": classes[i], "teacher": "Placement Teacher"}
+        let stats = {'avgBehavior' : avg_behavior, 'femaleCount' : female_count, 
+                     'maleCount' : male_count, 'avgDial4' : avg_dial4, 
+                     'genderRatio' : male_count / female_count, 'avgAge' : avg_age,
+                     'potentialDelays' : potential_delay_count
+                    }
+
+        classes[i] = {'stats': stats, 'students': classes[i], 'teacher': 'Placement Teacher'}
         }
     let grade = {'grade': 0, 'sections': classes}
     return grade
