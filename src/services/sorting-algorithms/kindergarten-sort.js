@@ -1,4 +1,6 @@
-export function placeStudents(students, num_classes){
+import kindergartenData from '../../mock-data/kindergarten-data.json'
+
+export default function placeStudents(){
     /*
         sorts students into their classes for the new year
         inputs:
@@ -8,6 +10,26 @@ export function placeStudents(students, num_classes){
             array of array of student objects representing the new classes for the new year
             
     */
+    //TODO replace num classes and students with calls to database
+    //num classes is determined by number of teachers
+    let num_classes = 4
+
+    let students = []
+    for (let student of kindergartenData) {
+        let age = student.age.split(' ')
+        let year = age[0]
+        let month = age[2]
+        student.age = parseInt(month) + parseInt(year) * 12
+        student.potentialDelay = (student.potentialDelay === 'X') ? 1 : 0
+
+        let attributes = {
+          'sex': student.sex, 'firstName': student.firstName, 'lastName': student.lastName,
+          'dial4': student.dial4, 'behaviorObservation': student.behaviorObservation,
+          'potentialDelay': student.potentialDelay, 'dob': student.age
+        }
+
+        students.push(attributes)
+    }
     
     //constants for the calculating weighted quantitative score
     let dial4_weight = .65
@@ -39,7 +61,7 @@ export function placeStudents(students, num_classes){
     let flag_array = []
     
     for(let i = 0; i<students.length; i++){
-        if(students[i].potential_delay == true || students[i].behavior > 5){
+        if(students[i].potentialDelay == true || students[i].behavior > 5){
             flag_array.push(students[i])
         }
         else if(students[i].sex == 'F'){
@@ -55,7 +77,7 @@ export function placeStudents(students, num_classes){
     boy_array.sort(function(a, b){return b.weighted_score - a.weighted_score})
     
     //sort the flagged students array based off behavior
-    flag_array.sort(function(a, b){return b.behavior_observation - a.behavior_observation})
+    flag_array.sort(function(a, b){return b.behaviorObservation - a.behaviorObservation})
     
     //create the correct number of classrooms that will be sorted into
     let classes = []
@@ -89,28 +111,39 @@ export function placeStudents(students, num_classes){
         if (round_num % 2 == 0) {
             index = num_classes - index - 1
         }
-        console.log('pushing ' + flag_array[i].firstname + ' ' + flag_array[i].lastname + ' with behavior: ' + flag_array[i].behavior_observation +' to class ' + index)
+        //console.log('pushing ' + flag_array[i].firstName + ' ' + flag_array[i].lastName + ' with behavior: ' + flag_array[i].behaviorObservation +' to class ' + index)
         classes[index].push(flag_array[i])
     }
     
-    //make sure the average behavior counts are similar
+    //calculate averages
     for(let i = 0; i < num_classes; i++){
         let total_behavior = 0.0
+        let total_dial4 = 0.0
+        let male_count = 0
+        let potential_delay_count = 0
+        let total_age = 0.0
         let count = 0.0
-        console.log('class[' + i + '] student list: ')
         for(let j = 0; j < classes[i].length; j++){
-            total_behavior += classes[i][j].behavior_observation
+            total_behavior += classes[i][j].behaviorObservation
+            total_dial4 += classes[i][j].dial4
+            total_age += classes[i][j].dob
             count++
-            console.log(classes[i][j].toString())
+            if(classes[i][j].sex === 'M')
+                male_count++
+            if(classes[i][j].potentialDelay == 1)
+                potential_delay_count++
         }
-        classes[i].avg_behavior = total_behavior / count   
+        let avg_behavior = total_behavior / count
+        let female_count = count - male_count
+        let avg_dial4 = total_dial4 / count
+        let avg_age = total_age / count
         
-        //for now print out the class behavior averages
-        //TODO: balance out the behaviors to an acceptable level
-        console.log('class[' + i + '] size = ' + classes[i].length + ' average behavior = ' + classes[i].avg_behavior)
-    }
-    
-    return classes
-}
+        let stats = {'avgBehavior' : avg_behavior, "femaleCount" : female_count, 
+                     'maleCount' : male_count, 'avgDial4' : avg_dial4, 
+                     'genderRatio' : male_count / female_count, "avgAge" : avg_age}
 
-export default placeStudents
+        classes[i] = {"stats": stats, "students": classes[i], "teacher": "Placement Teacher"}
+        }
+    let grade = {'grade': 0, 'sections': classes}
+    return grade
+}
