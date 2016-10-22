@@ -1,32 +1,4 @@
-class Student{
-/*
-    main object for students
-    holds all attributes a student will have even if they are null
-    just used for get methods
-*/
-    constructor(attributes){
-    /*
-        constructor for Student that takes in JSON object that holds
-        all available values for the Student
-    */
-        this.firstname = attributes.firstname;
-        this.lastname = attributes.lastname;
-        this.dob = parseInt(attributes.dob);
-        this.dial4 = parseInt(attributes.dial4);
-        this.behavior_observation = parseInt(attributes.behavior_observation);
-        this.potential_delay = parseInt(attributes.potential_delay);
-        this.sex = attributes.sex;
-    }
-
-    toString(){
-        return ("Name: " + this.firstname + " " + this.lastname + " DOB: " + this.dob + " Dial4: " +
-                this.dial4 + " BO: " + this.behavior_observation +
-                " potential_delay: " + this.potential_delay + " sex: " + this.sex);
-    }
-
-}
-
-function kindergarten_sort(students, num_classes){
+function place_students(students, num_classes){
     /*
         sorts students into their classes for the new year
         inputs:
@@ -140,3 +112,5 @@ function kindergarten_sort(students, num_classes){
     
     return classes;
 }
+
+module.exports.place_students = place_students
