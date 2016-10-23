@@ -1,21 +1,22 @@
 import resource from 'resource-router-middleware'
-import kindergarten_placement from '../services/KindergartenSort.js'
+import kindergartenSort from '../services/sorting-algorithms/kindergarten-sort.js'
 
 export default ({ config, db }) => resource({
-
+	
+	/** Property name to store preloaded entity on `request`. */
 	id: 'grade',
+	
 	/** GET /:id - Return a given entity */
-	read(req, res) {
-		
-		//unused option for now
-		var option = req.query.option
-		if(option === undefined){
-			option = 'doesnt exist!'
-		}
-
+	read(req, res) {	
 		switch(parseInt(req.params.grade)){
 			case 0:
-				res.json(kindergarten_placement())
+				kindergartenSort()
+					.then(result => {
+						res.status(200).json(result)
+					})
+					// .catch(err => {
+					// 	res.status(500).send(err)
+					// })
 				break
 			case 1:
 			case 2:
@@ -34,18 +35,29 @@ export default ({ config, db }) => resource({
 				res.json('eighth grade not implemented yet')
 				break
 			default:
-				//bad grade given
-				res.sendStatus(400)
+				res.sendStatus(404)
 		}
 	},
-	//TODO: save the classes to the database for future use
+	/** POST / - Run the algorithm */
+	create({ body }, res) {
+		kindergartenSort()
+		.then(res.sendStatus(200))
+		.catch(res.sendStatus(500))
+	},
+
 	/** PUT /:id - Update a given entity */
-	/*update({ facet, body }, res) {
+	update({ facet, body }, res) {
 		for (let key in body) {
 			if (key!=='id') {
 				facet[key] = body[key]
 			}
 		}
 		res.sendStatus(204)
-	},*/
+	},
+
+	/** DELETE /:id - Delete a given entity */
+	delete({ facet }, res) {
+		facets.splice(facets.indexOf(facet), 1)
+		res.sendStatus(204)
+	}
 })
