@@ -27,3 +27,29 @@ export function deleteKindergartenPlacement() {
     })
   })
 }
+
+export function getSixthPlacement() {
+  return new Promise((resolve, reject) => {
+    const filepath = path.join(__dirname, '../mock-data/placements/sixth-placement.json')
+    fs.readFile(filepath, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(JSON.parse(data))
+      }
+    })
+  })
+}
+
+export function deleteSixthPlacement() {
+  return new Promise((resolve, reject) => {
+    const filepath = path.join(__dirname, '../mock-data/placements/sixth-placement.json')
+    fs.unlink(filepath, function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
