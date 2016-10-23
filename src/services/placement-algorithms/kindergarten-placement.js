@@ -1,50 +1,34 @@
 import fs from 'fs'
 import path from 'path'
-import { kindergarten } from '../../daos/grade-dao'
+import { getKindergartenRaw } from '../../daos/grade-dao'
 
 export default function place() {
-  return kindergarten()
+  return getKindergartenRaw()
     .then(data => {
-      let students = []
-      for (let student of data.students) {
-        let age = student.age.split(' ')
-        let year = age[0]
-        let month = age[2]
-        student.age = parseInt(month) + parseInt(year) * 12
-        student.potentialDelay = (student.potentialDelay === 'X') ? 1 : 0
-
-        let attributes = {
-          'sex': student.sex, 'firstName': student.firstName, 'lastName': student.lastName,
-          'dial4': student.dial4, 'behaviorObservation': student.behaviorObservation,
-          'potentialDelay': student.potentialDelay, 'dob': student.age
-        }
-
-        students.push(attributes)
-      }
-
+      let students = data.students
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
-      const dobWeight = .35
+      const ageWeight = .35
 
       //get min and max ages of students   
-      let minAge = students[0].dob
-      let maxAge = students[0].dob
+      let minAge = students[0].age
+      let maxAge = students[0].age
 
       for (let i = 0; i < students.length; i++) {
-        if (students[i].dob > maxAge) {
-          maxAge = students[i].dob
+        if (students[i].age > maxAge) {
+          maxAge = students[i].age
         }
-        else if (students[i].dob < minAge) {
-          minAge = students[i].dob
+        else if (students[i].age < minAge) {
+          minAge = students[i].age
         }
       }
 
-      //convert dob and dial4 to percentage out of 100 for each student
+      //convert age and dial4 to percentage out of 100 for each student
       //then calculate their weighted quantitative score
       for (let i = 0; i < students.length; i++) {
-        let dobPercentage = (students[i].dob - minAge) / maxAge
+        let agePercentage = (students[i].age - minAge) / maxAge
         let dial4Percentage = students[i].dial4 / 105
-        students[i].weighted_score = dial4Weight * dial4Percentage + dobWeight * dobPercentage
+        students[i].weighted_score = dial4Weight * dial4Percentage + ageWeight * agePercentage
       }
 
       let girls = []
@@ -116,7 +100,7 @@ export default function place() {
         for (let j = 0; j < classes[i].length; j++) {
           totalBehavior += classes[i][j].behaviorObservation
           totalDial4 += classes[i][j].dial4
-          totalAge += classes[i][j].dob
+          totalAge += classes[i][j].age
           count++
           if (classes[i][j].sex === 'M')
             male_count++

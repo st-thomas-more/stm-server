@@ -1,8 +1,8 @@
-import kindergartenData from '../mock-data/grades/kindergarten-grade'
+import kindergartenRaw from '../mock-data/raw/kindergarten-raw'
 
-// TODO - replace with reads from database
-export function kindergarten() {
+// TODO - replace with calls to database
+export function getKindergartenRaw() {
   return new Promise((resolve) => {
-    resolve(kindergartenData)
+    resolve(kindergartenRaw)
   })
 }
