@@ -8,7 +8,8 @@
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "start": "node dist",
     "prestart": "npm run -s build",
-    "test": "eslint src"
+    "lint": "eslint ./src",
+    "test": "./node_modules/.bin/mocha --require babel-register --recursive ./src/**/*.spec.js"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -17,7 +18,8 @@
       "sourceType": "module"
     },
     "env": {
-      "node": true
+      "node": true,
+      "mocha": true
     },
     "rules": {
       "no-console": 0,
@@ -53,6 +55,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "eslint": "^3.1.1",
     "fast-csv": "^2.3.0",
+    "mocha": "^3.1.2",
     "nodemon": "^1.9.2"
   },
   "bugs": {

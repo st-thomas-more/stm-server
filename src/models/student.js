@@ -1,4 +1,4 @@
-class Student{
+export class Student{
 /*
     main object for students
     holds all attributes a student will have even if they are null
@@ -9,13 +9,13 @@ class Student{
         constructor for Student that takes in JSON object that holds
         all available values for the Student
     */
-        this.firstname = attributes.firstname;
-        this.lastname = attributes.lastname;
-        this.dob = parseInt(attributes.dob);
-        this.dial4 = parseInt(attributes.dial4);
-        this.behavior_observation = parseInt(attributes.behavior_observation);
-        this.potential_delay = parseInt(attributes.potential_delay);
-        this.sex = attributes.sex;
+        this.firstname = attributes.firstname
+        this.lastname = attributes.lastname
+        this.dob = parseInt(attributes.dob)
+        this.dial4 = parseInt(attributes.dial4)
+        this.behavior_observation = parseInt(attributes.behavior_observation)
+        this.potential_delay = parseInt(attributes.potential_delay)
+        this.sex = attributes.sex
         this.homeroom_teacher = attributes.homeroom_teacher
         this.yo = attributes.yo
         this.faculty_student = attributes.faculty_student
@@ -39,11 +39,11 @@ class Student{
     }
 
     toString(){
-        return ("Name: " + this.firstname + " " + this.lastname + " DOB: " + this.dob + " Dial4: " +
-                this.dial4 + " BO: " + this.behavior_observation +
-                " potential_delay: " + this.potential_delay + " sex: " + this.sex);
+        return ('Name: ' + this.firstname + ' ' + this.lastname + ' DOB: ' + this.dob + ' Dial4: ' +
+                this.dial4 + ' BO: ' + this.behavior_observation +
+                ' potential_delay: ' + this.potential_delay + ' sex: ' + this.sex)
     }
 
 }
 
-module.exports.Student = Student
+export default Student
