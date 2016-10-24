@@ -31,40 +31,68 @@ export default function place() {
 
 			let girls = []
 			let boys = []
-			let behavior = []
-			let asp = []
-			let advancedMath = []
-			let medical = []
-			let hmp = []
-			let facultyStudent = []
-			let newStudent = []
+			let behaviorM = []
+			let behaviorF = []
+			let aspM = []
+			let aspF = []
+			let advancedMathM = []
+			let advancedMathF = []
+			let medicalM = []
+			let medicalF = []
+			let hmpM = []
+			let hmpF = []
+			let facultyStudentM = []
+			let facultyStudentF = []
+			let newStudentM = []
+			let newStudentF = []
 
 
 			for (let i = 0; i < students.length; i++) {
 				if (students[i].facultyStudent == 1 || students[i].newStudent == 1 || students[i].advancedMath == 1 || students[i].hmp == 1 || students[i].medicalConcern == 1 || students[i].asp == 1) {
 					if (students[i].asp == 1) {
-						asp.push(students[i])
+						if (students[i].sex === 'M')
+							aspM.push(students[i])
+						else
+							aspF.push(students[i])
 					}
 					else if (students[i].advancedMath == 1) {
-						advancedMath.push(students[i])
+						if (students[i].sex === 'M')
+							advancedMathM.push(students[i])
+						else
+							advancedMathF.push(students[i])
 					}
 					else if (students[i].medicalConcern == 1) {
-						medical.push(students[i])
+						if (students[i].sex === 'M')
+							medicalM.push(students[i])
+						else
+							medicalF.push(students[i])
 					}
 					else if (students[i].facultyStudent == 1) {
-						facultyStudent.push(students[i])
+						if (students[i].sex === 'M')
+							facultyStudentM.push(students[i])
+						else
+							facultyStudentF.push(students[i])
 					}
 					else if (students[i].hmp == 1) {
-						hmp.push(students[i])
+						if (students[i].sex === 'M')
+							hmpM.push(students[i])
+						else
+							hmpF.push(students[i])
 					}
 					else if (students[i].newStudent == 1) {
-						newStudent.push(students[i])
+						if (students[i].sex === 'M')
+							newStudentM.push(students[i])
+						else
+							newStudentF.push(students[i])
 					}
 				}
 				else if (students[i].behaviorScore < 2) {
-					behavior.push(students[i])
+					if (students[i].sex === 'M')
+						behaviorM.push(students[i])
+					else
+						behaviorF.push(students[i])
 				}
-				else if (students[i].sex == 'F') {
+				else if (students[i].sex === 'F') {
 					girls.push(students[i])
 				}
 				else {
@@ -75,15 +103,22 @@ export default function place() {
 			//sort the boy and girl array based off weighted score in descending order
 			girls.sort(function (a, b) { return b.weightedScore - a.weightedScore })
 			boys.sort(function (a, b) { return b.weightedScore - a.weightedScore })
-			behavior.sort(function (a, b) { return b.weightedScore - a.weightedScore })
+			behaviorM.sort(function (a, b) { return b.weightedScore - a.weightedScore })
+			behaviorF.sort(function (a, b) { return b.weightedScore - a.weightedScore })
 
 			//sort the flagged students array based off behavior
-			asp.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
-			advancedMath.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
-			medical.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
-			facultyStudent.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
-			hmp.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
-			newStudent.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			aspM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			aspF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			advancedMathM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			advancedMathF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			medicalM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			medicalF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			facultyStudentM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			facultyStudentF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			hmpM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			hmpF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			newStudentM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+			newStudentF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
 
 			//create the correct number of classrooms that will be sorted into
 			let classes = []
@@ -112,68 +147,109 @@ export default function place() {
 			}
 
 			//put the behavior kids into their classrooms
-			for (let i = 0; i < behavior.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(behavior[i])
+			let classIndex = 0
+			for (let i = 0; i < behaviorF.length; i++) {
+				classes[classIndex].push(behaviorF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < behaviorM.length; i++) {
+				classes[classIndex].push(behaviorM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
 
 			//put the flagged kids into their classrooms
-			for (let i = 0; i < newStudent.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(newStudent[i])
+			for (let i = 0; i < newStudentM.length; i++) {
+				classes[classIndex].push(newStudentM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < newStudentF.length; i++) {
+				classes[classIndex].push(newStudentF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < facultyStudentM.length; i++) {
+				classes[classIndex].push(facultyStudentM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < facultyStudentF.length; i++) {
+				classes[classIndex].push(facultyStudentF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < hmpM.length; i++) {
+				classes[classIndex].push(hmpM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < hmpF.length; i++) {
+				classes[classIndex].push(hmpF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
 
-			for (let i = 0; i < facultyStudent.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(facultyStudent[i])
+			for (let i = 0; i < medicalM.length; i++) {
+				classes[classIndex].push(medicalM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < medicalF.length; i++) {
+				classes[classIndex].push(medicalF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
 
-			for (let i = 0; i < hmp.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(hmp[i])
+			for (let i = 0; i < advancedMathM.length; i++) {
+				classes[classIndex].push(advancedMathM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
+			}
+			for (let i = 0; i < advancedMathF.length; i++) {
+				classes[classIndex].push(advancedMathF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
 
-			for (let i = 0; i < medical.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(medical[i])
+			for (let i = 0; i < aspM.length; i++) {
+				classes[classIndex].push(aspM[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
-
-			for (let i = 0; i < advancedMath.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(advancedMath[i])
-			}
-
-			for (let i = 0; i < asp.length; i++) {
-				let roundNum = Math.floor(i / data.sections)
-				let index = i % data.sections
-				if (roundNum % 2 == 0) {
-					index = data.sections - index - 1
-				}
-				classes[index].push(asp[i])
+			for (let i = 0; i < aspF.length; i++) {
+				classes[classIndex].push(aspF[i])
+				if (classIndex < data.sections - 1)
+					classIndex++
+				else
+					classIndex = 0
 			}
 
 			//calculate averages
@@ -210,5 +286,7 @@ export default function place() {
 					}
 				})
 			})
+
 		})
 }
+
