@@ -1,9 +1,8 @@
 import resource from 'resource-router-middleware'
-import { getKindergartenPlacement, deleteKindergartenPlacement } from '../daos/placement-dao'
+import * as placementDao from '../daos/placement-dao'
 import placeKindergarten from '../services/placement-algorithms/kindergarten-placement'
-import { getThirdPlacement, deleteThirdPlacement } from '../daos/placement-dao'
 import placeThird from '../services/placement-algorithms/third-placement'
-
+import placeSixth from '../services/placement-algorithms/sixth-placement'
 
 export default ({ config, db }) => resource({
 
@@ -14,7 +13,7 @@ export default ({ config, db }) => resource({
 	read(req, res) {
 		switch (parseInt(req.params.grade)) {
 			case 0:
-				getKindergartenPlacement()
+				placementDao.getKindergartenPlacement()
 					.then(placement => {
 						res.status(200).json(placement)
 					})
@@ -23,8 +22,18 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-				case 3:
-				getThirdPlacement()
+			case 3:
+				placementDao.getThirdPlacement()
+					.then(placement => {
+						res.status(200).json(placement)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+			case 6:
+				placementDao.getSixthPlacement()
 					.then(placement => {
 						res.status(200).json(placement)
 					})
@@ -50,9 +59,18 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-
-				case 3:
+			case 3:
 				placeThird()
+					.then(() => {
+						res.sendStatus(200)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+			case 6:
+				placeSixth()
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -63,13 +81,13 @@ export default ({ config, db }) => resource({
 				break
 			default:
 				res.sendStatus(404)
-			}
+		}
 		},
 		/** DELETE /:id - Delete a given entity */
 		delete(req, res) {
-			switch (parseInt(req.params.grade)) {
+		switch (parseInt(req.params.grade)) {
 			case 0:
-				deleteKindergartenPlacement()
+				placementDao.deleteKindergartenPlacement()
 					.then(() => {
 						res.sendStatus(204)
 					})
@@ -78,9 +96,18 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-
-				case 3:
-				deleteThirdPlacement()
+			case 3:
+				placementDao.deleteThirdPlacement()
+					.then(() => {
+						res.sendStatus(204)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+			case 6:
+				placementDao.deleteSixthPlacement()
 					.then(() => {
 						res.sendStatus(204)
 					})
@@ -91,6 +118,6 @@ export default ({ config, db }) => resource({
 				break
 			default:
 				res.sendStatus(404)
-			}
+		}
 		}
 })
