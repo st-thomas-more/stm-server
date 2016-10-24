@@ -6,13 +6,13 @@
         "ASP": 0,
         "advancedMath": 0,
         "maleCount": 10,
-        "femaleCount": 9,
-        "genderRatio": 1.1111111111111112,
+        "femaleCount": 7,
+        "genderRatio": 1.4285714285714286,
         "medicalConcern": 0,
         "HMP": 0,
         "facultyStudent": 2,
         "newStudent": 1,
-        "testAvg": 56.986466165413525
+        "testAvg": 63.690756302521
       },
       "students": [
         {
@@ -240,38 +240,6 @@
           "behavior_score": 3
         },
         {
-          "sex": "",
-          "firstName": "",
-          "lastName": "",
-          "behavior": "",
-          "facultyStudent": 0,
-          "newStudent": 0,
-          "medicalConcern": 0,
-          "hmp": 0,
-          "workEthic": "",
-          "mathBench": "",
-          "dra": "",
-          "asp": 0,
-          "weighted_score": 0,
-          "behavior_score": ""
-        },
-        {
-          "sex": "",
-          "firstName": "",
-          "lastName": "",
-          "behavior": "",
-          "facultyStudent": 0,
-          "newStudent": 0,
-          "medicalConcern": 0,
-          "hmp": 0,
-          "workEthic": "",
-          "mathBench": "",
-          "dra": "",
-          "asp": 0,
-          "weighted_score": 0,
-          "behavior_score": ""
-        },
-        {
           "sex": "M",
           "firstName": "Antonio",
           "lastName": "Lee",
@@ -327,13 +295,13 @@
         "ASP": 0,
         "advancedMath": 0,
         "maleCount": 9,
-        "femaleCount": 9,
-        "genderRatio": 1,
+        "femaleCount": 8,
+        "genderRatio": 1.125,
         "medicalConcern": 0,
         "HMP": 0,
         "facultyStudent": 2,
         "newStudent": 1,
-        "testAvg": 59.723809523809514
+        "testAvg": 63.236974789915955
       },
       "students": [
         {
@@ -561,22 +529,6 @@
           "behavior_score": 2
         },
         {
-          "sex": "",
-          "firstName": "",
-          "lastName": "",
-          "behavior": "",
-          "facultyStudent": 0,
-          "newStudent": 0,
-          "medicalConcern": 0,
-          "hmp": 0,
-          "workEthic": "",
-          "mathBench": "",
-          "dra": "",
-          "asp": 0,
-          "weighted_score": 0,
-          "behavior_score": ""
-        },
-        {
           "sex": "F",
           "firstName": "Chloe",
           "lastName": "Posevek",
@@ -632,13 +584,13 @@
         "ASP": 0,
         "advancedMath": 0,
         "maleCount": 12,
-        "femaleCount": 8,
-        "genderRatio": 1.5,
+        "femaleCount": 7,
+        "genderRatio": 1.7142857142857142,
         "medicalConcern": 1,
         "HMP": 1,
         "facultyStudent": 1,
         "newStudent": 1,
-        "testAvg": 58.06285714285715
+        "testAvg": 61.11879699248121
       },
       "students": [
         {
@@ -882,22 +834,6 @@
           "behavior_score": 5
         },
         {
-          "sex": "",
-          "firstName": "",
-          "lastName": "",
-          "behavior": "",
-          "facultyStudent": 0,
-          "newStudent": 0,
-          "medicalConcern": 0,
-          "hmp": 0,
-          "workEthic": "",
-          "mathBench": "",
-          "dra": "",
-          "asp": 0,
-          "weighted_score": 0,
-          "behavior_score": ""
-        },
-        {
           "sex": "M",
           "firstName": "Savya",
           "lastName": "Patel",
@@ -969,13 +905,13 @@
         "ASP": 0,
         "advancedMath": 0,
         "maleCount": 9,
-        "femaleCount": 12,
-        "genderRatio": 0.75,
+        "femaleCount": 11,
+        "genderRatio": 0.8181818181818182,
         "medicalConcern": 1,
         "HMP": 1,
         "facultyStudent": 1,
         "newStudent": 1,
-        "testAvg": 56.79455782312924
+        "testAvg": 59.6342857142857
       },
       "students": [
         {
@@ -1233,22 +1169,6 @@
           "asp": 0,
           "weighted_score": 43.82857142857143,
           "behavior_score": 4
-        },
-        {
-          "sex": "",
-          "firstName": "",
-          "lastName": "",
-          "behavior": "",
-          "facultyStudent": 0,
-          "newStudent": 0,
-          "medicalConcern": 0,
-          "hmp": 0,
-          "workEthic": "",
-          "mathBench": "",
-          "dra": "",
-          "asp": 0,
-          "weighted_score": 0,
-          "behavior_score": ""
         },
         {
           "sex": "F",

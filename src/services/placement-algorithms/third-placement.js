@@ -14,9 +14,6 @@ export default function place() {
         let draPercentage = (students[i].dra * 100) / 70
         students[i].weighted_score = draWeight * draPercentage + mathBenchWeight * students[i].mathBench
         students[i].behavior_score = students[i].behavior + students[i].workEthic
-        if (students[i].dra === "40+") {
-          students[i].dra = 40
-        }
       }
 
       let girl_array = []
@@ -231,7 +228,7 @@ export default function place() {
           'newStudent': countNewStudent, 'testAvg': testAvg
         }
 
-        classes[i] = { 'stats': stats, 'students': classes[i], 'teacher': 'Placement Teacher' }
+        classes[i] = { 'stats': stats, 'students': classes[i], 'teacher': data.teachers[i].name }
       }
       let placement = { 'grade': data.grade, 'sections': classes }
 
