@@ -15,7 +15,7 @@ export default function place() {
         students[i].weighted_score = draWeight * draPercentage + mathBenchWeight * students[i].mathBench
         students[i].behavior_score = students[i].behavior + students[i].workEthic
         if (students[i].dra === "40+") {
-          student[i].dra = 40;
+          students[i].dra = 40
         }
       }
 
