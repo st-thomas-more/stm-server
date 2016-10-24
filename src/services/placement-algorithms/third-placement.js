@@ -16,161 +16,229 @@ export default function place() {
         students[i].behavior_score = students[i].behavior + students[i].workEthic
       }
 
-      let girl_array = []
-      let boy_array = []
-      let behavior_array = []
-      let ASP_array = []
-      let advancedMath_array = []
-      let medical_array = []
-      let HMP_array = []
-      let facultyStudent_array = []
-      let newStudent_array = []
+      let girls = []
+      let boys = []
+      let behaviorM = []
+      let behaviorF = []
+      let aspM = []
+      let aspF = []
+      let advancedMathM = []
+      let advancedMathF = []
+      let medicalM = []
+      let medicalF = []
+      let hmpM = []
+      let hmpF = []
+      let facultyStudentM = []
+      let facultyStudentF = []
+      let newStudentM = []
+      let newStudentF = []
+
 
       for (let i = 0; i < students.length; i++) {
         if (students[i].facultyStudent == 1 || students[i].newStudent == 1 || students[i].advancedMath == 1 || students[i].hmp == 1 || students[i].medicalConcern == 1 || students[i].asp == 1) {
           if (students[i].asp == 1) {
-            ASP_array.push(students[i])
+            if (students[i].sex === 'M')
+              aspM.push(students[i])
+            else
+              aspF.push(students[i])
           }
           else if (students[i].advancedMath == 1) {
-            advancedMath_array.push(students[i])
+            if (students[i].sex === 'M')
+              advancedMathM.push(students[i])
+            else
+              advancedMathF.push(students[i])
           }
-
           else if (students[i].medicalConcern == 1) {
-            medical_array.push(students[i])
-          }
-          else if (students[i].hmp == 1) {
-            HMP_array.push(students[i])
+            if (students[i].sex === 'M')
+              medicalM.push(students[i])
+            else
+              medicalF.push(students[i])
           }
           else if (students[i].facultyStudent == 1) {
-            facultyStudent_array.push(students[i])
+            if (students[i].sex === 'M')
+              facultyStudentM.push(students[i])
+            else
+              facultyStudentF.push(students[i])
+          }
+          else if (students[i].hmp == 1) {
+            if (students[i].sex === 'M')
+              hmpM.push(students[i])
+            else
+              hmpF.push(students[i])
           }
           else if (students[i].newStudent == 1) {
-            newStudent_array.push(students[i])
+            if (students[i].sex === 'M')
+              newStudentM.push(students[i])
+            else
+              newStudentF.push(students[i])
           }
         }
-
-        else if (students[i].behavior_score < 2) {
-          behavior_array.push(students[i])
+        else if (students[i].behaviorScore < 2) {
+          if (students[i].sex === 'M')
+            behaviorM.push(students[i])
+          else
+            behaviorF.push(students[i])
         }
-        else if (students[i].sex == 'F') {
-          girl_array.push(students[i])
+        else if (students[i].sex === 'F') {
+          girls.push(students[i])
         }
         else {
-          boy_array.push(students[i])
+          boys.push(students[i])
         }
       }
 
       //sort the boy and girl array based off weighted score in descending order
-      girl_array.sort(function (a, b) { return b.weighted_score - a.weighted_score })
-      boy_array.sort(function (a, b) { return b.weighted_score - a.weighted_score })
-      behavior_array.sort(function (a, b) { return b.weighted_score - a.weighted_score })
+      girls.sort(function (a, b) { return b.weightedScore - a.weightedScore })
+      boys.sort(function (a, b) { return b.weightedScore - a.weightedScore })
+      behaviorM.sort(function (a, b) { return b.weightedScore - a.weightedScore })
+      behaviorF.sort(function (a, b) { return b.weightedScore - a.weightedScore })
 
       //sort the flagged students array based off behavior
-      ASP_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
-      advancedMath_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
-      medical_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
-      HMP_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
-      facultyStudent_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
-      newStudent_array.sort(function (a, b) { return b.behavior_score - a.behavior_score })
+      aspM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      aspF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      advancedMathM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      advancedMathF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      medicalM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      medicalF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      facultyStudentM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      facultyStudentF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      hmpM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      hmpF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      newStudentM.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
+      newStudentF.sort(function (a, b) { return b.behaviorScore - a.behaviorScore })
 
-
-      //create the correct number of classrooms that will be sorted into
       let classes = []
       for (let i = 0; i < data.sections; i++) {
         classes.push([])
       }
 
       //put the girls into their classrooms using a snake algorithm
-      for (let i = 0; i < girl_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
+      for (let i = 0; i < girls.length; i++) {
+        let roundNum = Math.floor(i / data.sections)
         let index = i % data.sections
-        if (round_num % 2 == 0) {
+        if (roundNum % 2 == 0) {
           index = data.sections - index - 1
         }
-        classes[index].push(girl_array[i])
+        classes[index].push(girls[i])
       }
 
       //put the boys into their classrooms
-      for (let i = 0; i < boy_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
+      for (let i = 0; i < boys.length; i++) {
+        let roundNum = Math.floor(i / data.sections)
         let index = i % data.sections
-        if (round_num % 2 == 0) {
+        if (roundNum % 2 == 0) {
           index = data.sections - index - 1
         }
-        classes[index].push(boy_array[i])
+        classes[index].push(boys[i])
       }
 
       //put the behavior kids into their classrooms
-      for (let i = 0; i < behavior_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        classes[index].push(behavior_array[i])
+      let classIndex = 0
+      for (let i = 0; i < behaviorF.length; i++) {
+        classes[classIndex].push(behaviorF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < behaviorM.length; i++) {
+        classes[classIndex].push(behaviorM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
       }
 
       //put the flagged kids into their classrooms
-
-      for (let i = 0; i < newStudent_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //    console.log("pushing " + newStudent_array[i].firstName + " " + newStudent_array[i].lastName + " with behavior: " + newStudent_array[i].behavior_score +" to class " + index)
-        classes[index].push(newStudent_array[i])
+      for (let i = 0; i < newStudentM.length; i++) {
+        classes[classIndex].push(newStudentM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < newStudentF.length; i++) {
+        classes[classIndex].push(newStudentF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < facultyStudentM.length; i++) {
+        classes[classIndex].push(facultyStudentM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < facultyStudentF.length; i++) {
+        classes[classIndex].push(facultyStudentF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < hmpM.length; i++) {
+        classes[classIndex].push(hmpM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < hmpF.length; i++) {
+        classes[classIndex].push(hmpF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
       }
 
-      for (let i = 0; i < facultyStudent_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //    console.log("pushing " + facultyStudent_array[i].firstName + " " + facultyStudent_array[i].lastName + " with behavior: " + facultyStudent_array[i].behavior_score +" to class " + index)
-        classes[index].push(facultyStudent_array[i])
+      for (let i = 0; i < medicalM.length; i++) {
+        classes[classIndex].push(medicalM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < medicalF.length; i++) {
+        classes[classIndex].push(medicalF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
       }
 
-      for (let i = 0; i < HMP_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //     console.log("pushing " + HMP_array[i].firstName + " " + HMP_array[i].lastName + " with behavior: " + HMP_array[i].behavior_score +" to class " + index)
-        classes[index].push(HMP_array[i])
+      for (let i = 0; i < advancedMathM.length; i++) {
+        classes[classIndex].push(advancedMathM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < advancedMathF.length; i++) {
+        classes[classIndex].push(advancedMathF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
       }
 
-      for (let i = 0; i < medical_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //      console.log("pushing " + medical_array[i].firstName + " " + medical_array[i].lastName + " with behavior: " + medical_array[i].behavior_score +" to class " + index)
-        classes[index].push(medical_array[i])
+      for (let i = 0; i < aspM.length; i++) {
+        classes[classIndex].push(aspM[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
+      }
+      for (let i = 0; i < aspF.length; i++) {
+        classes[classIndex].push(aspF[i])
+        if (classIndex < data.sections - 1)
+          classIndex++
+        else
+          classIndex = 0
       }
 
-      for (let i = 0; i < advancedMath_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //      console.log("pushing " + advancedMath_array[i].firstName + " " + advancedMath_array[i].lastName + " with behavior: " + advancedMath_array[i].behavior_score +" to class " + index)
-        classes[index].push(advancedMath_array[i])
-      }
 
-      for (let i = 0; i < ASP_array.length; i++) {
-        let round_num = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (round_num % 2 == 0) {
-          index = data.sections - index - 1
-        }
-        //      console.log("pushing " + ASP_array[i].firstName + " " + ASP_array[i].lastName + " with behavior: " + ASP_array[i].behavior_score +" to class " + index)
-        classes[index].push(ASP_array[i])
-      }
 
 
       //count # of flagged kids in each class
