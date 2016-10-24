@@ -1,6 +1,9 @@
 import resource from 'resource-router-middleware'
 import { getKindergartenPlacement, deleteKindergartenPlacement } from '../daos/placement-dao'
 import placeKindergarten from '../services/placement-algorithms/kindergarten-placement'
+import { getThirdPlacement, deleteThirdPlacement } from '../daos/placement-dao'
+import placeThird from '../services/placement-algorithms/third-placement'
+
 
 export default ({ config, db }) => resource({
 
@@ -12,6 +15,16 @@ export default ({ config, db }) => resource({
 		switch (parseInt(req.params.grade)) {
 			case 0:
 				getKindergartenPlacement()
+					.then(placement => {
+						res.status(200).json(placement)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+				case 3:
+				getThirdPlacement()
 					.then(placement => {
 						res.status(200).json(placement)
 					})
@@ -37,6 +50,17 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
+
+				case 3:
+				placeThird()
+					.then(() => {
+						res.sendStatus(200)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
 			default:
 				res.sendStatus(404)
 			}
@@ -46,6 +70,17 @@ export default ({ config, db }) => resource({
 			switch (parseInt(req.params.grade)) {
 			case 0:
 				deleteKindergartenPlacement()
+					.then(() => {
+						res.sendStatus(204)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+
+				case 3:
+				deleteThirdPlacement()
 					.then(() => {
 						res.sendStatus(204)
 					})
