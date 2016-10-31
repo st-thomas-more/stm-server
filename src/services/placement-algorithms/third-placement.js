@@ -1,6 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import { getThirdRaw } from '../../daos/grade-dao'
+import { savePlacement } from '../../daos/placement-dao'
 
 export default function place() {
   return getThirdRaw()
@@ -299,19 +298,6 @@ export default function place() {
         classes[i] = { 'stats': stats, 'students': classes[i], 'teacher': data.teachers[i].name }
       }
       let placement = { 'grade': data.grade, 'sections': classes }
-
-      return new Promise((resolve, reject) => {
-        let filepath = path.join(__dirname, '../../mock-data/placements/third-placement.json')
-        fs.writeFile(filepath, JSON.stringify(placement, null, 2), 'utf8', function (err) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve()
-          }
-        })
-      })
-    })
-    .catch(err => {
-      console.error(err)
+      return savePlacement(3, placement)
     })
 }
