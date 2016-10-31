@@ -2,556 +2,8 @@
   "grade": 0,
   "sections": [
     {
-      "stats": {
-        "avgBehavior": 2.5,
-        "femaleCount": 10,
-        "maleCount": 6,
-        "avgDial4": 83.5,
-        "genderRatio": 0.6,
-        "avgAge": 61,
-        "potentialDelays": 4
-      },
-      "students": [
-        {
-          "sex": "F",
-          "firstName": "Adrianna",
-          "lastName": "Carocci",
-          "dial4": 99,
-          "behaviorObservation": 4,
-          "potentialDelay": 0,
-          "age": 63,
-          "weighted_score": 0.661468253968254
-        },
-        {
-          "sex": "F",
-          "firstName": "Amelia",
-          "lastName": "Mozeko",
-          "dial4": 98,
-          "behaviorObservation": 1,
-          "potentialDelay": 0,
-          "age": 64,
-          "weighted_score": 0.6601388888888889
-        },
-        {
-          "sex": "F",
-          "firstName": "Jillian",
-          "lastName": "Hudak",
-          "dial4": 91,
-          "behaviorObservation": 4,
-          "potentialDelay": 0,
-          "age": 61,
-          "weighted_score": 0.6022222222222222
-        },
-        {
-          "sex": "F",
-          "firstName": "Mckayla",
-          "lastName": "O'Brien",
-          "dial4": 86,
-          "behaviorObservation": 1,
-          "potentialDelay": 0,
-          "age": 66,
-          "weighted_score": 0.5955753968253968
-        },
-        {
-          "sex": "F",
-          "firstName": "Gracie",
-          "lastName": "Flick",
-          "dial4": 88,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 58,
-          "weighted_score": 0.5690674603174604
-        },
-        {
-          "sex": "F",
-          "firstName": "Colleen",
-          "lastName": "Piccini",
-          "dial4": 80,
-          "behaviorObservation": 1,
-          "potentialDelay": 1,
-          "age": 68,
-          "weighted_score": 0.5681547619047619
-        },
-        {
-          "sex": "F",
-          "firstName": "Deana",
-          "lastName": "Villarejo",
-          "dial4": 79,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 63,
-          "weighted_score": 0.5376587301587302
-        },
-        {
-          "sex": "F",
-          "firstName": "Lauren",
-          "lastName": "Meitzler",
-          "dial4": 83,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 54,
-          "weighted_score": 0.5186706349206349
-        },
-        {
-          "sex": "F",
-          "firstName": "Emma",
-          "lastName": "Adamchik",
-          "dial4": 70,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 53,
-          "weighted_score": 0.43333333333333335
-        },
-        {
-          "sex": "F",
-          "firstName": "Ann",
-          "lastName": "Mathew",
-          "dial4": 59,
-          "behaviorObservation": 17,
-          "potentialDelay": 1,
-          "age": 59,
-          "weighted_score": 0.3944047619047619
-        },
-        {
-          "sex": "M",
-          "firstName": "Noah",
-          "lastName": "Scharper",
-          "dial4": 88,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 67,
-          "weighted_score": 0.6128174603174603
-        },
-        {
-          "sex": "M",
-          "firstName": "Caleb",
-          "lastName": "Goyke",
-          "dial4": 88,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 66,
-          "weighted_score": 0.6079563492063492
-        },
-        {
-          "sex": "M",
-          "firstName": "Tripp",
-          "lastName": "Sell",
-          "dial4": 87,
-          "behaviorObservation": 3,
-          "potentialDelay": 0,
-          "age": 61,
-          "weighted_score": 0.5774603174603175
-        },
-        {
-          "sex": "M",
-          "firstName": "Nicolo",
-          "lastName": "Ramunni",
-          "dial4": 89,
-          "behaviorObservation": 3,
-          "potentialDelay": 0,
-          "age": 58,
-          "weighted_score": 0.5752579365079366
-        },
-        {
-          "sex": "M",
-          "firstName": "Noah",
-          "lastName": "Russo",
-          "dial4": 76,
-          "behaviorObservation": 2,
-          "potentialDelay": 1,
-          "age": 59,
-          "weighted_score": 0.49964285714285717
-        },
-        {
-          "sex": "M",
-          "firstName": "Hudson",
-          "lastName": "Miller",
-          "dial4": 75,
-          "behaviorObservation": 4,
-          "potentialDelay": 1,
-          "age": 56,
-          "weighted_score": 0.47886904761904764
-        }
-      ],
-      "teacher": "Teacher A"
-    },
-    {
-      "stats": {
-        "avgBehavior": 4.294117647058823,
-        "femaleCount": 10,
-        "maleCount": 7,
-        "avgDial4": 82.29411764705883,
-        "genderRatio": 0.7,
-        "avgAge": 61.23529411764706,
-        "potentialDelays": 8
-      },
-      "students": [
-        {
-          "sex": "F",
-          "firstName": "Avery",
-          "lastName": "Spence",
-          "dial4": 100,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 65,
-          "weighted_score": 0.6773809523809524
-        },
-        {
-          "sex": "F",
-          "firstName": "Gabriella",
-          "lastName": "Guarino",
-          "dial4": 96,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 66,
-          "weighted_score": 0.6574801587301587
-        },
-        {
-          "sex": "F",
-          "firstName": "Ella",
-          "lastName": "Bubnis",
-          "dial4": 92,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 60,
-          "weighted_score": 0.6035515873015873
-        },
-        {
-          "sex": "F",
-          "firstName": "Callie",
-          "lastName": "Nechetsky",
-          "dial4": 93,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 57,
-          "weighted_score": 0.5951587301587302
-        },
-        {
-          "sex": "F",
-          "firstName": "Vinnia",
-          "lastName": "Bove-Seagreaves",
-          "dial4": 82,
-          "behaviorObservation": 6,
-          "potentialDelay": 1,
-          "age": 67,
-          "weighted_score": 0.5756746031746032
-        },
-        {
-          "sex": "F",
-          "firstName": "Alana",
-          "lastName": "Hoffman",
-          "dial4": 87,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 59,
-          "weighted_score": 0.5677380952380953
-        },
-        {
-          "sex": "F",
-          "firstName": "Piper",
-          "lastName": "Cerimele",
-          "dial4": 83,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 58,
-          "weighted_score": 0.5381150793650794
-        },
-        {
-          "sex": "F",
-          "firstName": "Vittoria",
-          "lastName": "Bellucci",
-          "dial4": 77,
-          "behaviorObservation": 3,
-          "potentialDelay": 0,
-          "age": 57,
-          "weighted_score": 0.49611111111111106
-        },
-        {
-          "sex": "F",
-          "firstName": "Maria",
-          "lastName": "Castaneda-Martinez",
-          "dial4": 71,
-          "behaviorObservation": 17,
-          "potentialDelay": 1,
-          "age": 54,
-          "weighted_score": 0.44438492063492063
-        },
-        {
-          "sex": "F",
-          "firstName": "Aveley",
-          "lastName": "Alicea",
-          "dial4": 60,
-          "behaviorObservation": 19,
-          "potentialDelay": 1,
-          "age": 56,
-          "weighted_score": 0.3860119047619048
-        },
-        {
-          "sex": "M",
-          "firstName": "Ryan",
-          "lastName": "Spisszak",
-          "dial4": 94,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 68,
-          "weighted_score": 0.6548214285714286
-        },
-        {
-          "sex": "M",
-          "firstName": "Cole",
-          "lastName": "Heigl",
-          "dial4": 95,
-          "behaviorObservation": 2,
-          "potentialDelay": 0,
-          "age": 57,
-          "weighted_score": 0.6075396825396826
-        },
-        {
-          "sex": "M",
-          "firstName": "Tyler",
-          "lastName": "Mullaney",
-          "dial4": 84,
-          "behaviorObservation": 12,
-          "potentialDelay": 1,
-          "age": 65,
-          "weighted_score": 0.5783333333333334
-        },
-        {
-          "sex": "M",
-          "firstName": "Sean",
-          "lastName": "Robinson",
-          "dial4": 82,
-          "behaviorObservation": 2,
-          "potentialDelay": 1,
-          "age": 66,
-          "weighted_score": 0.5708134920634921
-        },
-        {
-          "sex": "M",
-          "firstName": "Jonathan",
-          "lastName": "Henson",
-          "dial4": 73,
-          "behaviorObservation": 3,
-          "potentialDelay": 1,
-          "age": 66,
-          "weighted_score": 0.5150992063492064
-        },
-        {
-          "sex": "M",
-          "firstName": "Gavyn",
-          "lastName": "Granitz",
-          "dial4": 66,
-          "behaviorObservation": 4,
-          "potentialDelay": 1,
-          "age": 65,
-          "weighted_score": 0.46690476190476193
-        },
-        {
-          "sex": "M",
-          "firstName": "Landon",
-          "lastName": "Muir",
-          "dial4": 64,
-          "behaviorObservation": 5,
-          "potentialDelay": 1,
-          "age": 55,
-          "weighted_score": 0.4059126984126985
-        }
-      ],
-      "teacher": "Teacher B"
-    },
-    {
-      "stats": {
-        "avgBehavior": 2.588235294117647,
-        "femaleCount": 10,
-        "maleCount": 7,
-        "avgDial4": 81.76470588235294,
-        "genderRatio": 0.7,
-        "avgAge": 61.35294117647059,
-        "potentialDelays": 3
-      },
-      "students": [
-        {
-          "sex": "F",
-          "firstName": "Scarlet",
-          "lastName": "Posavek",
-          "dial4": 97,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 71,
-          "weighted_score": 0.6879761904761905
-        },
-        {
-          "sex": "F",
-          "firstName": "Marie",
-          "lastName": "Collins",
-          "dial4": 97,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 64,
-          "weighted_score": 0.6539484126984128
-        },
-        {
-          "sex": "F",
-          "firstName": "Reese",
-          "lastName": "Walter",
-          "dial4": 93,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 65,
-          "weighted_score": 0.6340476190476191
-        },
-        {
-          "sex": "F",
-          "firstName": "Meghan",
-          "lastName": "Puentes",
-          "dial4": 89,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 62,
-          "weighted_score": 0.5947023809523809
-        },
-        {
-          "sex": "F",
-          "firstName": "Nina",
-          "lastName": "Sadaphal",
-          "dial4": 87,
-          "behaviorObservation": 3,
-          "potentialDelay": 0,
-          "age": 61,
-          "weighted_score": 0.5774603174603175
-        },
-        {
-          "sex": "F",
-          "firstName": "Lylah",
-          "lastName": "Freed",
-          "dial4": 85,
-          "behaviorObservation": 5,
-          "potentialDelay": 0,
-          "age": 60,
-          "weighted_score": 0.560218253968254
-        },
-        {
-          "sex": "F",
-          "firstName": "Lorelei",
-          "lastName": "Campbell",
-          "dial4": 83,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 59,
-          "weighted_score": 0.5429761904761905
-        },
-        {
-          "sex": "F",
-          "firstName": "Clare",
-          "lastName": "Henry",
-          "dial4": 76,
-          "behaviorObservation": 2,
-          "potentialDelay": 0,
-          "age": 55,
-          "weighted_score": 0.48019841269841274
-        },
-        {
-          "sex": "F",
-          "firstName": "Alanah",
-          "lastName": "Rinker",
-          "dial4": 71,
-          "behaviorObservation": 1,
-          "potentialDelay": 0,
-          "age": 56,
-          "weighted_score": 0.4541071428571429
-        },
-        {
-          "sex": "F",
-          "firstName": "Tahlia",
-          "lastName": "Wagner",
-          "dial4": 46,
-          "behaviorObservation": 9,
-          "potentialDelay": 1,
-          "age": 54,
-          "weighted_score": 0.28962301587301587
-        },
-        {
-          "sex": "M",
-          "firstName": "Duncan",
-          "lastName": "Toomey",
-          "dial4": 93,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 71,
-          "weighted_score": 0.6632142857142858
-        },
-        {
-          "sex": "M",
-          "firstName": "Evan",
-          "lastName": "Langehennig",
-          "dial4": 91,
-          "behaviorObservation": 9,
-          "potentialDelay": 0,
-          "age": 62,
-          "weighted_score": 0.6070833333333333
-        },
-        {
-          "sex": "M",
-          "firstName": "Brennen",
-          "lastName": "Poll",
-          "dial4": 87,
-          "behaviorObservation": 2,
-          "potentialDelay": 0,
-          "age": 64,
-          "weighted_score": 0.5920436507936508
-        },
-        {
-          "sex": "M",
-          "firstName": "Quinn",
-          "lastName": "Cannon",
-          "dial4": 84,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 62,
-          "weighted_score": 0.56375
-        },
-        {
-          "sex": "M",
-          "firstName": "Declan",
-          "lastName": "McGee",
-          "dial4": 78,
-          "behaviorObservation": 9,
-          "potentialDelay": 1,
-          "age": 60,
-          "weighted_score": 0.5168849206349206
-        },
-        {
-          "sex": "M",
-          "firstName": "Ryan",
-          "lastName": "Barchini",
-          "dial4": 72,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 56,
-          "weighted_score": 0.46029761904761907
-        },
-        {
-          "sex": "M",
-          "firstName": "Dominic",
-          "lastName": "Pursell",
-          "dial4": 61,
-          "behaviorObservation": 4,
-          "potentialDelay": 1,
-          "age": 61,
-          "weighted_score": 0.41650793650793655
-        }
-      ],
-      "teacher": "Teacher C"
-    },
-    {
-      "stats": {
-        "avgBehavior": 2.3125,
-        "femaleCount": 9,
-        "maleCount": 7,
-        "avgDial4": 85.4375,
-        "genderRatio": 0.7777777777777778,
-        "avgAge": 60.875,
-        "potentialDelays": 2
+      "teacher": {
+        "name": "Teacher B"
       },
       "students": [
         {
@@ -562,57 +14,27 @@
           "behaviorObservation": 0,
           "potentialDelay": 0,
           "age": 67,
-          "weighted_score": 0.6932936507936508
+          "weightedScore": 0.6932936507936508
         },
         {
           "sex": "F",
-          "firstName": "Ana",
-          "lastName": "Mushrush",
-          "dial4": 97,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 61,
-          "weighted_score": 0.6393650793650794
-        },
-        {
-          "sex": "F",
-          "firstName": "Lia",
-          "lastName": "Nnenkwo",
-          "dial4": 95,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 63,
-          "weighted_score": 0.6367063492063493
-        },
-        {
-          "sex": "F",
-          "firstName": "Grace",
-          "lastName": "Bleil",
-          "dial4": 88,
+          "firstName": "Vittoria",
+          "lastName": "Bellucci",
+          "dial4": 77,
           "behaviorObservation": 3,
           "potentialDelay": 0,
-          "age": 61,
-          "weighted_score": 0.5836507936507936
+          "age": 57,
+          "weightedScore": 0.49611111111111106
         },
         {
           "sex": "F",
-          "firstName": "Katelyn",
-          "lastName": "Hopko",
-          "dial4": 85,
-          "behaviorObservation": 2,
+          "firstName": "Piper",
+          "lastName": "Cerimele",
+          "dial4": 83,
+          "behaviorObservation": 0,
           "potentialDelay": 0,
-          "age": 64,
-          "weighted_score": 0.5796626984126985
-        },
-        {
-          "sex": "F",
-          "firstName": "Lily",
-          "lastName": "Robinson",
-          "dial4": 78,
-          "behaviorObservation": 5,
-          "potentialDelay": 1,
-          "age": 67,
-          "weighted_score": 0.5509126984126984
+          "age": 58,
+          "weightedScore": 0.5381150793650794
         },
         {
           "sex": "F",
@@ -622,27 +44,47 @@
           "behaviorObservation": 1,
           "potentialDelay": 0,
           "age": 55,
-          "weighted_score": 0.5482936507936508
+          "weightedScore": 0.5482936507936508
         },
         {
           "sex": "F",
-          "firstName": "Sophia",
-          "lastName": "Gallucci",
-          "dial4": 75,
-          "behaviorObservation": 4,
+          "firstName": "Grace",
+          "lastName": "Bleil",
+          "dial4": 88,
+          "behaviorObservation": 3,
           "potentialDelay": 0,
-          "age": 54,
-          "weighted_score": 0.4691468253968254
+          "age": 61,
+          "weightedScore": 0.5836507936507936
         },
         {
           "sex": "F",
-          "firstName": "Amara",
-          "lastName": "Saadeh",
-          "dial4": 75,
+          "firstName": "Callie",
+          "lastName": "Nechetsky",
+          "dial4": 93,
           "behaviorObservation": 0,
           "potentialDelay": 0,
-          "age": 54,
-          "weighted_score": 0.4691468253968254
+          "age": 57,
+          "weightedScore": 0.5951587301587302
+        },
+        {
+          "sex": "F",
+          "firstName": "Ana",
+          "lastName": "Mushrush",
+          "dial4": 97,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 61,
+          "weightedScore": 0.6393650793650794
+        },
+        {
+          "sex": "F",
+          "firstName": "Adrianna",
+          "lastName": "Carocci",
+          "dial4": 99,
+          "behaviorObservation": 4,
+          "potentialDelay": 0,
+          "age": 63,
+          "weightedScore": 0.661468253968254
         },
         {
           "sex": "M",
@@ -652,27 +94,7 @@
           "behaviorObservation": 0,
           "potentialDelay": 0,
           "age": 72,
-          "weighted_score": 0.7175992063492064
-        },
-        {
-          "sex": "M",
-          "firstName": "Landon",
-          "lastName": "Conrad",
-          "dial4": 91,
-          "behaviorObservation": 1,
-          "potentialDelay": 0,
-          "age": 62,
-          "weighted_score": 0.6070833333333333
-        },
-        {
-          "sex": "M",
-          "firstName": "Alex",
-          "lastName": "Voci",
-          "dial4": 88,
-          "behaviorObservation": 0,
-          "potentialDelay": 0,
-          "age": 65,
-          "weighted_score": 0.6030952380952381
+          "weightedScore": 0.7175992063492064
         },
         {
           "sex": "M",
@@ -682,17 +104,37 @@
           "behaviorObservation": 2,
           "potentialDelay": 0,
           "age": 58,
-          "weighted_score": 0.5628769841269842
+          "weightedScore": 0.5628769841269842
         },
         {
           "sex": "M",
-          "firstName": "Andrew",
-          "lastName": "Bowen",
-          "dial4": 83,
+          "firstName": "Caleb",
+          "lastName": "Goyke",
+          "dial4": 88,
           "behaviorObservation": 0,
           "potentialDelay": 0,
-          "age": 57,
-          "weighted_score": 0.5332539682539683
+          "age": 66,
+          "weightedScore": 0.6079563492063492
+        },
+        {
+          "sex": "M",
+          "firstName": "Duncan",
+          "lastName": "Toomey",
+          "dial4": 93,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 71,
+          "weightedScore": 0.6632142857142858
+        },
+        {
+          "sex": "F",
+          "firstName": "Aveley",
+          "lastName": "Alicea",
+          "dial4": 60,
+          "behaviorObservation": 19,
+          "potentialDelay": 1,
+          "age": 56,
+          "weightedScore": 0.3860119047619048
         },
         {
           "sex": "M",
@@ -702,7 +144,317 @@
           "behaviorObservation": 11,
           "potentialDelay": 1,
           "age": 61,
-          "weighted_score": 0.45984126984126983
+          "weightedScore": 0.45984126984126983
+        },
+        {
+          "sex": "M",
+          "firstName": "Landon",
+          "lastName": "Muir",
+          "dial4": 64,
+          "behaviorObservation": 5,
+          "potentialDelay": 1,
+          "age": 55,
+          "weightedScore": 0.4059126984126985
+        },
+        {
+          "sex": "M",
+          "firstName": "Dominic",
+          "lastName": "Pursell",
+          "dial4": 61,
+          "behaviorObservation": 4,
+          "potentialDelay": 1,
+          "age": 61,
+          "weightedScore": 0.41650793650793655
+        },
+        {
+          "sex": "F",
+          "firstName": "Colleen",
+          "lastName": "Piccini",
+          "dial4": 80,
+          "behaviorObservation": 1,
+          "potentialDelay": 1,
+          "age": 68,
+          "weightedScore": 0.5681547619047619
+        }
+      ],
+      "stats": {
+        "behavior": 53,
+        "dial4": 1427,
+        "age": 1047,
+        "females": 10,
+        "males": 7,
+        "potentialDelays": 5,
+        "count": 17,
+        "avgBehavior": 3.1176470588235294,
+        "avgDial4": 83.94117647058823,
+        "avgAge": 61.588235294117645,
+        "genderRatio": 0.7
+      }
+    },
+    {
+      "teacher": {
+        "name": "Teacher D"
+      },
+      "students": [
+        {
+          "sex": "F",
+          "firstName": "Sophia",
+          "lastName": "Gallucci",
+          "dial4": 75,
+          "behaviorObservation": 4,
+          "potentialDelay": 0,
+          "age": 54,
+          "weightedScore": 0.4691468253968254
+        },
+        {
+          "sex": "F",
+          "firstName": "Lauren",
+          "lastName": "Meitzler",
+          "dial4": 83,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 54,
+          "weightedScore": 0.5186706349206349
+        },
+        {
+          "sex": "F",
+          "firstName": "Lylah",
+          "lastName": "Freed",
+          "dial4": 85,
+          "behaviorObservation": 5,
+          "potentialDelay": 0,
+          "age": 60,
+          "weightedScore": 0.560218253968254
+        },
+        {
+          "sex": "F",
+          "firstName": "Alana",
+          "lastName": "Hoffman",
+          "dial4": 87,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 59,
+          "weightedScore": 0.5677380952380953
+        },
+        {
+          "sex": "F",
+          "firstName": "Jillian",
+          "lastName": "Hudak",
+          "dial4": 91,
+          "behaviorObservation": 4,
+          "potentialDelay": 0,
+          "age": 61,
+          "weightedScore": 0.6022222222222222
+        },
+        {
+          "sex": "F",
+          "firstName": "Lia",
+          "lastName": "Nnenkwo",
+          "dial4": 95,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 63,
+          "weightedScore": 0.6367063492063493
+        },
+        {
+          "sex": "F",
+          "firstName": "Scarlet",
+          "lastName": "Posavek",
+          "dial4": 97,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 71,
+          "weightedScore": 0.6879761904761905
+        },
+        {
+          "sex": "F",
+          "firstName": "Gracie",
+          "lastName": "Flick",
+          "dial4": 88,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 58,
+          "weightedScore": 0.5690674603174604
+        },
+        {
+          "sex": "M",
+          "firstName": "Quinn",
+          "lastName": "Cannon",
+          "dial4": 84,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 62,
+          "weightedScore": 0.56375
+        },
+        {
+          "sex": "M",
+          "firstName": "Noah",
+          "lastName": "Scharper",
+          "dial4": 88,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 67,
+          "weightedScore": 0.6128174603174603
+        },
+        {
+          "sex": "M",
+          "firstName": "Evan",
+          "lastName": "Langehennig",
+          "dial4": 91,
+          "behaviorObservation": 9,
+          "potentialDelay": 0,
+          "age": 62,
+          "weightedScore": 0.6070833333333333
+        },
+        {
+          "sex": "M",
+          "firstName": "Cole",
+          "lastName": "Heigl",
+          "dial4": 95,
+          "behaviorObservation": 2,
+          "potentialDelay": 0,
+          "age": 57,
+          "weightedScore": 0.6075396825396826
+        },
+        {
+          "sex": "F",
+          "firstName": "Ann",
+          "lastName": "Mathew",
+          "dial4": 59,
+          "behaviorObservation": 17,
+          "potentialDelay": 1,
+          "age": 59,
+          "weightedScore": 0.3944047619047619
+        },
+        {
+          "sex": "M",
+          "firstName": "Declan",
+          "lastName": "McGee",
+          "dial4": 78,
+          "behaviorObservation": 9,
+          "potentialDelay": 1,
+          "age": 60,
+          "weightedScore": 0.5168849206349206
+        },
+        {
+          "sex": "F",
+          "firstName": "Lily",
+          "lastName": "Robinson",
+          "dial4": 78,
+          "behaviorObservation": 5,
+          "potentialDelay": 1,
+          "age": 67,
+          "weightedScore": 0.5509126984126984
+        },
+        {
+          "sex": "M",
+          "firstName": "Jonathan",
+          "lastName": "Henson",
+          "dial4": 73,
+          "behaviorObservation": 3,
+          "potentialDelay": 1,
+          "age": 66,
+          "weightedScore": 0.5150992063492064
+        }
+      ],
+      "stats": {
+        "behavior": 58,
+        "dial4": 1347,
+        "age": 980,
+        "females": 10,
+        "males": 6,
+        "potentialDelays": 4,
+        "count": 16,
+        "avgBehavior": 3.625,
+        "avgDial4": 84.1875,
+        "avgAge": 61.25,
+        "genderRatio": 0.6
+      }
+    },
+    {
+      "teacher": {
+        "name": "Teacher C"
+      },
+      "students": [
+        {
+          "sex": "F",
+          "firstName": "Amara",
+          "lastName": "Saadeh",
+          "dial4": 75,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 54,
+          "weightedScore": 0.4691468253968254
+        },
+        {
+          "sex": "F",
+          "firstName": "Deana",
+          "lastName": "Villarejo",
+          "dial4": 79,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 63,
+          "weightedScore": 0.5376587301587302
+        },
+        {
+          "sex": "F",
+          "firstName": "Katelyn",
+          "lastName": "Hopko",
+          "dial4": 85,
+          "behaviorObservation": 2,
+          "potentialDelay": 0,
+          "age": 64,
+          "weightedScore": 0.5796626984126985
+        },
+        {
+          "sex": "F",
+          "firstName": "Nina",
+          "lastName": "Sadaphal",
+          "dial4": 87,
+          "behaviorObservation": 3,
+          "potentialDelay": 0,
+          "age": 61,
+          "weightedScore": 0.5774603174603175
+        },
+        {
+          "sex": "F",
+          "firstName": "Meghan",
+          "lastName": "Puentes",
+          "dial4": 89,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 62,
+          "weightedScore": 0.5947023809523809
+        },
+        {
+          "sex": "F",
+          "firstName": "Reese",
+          "lastName": "Walter",
+          "dial4": 93,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 65,
+          "weightedScore": 0.6340476190476191
+        },
+        {
+          "sex": "F",
+          "firstName": "Marie",
+          "lastName": "Collins",
+          "dial4": 97,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 64,
+          "weightedScore": 0.6539484126984128
+        },
+        {
+          "sex": "F",
+          "firstName": "Avery",
+          "lastName": "Spence",
+          "dial4": 100,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 65,
+          "weightedScore": 0.6773809523809524
         },
         {
           "sex": "M",
@@ -712,10 +464,282 @@
           "behaviorObservation": 8,
           "potentialDelay": 0,
           "age": 53,
-          "weighted_score": 0.42095238095238097
+          "weightedScore": 0.42095238095238097
+        },
+        {
+          "sex": "M",
+          "firstName": "Tripp",
+          "lastName": "Sell",
+          "dial4": 87,
+          "behaviorObservation": 3,
+          "potentialDelay": 0,
+          "age": 61,
+          "weightedScore": 0.5774603174603175
+        },
+        {
+          "sex": "M",
+          "firstName": "Ryan",
+          "lastName": "Barchini",
+          "dial4": 72,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 56,
+          "weightedScore": 0.46029761904761907
+        },
+        {
+          "sex": "M",
+          "firstName": "Landon",
+          "lastName": "Conrad",
+          "dial4": 91,
+          "behaviorObservation": 1,
+          "potentialDelay": 0,
+          "age": 62,
+          "weightedScore": 0.6070833333333333
+        },
+        {
+          "sex": "M",
+          "firstName": "Alex",
+          "lastName": "Voci",
+          "dial4": 88,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 65,
+          "weightedScore": 0.6030952380952381
+        },
+        {
+          "sex": "F",
+          "firstName": "Maria",
+          "lastName": "Castaneda-Martinez",
+          "dial4": 71,
+          "behaviorObservation": 17,
+          "potentialDelay": 1,
+          "age": 54,
+          "weightedScore": 0.44438492063492063
+        },
+        {
+          "sex": "F",
+          "firstName": "Tahlia",
+          "lastName": "Wagner",
+          "dial4": 46,
+          "behaviorObservation": 9,
+          "potentialDelay": 1,
+          "age": 54,
+          "weightedScore": 0.28962301587301587
+        },
+        {
+          "sex": "M",
+          "firstName": "Gavyn",
+          "lastName": "Granitz",
+          "dial4": 66,
+          "behaviorObservation": 4,
+          "potentialDelay": 1,
+          "age": 65,
+          "weightedScore": 0.46690476190476193
+        },
+        {
+          "sex": "M",
+          "firstName": "Noah",
+          "lastName": "Russo",
+          "dial4": 76,
+          "behaviorObservation": 2,
+          "potentialDelay": 1,
+          "age": 59,
+          "weightedScore": 0.49964285714285717
         }
       ],
-      "teacher": "Teacher D"
+      "stats": {
+        "behavior": 49,
+        "dial4": 1370,
+        "age": 1027,
+        "females": 10,
+        "males": 7,
+        "potentialDelays": 4,
+        "count": 17,
+        "avgBehavior": 2.8823529411764706,
+        "avgDial4": 80.58823529411765,
+        "avgAge": 60.411764705882355,
+        "genderRatio": 0.7
+      }
+    },
+    {
+      "teacher": {
+        "name": "Teacher A"
+      },
+      "students": [
+        {
+          "sex": "F",
+          "firstName": "Emma",
+          "lastName": "Adamchik",
+          "dial4": 70,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 53,
+          "weightedScore": 0.43333333333333335
+        },
+        {
+          "sex": "F",
+          "firstName": "Clare",
+          "lastName": "Henry",
+          "dial4": 76,
+          "behaviorObservation": 2,
+          "potentialDelay": 0,
+          "age": 55,
+          "weightedScore": 0.48019841269841274
+        },
+        {
+          "sex": "F",
+          "firstName": "Lorelei",
+          "lastName": "Campbell",
+          "dial4": 83,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 59,
+          "weightedScore": 0.5429761904761905
+        },
+        {
+          "sex": "F",
+          "firstName": "Mckayla",
+          "lastName": "O'Brien",
+          "dial4": 86,
+          "behaviorObservation": 1,
+          "potentialDelay": 0,
+          "age": 66,
+          "weightedScore": 0.5955753968253968
+        },
+        {
+          "sex": "F",
+          "firstName": "Alanah",
+          "lastName": "Rinker",
+          "dial4": 71,
+          "behaviorObservation": 1,
+          "potentialDelay": 0,
+          "age": 56,
+          "weightedScore": 0.4541071428571429
+        },
+        {
+          "sex": "F",
+          "firstName": "Ella",
+          "lastName": "Bubnis",
+          "dial4": 92,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 60,
+          "weightedScore": 0.6035515873015873
+        },
+        {
+          "sex": "F",
+          "firstName": "Gabriella",
+          "lastName": "Guarino",
+          "dial4": 96,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 66,
+          "weightedScore": 0.6574801587301587
+        },
+        {
+          "sex": "F",
+          "firstName": "Amelia",
+          "lastName": "Mozeko",
+          "dial4": 98,
+          "behaviorObservation": 1,
+          "potentialDelay": 0,
+          "age": 64,
+          "weightedScore": 0.6601388888888889
+        },
+        {
+          "sex": "M",
+          "firstName": "Andrew",
+          "lastName": "Bowen",
+          "dial4": 83,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 57,
+          "weightedScore": 0.5332539682539683
+        },
+        {
+          "sex": "M",
+          "firstName": "Brennen",
+          "lastName": "Poll",
+          "dial4": 87,
+          "behaviorObservation": 2,
+          "potentialDelay": 0,
+          "age": 64,
+          "weightedScore": 0.5920436507936508
+        },
+        {
+          "sex": "M",
+          "firstName": "Nicolo",
+          "lastName": "Ramunni",
+          "dial4": 89,
+          "behaviorObservation": 3,
+          "potentialDelay": 0,
+          "age": 58,
+          "weightedScore": 0.5752579365079366
+        },
+        {
+          "sex": "M",
+          "firstName": "Ryan",
+          "lastName": "Spisszak",
+          "dial4": 94,
+          "behaviorObservation": 0,
+          "potentialDelay": 0,
+          "age": 68,
+          "weightedScore": 0.6548214285714286
+        },
+        {
+          "sex": "M",
+          "firstName": "Tyler",
+          "lastName": "Mullaney",
+          "dial4": 84,
+          "behaviorObservation": 12,
+          "potentialDelay": 1,
+          "age": 65,
+          "weightedScore": 0.5783333333333334
+        },
+        {
+          "sex": "F",
+          "firstName": "Vinnia",
+          "lastName": "Bove-Seagreaves",
+          "dial4": 82,
+          "behaviorObservation": 6,
+          "potentialDelay": 1,
+          "age": 67,
+          "weightedScore": 0.5756746031746032
+        },
+        {
+          "sex": "M",
+          "firstName": "Hudson",
+          "lastName": "Miller",
+          "dial4": 75,
+          "behaviorObservation": 4,
+          "potentialDelay": 1,
+          "age": 56,
+          "weightedScore": 0.47886904761904764
+        },
+        {
+          "sex": "M",
+          "firstName": "Sean",
+          "lastName": "Robinson",
+          "dial4": 82,
+          "behaviorObservation": 2,
+          "potentialDelay": 1,
+          "age": 66,
+          "weightedScore": 0.5708134920634921
+        }
+      ],
+      "stats": {
+        "behavior": 34,
+        "dial4": 1348,
+        "age": 980,
+        "females": 9,
+        "males": 7,
+        "potentialDelays": 4,
+        "count": 16,
+        "avgBehavior": 2.125,
+        "avgDial4": 84.25,
+        "avgAge": 61.25,
+        "genderRatio": 0.7777777777777778
+      }
     }
   ]
 }

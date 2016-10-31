@@ -1,3 +1,4 @@
+import { shuffle } from '../../lib/util'
 import { getKindergartenRaw } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
@@ -5,121 +6,112 @@ export default function place() {
   return getKindergartenRaw()
     .then(data => {
       let students = data.students
+
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
       const ageWeight = .35
+      const dial4Score = 105
+      const behaviorLimit = 5
 
-      //get min and max ages of students   
-      let minAge = students[0].age
-      let maxAge = students[0].age
+      // get min and max ages
+      let minAge = Number.POSITIVE_INFINITY
+      let maxAge = Number.NEGATIVE_INFINITY
 
-      for (let i = 0; i < students.length; i++) {
-        if (students[i].age > maxAge) {
-          maxAge = students[i].age
-        }
-        else if (students[i].age < minAge) {
-          minAge = students[i].age
-        }
-      }
-
-      //convert age and dial4 to percentage out of 100 for each student
-      //then calculate their weighted quantitative score
-      for (let i = 0; i < students.length; i++) {
-        let agePercentage = (students[i].age - minAge) / maxAge
-        let dial4Percentage = students[i].dial4 / 105
-        students[i].weighted_score = dial4Weight * dial4Percentage + ageWeight * agePercentage
-      }
-
-      let girls = []
-      let boys = []
-      let flags = []
-
-      for (let i = 0; i < students.length; i++) {
-        if (students[i].potentialDelay === true || students[i].behavior > 5) {
-          flags.push(students[i])
-        }
-        else if (students[i].sex === 'F') {
-          girls.push(students[i])
-        }
-        else {
-          boys.push(students[i])
+      for (let student of students) {
+        const age = student.age
+        if (age > maxAge) {
+          maxAge = student.age
+        } else if (age < minAge) {
+          minAge = age
         }
       }
 
-      //sort the boy and girl array based off weighted score in descending order
-      girls.sort(function (a, b) { return b.weighted_score - a.weighted_score })
-      boys.sort(function (a, b) { return b.weighted_score - a.weighted_score })
+      let flags = [], girls = [], boys = []
 
-      //sort the flagged students array based off behavior
-      flags.sort(function (a, b) { return b.behaviorObservation - a.behaviorObservation })
+      for (let student of students) {
+        // get weighted quantitative score
+        let agePercentage = (student.age - minAge) / maxAge
+        let dial4Percentage = student.dial4 / dial4Score
+        student.weightedScore = (dial4Weight * dial4Percentage) + (ageWeight * agePercentage)
+        // segregate
+        if (student.potentialDelay || student.behavior > behaviorLimit) {
+          flags.push(student)
+        } else if (student.sex === 'F') {
+          girls.push(student)
+        } else {
+          boys.push(student)
+        }
+      }
+
+      // sort by weighted score
+      girls.sort((a, b) => { return b.weighted_score - a.weighted_score })
+      boys.sort((a, b) => { return b.weighted_score - a.weighted_score })
+
+      // sort by behavior
+      flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
 
       //create the correct number of classrooms that will be sorted into
-      let classes = []
+      let sections = []
       for (let i = 0; i < data.sections; i++) {
-        classes.push([])
+        sections.push({
+          teacher: {
+            name: data.teachers[i].name
+          },
+          students: [],
+          stats: {}
+        })
       }
 
-      //put the girls into their classrooms using a snake algorithm
+      // place in sections (shuffle)
       for (let i = 0; i < girls.length; i++) {
-        let roundNum = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (roundNum % 2 === 0) {
-          index = data.sections - index - 1
-        }
-        classes[index].push(girls[i])
+        sections[i % sections.length].students.push(girls[i])
       }
 
-      //put the boys into their classrooms
+      shuffle(sections)
       for (let i = 0; i < boys.length; i++) {
-        let roundNum = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (roundNum % 2 === 0) {
-          index = data.sections - index - 1
-        }
-        classes[index].push(boys[i])
+        sections[i % sections.length].students.push(boys[i])
       }
 
+      shuffle(sections)
       for (let i = 0; i < flags.length; i++) {
-        let roundNum = Math.floor(i / data.sections)
-        let index = i % data.sections
-        if (roundNum % 2 === 0) {
-          index = data.sections - index - 1
-        }
-        classes[index].push(flags[i])
+        sections[i % sections.length].students.push(flags[i])
       }
 
-      //calculate averages
-      for (let i = 0; i < data.sections; i++) {
-        let totalBehavior = 0.0
-        let totalDial4 = 0.0
-        let male_count = 0
-        let potentialDelayCount = 0
-        let totalAge = 0.0
-        let count = 0.0
-        for (let j = 0; j < classes[i].length; j++) {
-          totalBehavior += classes[i][j].behaviorObservation
-          totalDial4 += classes[i][j].dial4
-          totalAge += classes[i][j].age
-          count++
-          if (classes[i][j].sex === 'M')
-            male_count++
-          if (classes[i][j].potentialDelay === 1)
-            potentialDelayCount++
+      const reducer = (stats, student) => {
+        console.error(stats)
+        stats.behavior += student.behaviorObservation
+        stats.dial4 += student.dial4
+        stats.age += student.age
+        if (student.sex === 'F') {
+          stats.females++
+        } else {
+          stats.males++
         }
-        let avgBehavior = totalBehavior / count
-        let femaleCount = count - male_count
-        let avgDial4 = totalDial4 / count
-        let avgAge = totalAge / count
-
-        let stats = {
-          'avgBehavior': avgBehavior, 'femaleCount': femaleCount,
-          'maleCount': male_count, 'avgDial4': avgDial4,
-          'genderRatio': male_count / femaleCount, 'avgAge': avgAge,
-          'potentialDelays': potentialDelayCount
+        if (student.potentialDelay) {
+          stats.potentialDelays++
         }
-        classes[i] = { 'stats': stats, 'students': classes[i], 'teacher': data.teachers[i].name }
+        stats.count++
+        return stats
       }
-      let placement = { 'grade': 0, 'sections': classes }
+
+      for (let section of sections) {
+        let stats = section.students.reduce(reducer, {
+          behavior: 0,
+          dial4: 0,
+          age: 0,
+          females: 0,
+          males: 0,
+          potentialDelays: 0,
+          count: 0
+        })
+        stats['avgBehavior'] = stats.behavior / stats.count
+        stats['avgDial4'] = stats.dial4 / stats.count
+        stats['avgAge'] = stats.age / stats.count
+        stats['genderRatio'] = stats.males / stats.females
+        section.stats = stats
+      }
+
+      let placement = { 'grade': 0, 'sections': sections }
       return savePlacement(0, placement)
     })
 }
