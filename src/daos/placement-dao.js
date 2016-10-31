@@ -1,10 +1,44 @@
 import fs from 'fs'
 import path from 'path'
 
+function getPath(grade) {
+  let name
+  switch(grade) {   
+    case 0:
+      name = 'kindergarten'
+      break
+    case 1:
+      name = 'first'
+      break
+    case 2:
+      name = 'second'
+      break
+    case 3:
+      name = 'third'
+      break
+    case 4:
+      name = 'fourth'
+      break
+    case 5:
+      name = 'fifth'
+      break
+    case 6:
+      name = 'sixth'
+      break
+    case 7:
+      name = 'seventh'
+      break
+    case 8:
+      name = 'eighth'
+      break
+  }
+  return path.join(__dirname, `../mock-data/placements/${name}-placement.json`)
+}
+
 // TODO - replace with calls to database
-export function getKindergartenPlacement() {
+export function getPlacement(grade) {
   return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/kindergarten-placement.json')
+    const filepath = getPath(grade)
     fs.readFile(filepath, function (err, data) {
       if (err) {
         reject(err)
@@ -15,10 +49,10 @@ export function getKindergartenPlacement() {
   })
 }
 
-export function deleteKindergartenPlacement() {
+export function savePlacement(grade, placement) {
   return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/kindergarten-placement.json')
-    fs.unlink(filepath, function (err) {
+    const filepath = getPath(grade)
+    fs.writeFile(filepath, JSON.stringify(placement, null, 2), 'utf8', function (err) {
       if (err) {
         reject(err)
       } else {
@@ -28,48 +62,9 @@ export function deleteKindergartenPlacement() {
   })
 }
 
-export function getThirdPlacement() {
+export function deletePlacement(grade) {
   return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/third-placement.json')
-    fs.readFile(filepath, function (err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(JSON.parse(data))
-      }
-    })
-  })
-}
-
-export function deleteThirdPlacement() {
-  return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/third-placement.json')
-    fs.unlink(filepath, function (err) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
-}
-
-export function getSixthPlacement() {
-  return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/sixth-placement.json')
-    fs.readFile(filepath, function (err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(JSON.parse(data))
-      }
-    })
-  })
-}
-
-export function deleteSixthPlacement() {
-  return new Promise((resolve, reject) => {
-    const filepath = path.join(__dirname, '../mock-data/placements/sixth-placement.json')
+    const filepath = getPath(grade)
     fs.unlink(filepath, function (err) {
       if (err) {
         reject(err)
