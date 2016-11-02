@@ -1,6 +1,6 @@
-import { shuffle } from '../../lib/util'
 import { getKindergartenRaw } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
+import { shuffle } from '../../lib/util'
 
 export default function place() {
   return getKindergartenRaw()
@@ -26,7 +26,9 @@ export default function place() {
         }
       }
 
-      let flags = [], girls = [], boys = []
+      let pool = {
+        girls: [], boys: [], flags: []
+      }
 
       for (let student of students) {
         // get weighted quantitative score
@@ -35,22 +37,22 @@ export default function place() {
         student.weightedScore = (dial4Weight * dial4Percentage) + (ageWeight * agePercentage)
         // segregate
         if (student.potentialDelay || student.behavior > behaviorLimit) {
-          flags.push(student)
+          pool.flags.push(student)
         } else if (student.sex === 'F') {
-          girls.push(student)
+          pool.girls.push(student)
         } else {
-          boys.push(student)
+          pool.boys.push(student)
         }
       }
 
       // sort by weighted score
-      girls.sort((a, b) => { return b.weighted_score - a.weighted_score })
-      boys.sort((a, b) => { return b.weighted_score - a.weighted_score })
+      pool.girls.sort((a, b) => { return b.weighted_score - a.weighted_score })
+      pool.boys.sort((a, b) => { return b.weighted_score - a.weighted_score })
 
       // sort by behavior
-      flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
+      pool.flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
 
-      //create the correct number of classrooms that will be sorted into
+      // initialize the sections
       let sections = []
       for (let i = 0; i < data.sections; i++) {
         sections.push({
@@ -62,23 +64,18 @@ export default function place() {
         })
       }
 
-      // place in sections (shuffle)
-      for (let i = 0; i < girls.length; i++) {
-        sections[i % sections.length].students.push(girls[i])
-      }
-
-      shuffle(sections)
-      for (let i = 0; i < boys.length; i++) {
-        sections[i % sections.length].students.push(boys[i])
-      }
-
-      shuffle(sections)
-      for (let i = 0; i < flags.length; i++) {
-        sections[i % sections.length].students.push(flags[i])
+      // distribute the students
+      for (let key in pool) {
+        if (pool.hasOwnProperty(key)) {
+          shuffle(sections)
+          let group = pool[key]
+          for (let i = 0; i < group.length; i++) {
+            sections[i % sections.length].students.push(group[i])
+          }
+        }
       }
 
       const reducer = (stats, student) => {
-        console.error(stats)
         stats.behavior += student.behaviorObservation
         stats.dial4 += student.dial4
         stats.age += student.age
@@ -110,7 +107,6 @@ export default function place() {
         stats['genderRatio'] = stats.males / stats.females
         section.stats = stats
       }
-
       let placement = { 'grade': 0, 'sections': sections }
       return savePlacement(0, placement)
     })
