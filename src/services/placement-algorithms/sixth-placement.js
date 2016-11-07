@@ -7,20 +7,20 @@ export default function place() {
 		.then(data => {
 			let students = data.students
 
-			//constants for calculating weighted quantitative score
+			// constants for calculating weighted quantitative score
 			const cogatWeight = .4
 			const iowaWeight = .35
 			const mathBenchWeight = .25
 			const cogatScore = 160
 			const behaviorLimit = 2
 
-			//convert cogAT to percentage out of 100 for each student (IOWA and Math Benchmark are already percentages)
-			//calculate their weighted quantitative score
-			//calculate behavior score
+			// convert cogAT to percentage out of 100 for each student (IOWA and Math Benchmark are already percentages)
+			// calculate their weighted quantitative score
+			// calculate behavior score
 			for (let student of students) {
-				let cogat = cogatWeight * ((student.cogAT * 100) / cogatScore)
+				let cogat = cogatWeight * (student.cogAT / cogatScore)
 				let math = mathBenchWeight * student.mathBench
-				let iowa = iowaWeight * ((student.elaTotal + student.mathTotal) / 200)
+				let iowa = iowaWeight * ((student.elaTotal + student.mathTotal) / 2)
 				student.weightedScore = cogat + math + iowa
 				student.behaviorScore = (student.behavior ? student.behavior : 0) + (student.workEthic ? student.workEthic : 0)
 			}
