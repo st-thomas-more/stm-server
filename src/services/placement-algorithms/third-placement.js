@@ -1,6 +1,5 @@
 import { getThirdRaw } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
-import { shuffle } from '../../lib/util'
 
 export default function place() {
   return getThirdRaw()
@@ -50,9 +49,9 @@ export default function place() {
       for (let key in pool) {
         if (pool.hasOwnProperty(key)) {
           if (key === 'girls' || key === 'boys') {
-            pool[key].sort((a, b) => { return b.weightedScore - a.weightedScore})
+            pool[key].sort((a, b) => { return b.weightedScore - a.weightedScore })
           } else {
-            pool[key].sort((a, b) => {return b.behaviorScore - a.behaviorScore})
+            pool[key].sort((a, b) => { return b.behaviorScore - a.behaviorScore })
           }
         }
       }
@@ -72,7 +71,7 @@ export default function place() {
       // distribute the students
       for (let key in pool) {
         if (pool.hasOwnProperty(key)) {
-          shuffle(sections)
+          sections.sort((a, b) => { return a.students.length - b.students.length })
           let group = pool[key]
           for (let i = 0; i < group.length; i++) {
             sections[i % sections.length].students.push(group[i])

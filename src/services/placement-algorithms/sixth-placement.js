@@ -1,6 +1,5 @@
 import { getSixthRaw } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
-import { shuffle } from '../../lib/util'
 
 export default function place() {
 	return getSixthRaw()
@@ -79,7 +78,7 @@ export default function place() {
 			// distribute the students
       for (let key in pool) {
         if (pool.hasOwnProperty(key)) {
-          shuffle(sections)
+          sections.sort((a, b) => { return a.students.length - b.students.length })
           let group = pool[key]
           for (let i = 0; i < group.length; i++) {
             sections[i % sections.length].students.push(group[i])
