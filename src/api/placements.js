@@ -11,39 +11,18 @@ export default ({ config, db }) => resource({
 
 	/** GET /:id - Return a given entity */
 	read(req, res) {
-		switch (parseInt(req.params.grade)) {
-			case 0:
-				placementDao.getKindergartenPlacement()
-					.then(placement => {
-						res.status(200).json(placement)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-				break
-			case 3:
-				placementDao.getThirdPlacement()
-					.then(placement => {
-						res.status(200).json(placement)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-				break
-			case 6:
-				placementDao.getSixthPlacement()
-					.then(placement => {
-						res.status(200).json(placement)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-				break
-			default:
-				res.sendStatus(404)
+		const grade = parseInt(req.params.grade)
+		if (grade >= 0 && grade <= 8) {
+			placementDao.getPlacement(grade)
+				.then(placement => {
+					res.status(200).json(placement)
+				})
+				.catch(err => {
+					console.error(err)
+					res.sendStatus(404)
+				})
+		} else {
+			res.sendStatus(404)
 		}
 	},
 	/** PUT /:id - Run the algorithm */
@@ -81,13 +60,13 @@ export default ({ config, db }) => resource({
 				break
 			default:
 				res.sendStatus(404)
-		}
+			}
 		},
 		/** DELETE /:id - Delete a given entity */
 		delete(req, res) {
-		switch (parseInt(req.params.grade)) {
-			case 0:
-				placementDao.deleteKindergartenPlacement()
+			const grade = parseInt(req.params.grade)
+			if (grade >= 0 && grade <= 8) {
+				placementDao.deletePlacement(grade)
 					.then(() => {
 						res.sendStatus(204)
 					})
@@ -95,29 +74,8 @@ export default ({ config, db }) => resource({
 						console.error(err)
 						res.sendStatus(404)
 					})
-				break
-			case 3:
-				placementDao.deleteThirdPlacement()
-					.then(() => {
-						res.sendStatus(204)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-				break
-			case 6:
-				placementDao.deleteSixthPlacement()
-					.then(() => {
-						res.sendStatus(204)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-				break
-			default:
+			} else {
 				res.sendStatus(404)
-		}
+			}
 		}
 })
