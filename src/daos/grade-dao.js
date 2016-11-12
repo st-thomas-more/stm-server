@@ -1,22 +1,27 @@
+import gradeRaw from '../mock-data/raw/grade-raw'
 import kindergartenRaw from '../mock-data/raw/kindergarten-raw'
 import thirdRaw from '../mock-data/raw/third-raw'
 import sixthRaw from '../mock-data/raw/sixth-raw'
 
 // TODO - replace with calls to database
-export function getKindergartenRaw() {
-  return new Promise((resolve) => {
-    resolve(kindergartenRaw)
-  })
-}
-
-export function getThirdRaw() {
-  return new Promise((resolve) => {
-    resolve(thirdRaw)
-  })
-}
-
-export function getSixthRaw() {
-  return new Promise((resolve) => {
-    resolve(sixthRaw)
-  })
+export function get(grade) {
+	return new Promise((resolve, reject) => {
+		if (grade === undefined) {
+			resolve(gradeRaw)
+		} else {
+			switch(grade) {
+				case 0:
+					resolve(kindergartenRaw)
+					break
+				case 3:
+					resolve(thirdRaw)
+					break
+				case 6:
+					resolve(sixthRaw)
+					break
+				default:
+					reject()
+			}
+		}
+	})
 }
