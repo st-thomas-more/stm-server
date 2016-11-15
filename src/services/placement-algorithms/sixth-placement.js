@@ -1,8 +1,8 @@
-import { getSixthRaw } from '../../daos/grade-dao'
+import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place() {
-	return getSixthRaw()
+	return getGrade(6)
 		.then(data => {
 			let students = data.students
 
