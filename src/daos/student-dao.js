@@ -3,8 +3,9 @@ import fs from 'fs'
 import path from 'path'
 //not needed after the database is connected
 function getPath(studentID) {
+  const id = parseInt(studentID, 10)
   let name
-  switch(studentID) {   
+  switch(id) {   
     case 0:
       name = 'kindergarten'
       break
@@ -34,7 +35,6 @@ export function getStudent(studentID) {
 }
 
 export function updateStudent(student) {
-  console.log(student)
   const filepath = getPath(student.id)
   return new Promise((resolve, reject) => {
     fs.writeFile(filepath, JSON.stringify(student, null, 2), 'utf8', function (err) {

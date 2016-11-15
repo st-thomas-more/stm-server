@@ -1,5 +1,5 @@
 import resource from 'resource-router-middleware'
-import * as studentsDao from '../daos/student-dao'
+import * as studentDAO from '../daos/student-dao'
 
 export default ({ config, db }) => resource({
 
@@ -8,24 +8,31 @@ export default ({ config, db }) => resource({
 
 	/** GET /:id - Return a given student */
 	read(req, res) {
-		const studentID = parseInt(req.params.studentID)
-		if (studentID >= 0) {
-			studentsDao.getStudent(studentID)
-				.then(student => {
-					res.status(200).json(student)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
-		} else {
-			res.sendStatus(404)
-		}
+		studentDAO.getStudent(req.params.studentID)
+			.then(student => {
+				res.status(200).json(student)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
 	},
 
 	/** POST - Create a new student */
 	create(req, res) {
-		studentsDao.createStudent(req.body.student)
+		studentDAO.createStudent(req.body.student)
+			.then(() => {
+				res.sendStatus(201)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
+	},
+
+	/** PUT /:id - Update a students info, this expects a json object of all of the students data */
+	update(req, res) {
+		studentDAO.updateStudent(req.body.student)
 			.then(() => {
 				res.sendStatus(200)
 			})
@@ -35,37 +42,15 @@ export default ({ config, db }) => resource({
 			})
 	},
 
-	/** PUT /:id - update a students info, this expects a json object of all of the students data */
-	update(req, res) {
-		const studentID = req.body.student.id
-		if (studentID >= 0) {
-			studentsDao.updateStudent(req.body.student)
-				.then(() => {
-					res.sendStatus(200)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
-		} else {
-			res.sendStatus(404)
-		}
-	},
-
 	/** DELETE /:id - Delete a given student based on their id */
 	delete(req, res) {
-		const studentID = parseInt(req.params.studentID)
-		if (studentID > 0) {
-			studentsDao.deleteStudent(studentID)
-				.then(() => {
-					res.sendStatus(200)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
-		} else {
-			res.sendStatus(404)
-		}
+		studentDAO.deleteStudent(req.params.studentID)
+			.then(() => {
+				res.sendStatus(204)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
 	}
 })
