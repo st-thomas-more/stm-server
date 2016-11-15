@@ -9,7 +9,8 @@ export function get(grade) {
 		if (grade === undefined) {
 			resolve(gradeRaw)
 		} else {
-			switch(grade) {
+			grade = (isNaN(grade) ? parseInt(grade, 10) : grade)
+			switch (grade) {
 				case 0:
 					resolve(kindergartenRaw)
 					break
@@ -20,7 +21,7 @@ export function get(grade) {
 					resolve(sixthRaw)
 					break
 				default:
-					reject()
+					reject(new Error(`Unknown grade: ${grade}`))
 			}
 		}
 	})

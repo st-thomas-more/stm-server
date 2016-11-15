@@ -5,33 +5,29 @@ export default ({ config, db }) => resource({
 
 	/** Property name to store preloaded entity on `request`. */
 	id: 'grade',
-	
-	list(req, res){
+
+	/** GET / - Return all grades */
+	list(req, res) {
 		gradeDao.get()
-			.then(g => {
-				res.status(200).json(g)
+			.then(grades => {
+				res.status(200).json(grades)
 			})
 			.catch(err => {
 				console.error(err)
 				res.sendStatus(404)
 			})
 	},
-	
-	/** GET /:id - Return a given entity */
+
+	/** GET /:grade - Return grade by # */
 	read(req, res) {
-		const grade = parseInt(req.params.grade)
-		if (grade >= 0 && grade <= 8) {
-			gradeDao.get(grade)
-				.then(g => {
-					res.status(200).json(g)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
-		} else {
-			res.sendStatus(404)
-		}
+		gradeDao.get(req.params.grade)
+			.then(grade => {
+				res.status(200).json(grade)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
 	}
 
 })
