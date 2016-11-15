@@ -1,8 +1,8 @@
-import { getThirdRaw } from '../../daos/grade-dao'
+import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place() {
-  return getThirdRaw()
+  return getGrade(3)
     .then(data => {
       let students = data.students
       //constants for the calculating weighted quantitative score

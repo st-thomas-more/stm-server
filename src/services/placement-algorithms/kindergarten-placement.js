@@ -1,8 +1,8 @@
-import { getKindergartenRaw } from '../../daos/grade-dao'
+import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place() {
-  return getKindergartenRaw()
+  return getGrade(0)
     .then(data => {
       let students = data.students
 
