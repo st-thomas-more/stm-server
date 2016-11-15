@@ -1,21 +1,20 @@
 import resource from 'resource-router-middleware'
-import * as sectionsDao from '../daos/sections-dao'
+import * as sectionDAO from '../daos/section-dao'
 
 export default ({ config, db }) => resource({
 
 	/** Property name to store preloaded entity on `request`. */
-	id: 'section',
+	id: 'sectionID',
 
-	/** GET /:id - Return a given entity */
+	/** GET /:sectionID - Return a given entity */
 	read(req, res) {
-		const section = parseInt(req.params.section)
-			sectionsDao.getSection(section)
-				.then(sec => {
-					res.status(200).json(sec)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
+		sectionDAO.getSection(req.params.sectionID)
+			.then(section => {
+				res.status(200).json(section)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
 	}
 })
