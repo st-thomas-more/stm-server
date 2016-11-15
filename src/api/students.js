@@ -6,7 +6,7 @@ export default ({ config, db }) => resource({
 	/** Property name to store preloaded entity on `request`. */
 	id: 'studentID',
 
-	/** GET /:id - Return a given student */
+	/** GET /:studentID - Return a given student */
 	read(req, res) {
 		studentDAO.getStudent(req.params.studentID)
 			.then(student => {
@@ -30,7 +30,7 @@ export default ({ config, db }) => resource({
 			})
 	},
 
-	/** PUT /:id - Update a students info, this expects a json object of all of the students data */
+	/** PUT / - Update a students info, this expects a json object of all of the students data */
 	update(req, res) {
 		studentDAO.updateStudent(req.body.student)
 			.then(() => {
@@ -42,7 +42,7 @@ export default ({ config, db }) => resource({
 			})
 	},
 
-	/** DELETE /:id - Delete a given student based on their id */
+	/** DELETE /:studentID - Delete a given student based on their id */
 	delete(req, res) {
 		studentDAO.deleteStudent(req.params.studentID)
 			.then(() => {

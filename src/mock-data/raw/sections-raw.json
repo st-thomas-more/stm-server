@@ -1,0 +1,306 @@
+[
+		{
+			"sectionID": 1,
+			"teacher": {
+				"firstName": "A",
+				"lastName": "Aa"
+			},
+			"students": [
+			{
+				"sex": "F",
+				"firstName": "Tahlia",
+				"lastName": "Wagner",
+				"dial4": 46,
+				"behaviorObservation": 9,
+				"selfHelp": 44,
+				"socialEmotional": 52,
+				"potentialDelay": 1,
+				"age": 54
+			}
+			]
+		},
+		{	
+			"sectionID": 2,
+			"teacher": {
+				"firstName": "B",
+				"lastName": "Bb"
+			},
+			"students": [
+			{
+				"sex": "F",
+				"firstName": "Ann",
+				"lastName": "Mathew",
+				"dial4": 59,
+				"behaviorObservation": 17,
+				"selfHelp": 36,
+				"socialEmotional": 41,
+				"potentialDelay": 1,
+				"age": 59
+			}
+			]
+		},
+		{
+			"sectionID": 3,
+			"teacher": {
+				"firstName": "C",
+				"lastName": "Cc"
+			},
+			"students": [
+			{
+				"sex": "F",
+				"firstName": "Aveley",
+				"lastName": "Alicea",
+				"dial4": 60,
+				"behaviorObservation": 19,
+				"selfHelp": 40,
+				"socialEmotional": 51,
+				"potentialDelay": 1,
+				"age": 56
+			}
+            ]
+        },
+		
+        {"sectionID": 4,
+			"teacher": {
+				"firstName": "A",
+				"lastName": "Aa"
+			},
+			"students": [
+			{
+				"firstName": "Joseph",
+				"lastName": "Lyons",
+				"dob": "11-11-07",
+				"sex": "M",
+				"presentTeacher": "Frank",
+				"gradeEntering": 3,
+				"asp": "",
+				"advancedMath": "",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "",
+				"behavior": 1,
+				"workEthic": 1,
+				"placeWith": "",
+				"separateFrom": "",
+				"dra": 40,
+				"wtwBook": "B",
+				"Sort": "",
+				"raz": "O",
+				"ge": 3.11,
+				"mathBench": 91,
+				"dibels": 1,
+				"elaTotal": 92,
+				"extendedEla": 91,
+				"mathTotal": 95,
+				"comments": ""
+			}
+			]
+		},
+		{	
+			"sectionID": 5,
+			"teacher": {
+				"firstName": "B",
+				"lastName": "Bb"
+			},
+			"students": [
+			{
+				"firstName": "Evan",
+				"lastName": "Borkowski",
+				"dob": "9-15-07",
+				"sex": "M",
+				"presentTeacher": "Payne",
+				"gradeEntering": 3,
+				"asp": "",
+				"advancedMath": "",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "",
+				"behavior": 2,
+				"workEthic": 2,
+				"placeWith": "",
+				"separateFrom": "",
+				"dra": 40,
+				"wtwBook": "",
+				"Sort": "",
+				"raz": "Z",
+				"ge": 3.11,
+				"mathBench": 78,
+				"dibels": 1,
+				"elaTotal": 99,
+				"extendedEla": 99,
+				"mathTotal": 99,
+				"comments": "Very Intelligent"
+			}
+			]
+		},
+		{
+			"sectionID": 6,
+			"teacher": {
+				"firstName": "C",
+				"lastName": "Cc"
+			},
+			"students": [
+			{
+				"firstName": "Liam",
+				"lastName": "Paradise",
+				"dob": "7-30-07",
+				"sex": "M",
+				"presentTeacher": "Schmidt",
+				"gradeEntering": 3,
+				"asp": "",
+				"advancedMath": "",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "",
+				"behavior": 2,
+				"workEthic": 2,
+				"placeWith": "",
+				"separateFrom": "",
+				"dra": 40,
+				"wtwBook": "B",
+				"Sort": "",
+				"raz": "O",
+				"ge": 3.11,
+				"mathBench": 95,
+				"dibels": 1,
+				"elaTotal": 97,
+				"extendedEla": 99,
+				"mathTotal": 98,
+				"comments": "Excellent Student"
+			}
+			]
+		},
+
+        {"sectionID": 7,
+			"teacher": {
+				"firstName": "A",
+				"lastName": "Aa"
+			},
+			"students": [
+			{
+				"firstName": "Aidan",
+				"lastName": "Wakstein",
+				"dob": "2-5-05",
+				"sex": "M",
+				"presentTeacher": "Hensinger",
+				"gradeEntering": 6,
+				"asp": "",
+				"advancedMath": "",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "1",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "",
+				"behavior": 2,
+				"workEthic": 2,
+				"placeWith": "",
+				"separateFrom": "Alistair",
+				"mathBench": 69,
+				"cogAT": 97,
+				"elaTotal": 78,
+				"mathTotal": 88,
+				"dibels": "",
+				"comments": ""
+			}
+			]
+		},
+		{	
+			"sectionID": 8,
+			"teacher": {
+				"firstName": "B",
+				"lastName": "Bb"
+			},
+			"students": [
+			{
+				"firstName": "Anthony",
+				"lastName": "Pez",
+				"dob": "5-25-05",
+				"sex": "M",
+				"presentTeacher": "Hensinger",
+				"gradeEntering": 6,
+				"asp": "",
+				"advancedMath": "",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "1",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "1",
+				"behavior": 0,
+				"workEthic": 0,
+				"placeWith": "",
+				"separateFrom": "Alex V, Victor M, Adam K",
+				"mathBench": 78,
+				"cogAT": 100,
+				"elaTotal": 76,
+				"mathTotal": 77,
+				"dibels": "",
+				"comments": ""
+			}
+			]
+		},
+		{
+			"sectionID": 9,
+			"teacher": {
+				"firstName": "C",
+				"lastName": "Cc"
+			},
+			"students": [
+			{
+				"firstName": "John",
+				"lastName": "Hughes",
+				"dob": "11-18-04",
+				"sex": "M",
+				"presentTeacher": "Hensinger",
+				"gradeEntering": 6,
+				"asp": "",
+				"advancedMath": "1",
+				"speechAndLanguage": "",
+				"iuReadingSvcs": "",
+				"iuMathSvcs": "",
+				"earobics": "",
+				"facultyStudent": "",
+				"youngestAndOnly": "1",
+				"newStudent": "",
+				"medicalConcern": "",
+				"hmp": "",
+				"behavior": 1,
+				"workEthic": 2,
+				"placeWith": "",
+				"separateFrom": "Nic R, Adam K",
+				"mathBench": 83,
+				"cogAT": 125,
+				"elaTotal": 99,
+				"mathTotal": 98,
+				"dibels": "",
+				"comments": ""
+			}
+			]
+		}
+
+]

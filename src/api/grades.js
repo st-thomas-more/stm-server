@@ -29,6 +29,5 @@ export default ({ config, db }) => resource({
 				res.sendStatus(404)
 			})
 	}
-
 })
 
