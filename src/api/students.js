@@ -8,7 +8,7 @@ export default ({ config, db }) => resource({
 
 	/** GET /:studentID - Return a given student */
 	read(req, res) {
-		studentDAO.getStudent(req.params.studentID)
+		studentDAO.getStudent(req.params.studentID, db)
 			.then(student => {
 				res.status(200).json(student)
 			})

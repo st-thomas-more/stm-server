@@ -21,14 +21,13 @@ function getPath(studentID) {
   return path.join(__dirname, `../mock-data/raw/${name}-students-raw.json`)
 }
 
-export function getStudent(studentID) {
+export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    const filepath = getPath(studentID)
-    fs.readFile(filepath, function (err, data) {
+    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `classroomBehavior` AS `behavior`, `facStudent` AS `facultyStudent`, `newStudent`, `medicalConcern`, `HMP` AS `hmp`, `workHabits` AS `workEthic`, `mathBenchmark` AS `mathBench`, `DRA` AS `dra`, `aspDate` AS `asp`  FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID, function (err, entities){
       if (err) {
         reject(err)
       } else {
-        resolve(JSON.parse(data))
+        resolve(entities)
       }
     })
   })
