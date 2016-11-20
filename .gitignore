@@ -3,4 +3,5 @@
 /npm-debug.log
 /node_modules
 /.vscode
+/src/mock-data/placements/*placement.json
 .DS_Store

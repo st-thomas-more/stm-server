@@ -1,0 +1,17 @@
+{
+      "id": 3,
+      "sex": "M",
+      "firstName": "Joseph",
+      "lastName": "Lyons",
+      "behavior": 2,
+      "facultyStudent": 0,
+      "newStudent": 0,
+      "medicalConcern": 0,
+      "hmp": 0,
+      "workEthic": 3,
+      "mathBench": 91,
+      "dra": 40,
+      "asp": 0,
+      "weighted_score": 70.68571428571428,
+      "behavior_score": 5
+}
