@@ -1,4 +1,5 @@
 // TODO - replace with calls to database
+import studentRaw from '../mock-data/raw/student-raw'
 import fs from 'fs'
 import path from 'path'
 //not needed after the database is connected
@@ -25,6 +26,12 @@ function getPath(studentID) {
       console.log('error finding path for studentid' + studentID)
   }
   return path.join(__dirname, `../mock-data/raw/${name}-students-raw.json`)
+}
+
+export function getStudents() {
+	return new Promise(resolve => {
+		resolve(studentRaw)
+	})
 }
 
 export function getStudent(studentID) {
