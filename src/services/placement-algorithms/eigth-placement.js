@@ -38,7 +38,6 @@ export default function place() {
 		// distribute the students
 		for (let key in pool) {
 			if (pool.hasOwnProperty(key)) {
-				//sections.sort((a, b) => { return a.students.length - b.students.length })
 				let group = pool[key]
 				let sectionSize = Math.floor(group.length / sections.length)
 				let remainderCount = group.length % sections.length
@@ -48,10 +47,10 @@ export default function place() {
 				for (let i = 0; i < group.length; i++) {
 					sections[sectionNum].students.push(group[i])
 					pushCount++
-					if(pushCount == secSize){
+					if(pushCount === secSize){
 						sectionNum++
 						pushCount = 0
-						if (remainderCount != 0) {
+						if (remainderCount !== 0) {
 							secSize = sectionSize + 1
 							remainderCount--
 						}

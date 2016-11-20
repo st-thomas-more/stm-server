@@ -29,7 +29,7 @@ function getPath(studentID) {
 }
 
 export function getStudents() {
-	return new Promise((resolve, reject) => {
+	return new Promise(resolve => {
 		resolve(studentRaw)
 	})
 }
