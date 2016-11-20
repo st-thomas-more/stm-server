@@ -1,25 +1,4 @@
-// TODO - replace with calls to database
-import fs from 'fs'
-import path from 'path'
-//not needed after the database is connected
-function getPath(studentID) {
-  const id = parseInt(studentID, 10)
-  let name
-  switch(id) {   
-    case 0:
-      name = 'kindergarten'
-      break
-    case 3:
-      name = 'third'
-      break
-    case 6:
-      name = 'sixth'
-      break
-    default:
-      console.log('error finding path for studentid' + studentID)
-  }
-  return path.join(__dirname, `../mock-data/raw/${name}-students-raw.json`)
-}
+import studentRaw from '../mock-data/raw/student-raw'
 
 export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {

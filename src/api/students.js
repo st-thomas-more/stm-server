@@ -6,6 +6,18 @@ export default ({ config, db }) => resource({
 	/** Property name to store preloaded entity on `request`. */
 	id: 'studentID',
 
+	/** GET / - Return all students */
+	list(req, res) {
+		studentDAO.getStudents()
+			.then(students => {
+				res.status(200).json(students)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+			})
+	},
+	
 	/** GET /:studentID - Return a given student */
 	read(req, res) {
 		studentDAO.getStudent(req.params.studentID, db)
