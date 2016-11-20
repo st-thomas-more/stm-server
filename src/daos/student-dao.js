@@ -33,25 +33,59 @@ export function getStudent(studentID, db) {
   })
 }
 
-export function updateStudent(student) {
-  const filepath = getPath(student.id)
+export function updateStudent(student, db) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filepath, JSON.stringify(student, null, 2), 'utf8', function (err) {
+    var student_update = {
+      id: student.id,
+      lastName: student.lastName,
+      firstName: student.firstName,
+      sex: student.sex,
+      dob: student.dob,
+      dial4: student.dial4
+    }
+    delete student['lastName']
+    delete student['firstName']
+    delete student['sex']
+    delete student['dob']
+    delete student['dial4']
+    db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
+    [student_update, student.id, student, student.id], function (err) {
       if (err) {
         reject(err)
       } else {
-        resolve(student)
+        resolve()
       }
     })
   })
 }
 
-export function deleteStudent(studentID) {
-  //not implemented rn since parsing a file is too much effort
-  //connect this to database
-  return
+export function deleteStudent(studentID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('DELETE FROM `student` WHERE `id` = ?', studentID, function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
 }
 
-export function createStudent(student){
-  //not implemented yet since its not necessary until db is connected
+export function createStudent(student, db){
+  return new Promise((resolve, reject) => {
+    db.query('INSERT INTO `student` (`id`, `lastName`, `firstName`, `sex`, `dob`, `dial4`) VALUES(?, ?, ?, ?, ?,?);' +
+             'INSERT INTO `ydsd` VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+      [student.id, student.lastName, student.firstName, student.sex, student.dob, student.dial4,
+      student.id, student.year, student.comments, student.homeroomTeacher, student.aspDate, student.nextMeetingSch,
+      student.advancedMath, student.speechLanguage, student.studentDevelopment, student.mathEnrichment, student.IUreadingServices,
+      student.IUmathServices, student.earobics, student.classroomBehavior, student.workHabits, student.youngestChild, student.onlyChild,
+      student.newStudent, student.medicalConcern, student.HMP, student.DRA, student.RAZ, student.WTW, student.iStation, student.mathBenchmark,
+      student.Dibels, student.CogAT, student.IOWA, student.ELA, student.ExtendedELA, student.mathTotal, student.facStudent], function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
 }
