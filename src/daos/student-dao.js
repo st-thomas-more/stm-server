@@ -15,6 +15,12 @@ function getPath(studentID) {
     case 6:
       name = 'sixth'
       break
+	case 7:
+		name = 'seventh'
+		break
+	case 8:
+		name = 'eigth'
+		break
     default:
       console.log('error finding path for studentid' + studentID)
   }

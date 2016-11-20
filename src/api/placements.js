@@ -3,6 +3,8 @@ import * as placementDao from '../daos/placement-dao'
 import placeKindergarten from '../services/placement-algorithms/kindergarten-placement'
 import placeThird from '../services/placement-algorithms/third-placement'
 import placeSixth from '../services/placement-algorithms/sixth-placement'
+import placeSeventh from '../services/placement-algorithms/seventh-placement'
+import placeEigth from '../services/placement-algorithms/eigth-placement'
 
 export default ({ config, db }) => resource({
 
@@ -50,6 +52,26 @@ export default ({ config, db }) => resource({
 				break
 			case 6:
 				placeSixth()
+					.then(() => {
+						res.sendStatus(200)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+			case 7:
+				placeSeventh()
+					.then(() => {
+						res.sendStatus(200)
+					})
+					.catch(err => {
+						console.error(err)
+						res.sendStatus(404)
+					})
+				break
+			case 8:
+				placeEigth()
 					.then(() => {
 						res.sendStatus(200)
 					})
