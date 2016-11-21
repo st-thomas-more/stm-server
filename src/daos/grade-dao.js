@@ -2,6 +2,8 @@ import gradeRaw from '../mock-data/raw/grade-raw'
 import kindergartenRaw from '../mock-data/raw/kindergarten-raw'
 import thirdRaw from '../mock-data/raw/third-raw'
 import sixthRaw from '../mock-data/raw/sixth-raw'
+import seventhRaw from '../mock-data/raw/seventh-raw'
+import eigthRaw from '../mock-data/raw/eigth-raw'
 
 // TODO - replace with calls to database
 export function getGrades() {
@@ -23,6 +25,12 @@ export function getGrade(grade) {
 				break
 			case 6:
 				resolve(sixthRaw)
+				break
+			case 7:
+				resolve(seventhRaw)
+				break
+			case 8:
+				resolve(eigthRaw)
 				break
 			default:
 				reject(new Error(`Unable to get grade: ${grade}`))

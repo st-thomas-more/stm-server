@@ -2,7 +2,7 @@ import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place() {
-  return getGrade(8)
+  return getGrade(7)
     .then(data => {
 		let students = data.students
 
@@ -11,6 +11,7 @@ export default function place() {
 		}
 
 		for (let student of students) {
+			student.behaviorScore = (student.behavior ? student.behavior : 0) + (student.workEthic ? student.workEthic : 0)
 			if (student.sex === 'F') {
 				pool.girls.push(student)
 			} else {
@@ -18,11 +19,11 @@ export default function place() {
 			}
 		}
 
-		// sort alphabetically by last name
-		pool.girls.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-		pool.boys.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+		// sort by behavior score
+		pool.girls.sort((a, b) => { return b.behaviorScore - a.behaviorScore })
+		pool.boys.sort((a, b) => { return b.behaviorScore - a.behaviorScore })
 
-		
+
 		// initialize the sections
 		let sections = []
 		for (let i = 0; i < data.sections; i++) {
@@ -38,29 +39,16 @@ export default function place() {
 		// distribute the students
 		for (let key in pool) {
 			if (pool.hasOwnProperty(key)) {
-				//sections.sort((a, b) => { return a.students.length - b.students.length })
+				sections.sort((a, b) => { return a.students.length - b.students.length })
 				let group = pool[key]
-				let sectionSize = Math.floor(group.length / sections.length)
-				let remainderCount = group.length % sections.length
-				let sectionNum = 0
-				let pushCount = 0
-				let secSize = sectionSize
 				for (let i = 0; i < group.length; i++) {
-					sections[sectionNum].students.push(group[i])
-					pushCount++
-					if(pushCount === secSize){
-						sectionNum++
-						pushCount = 0
-						if (remainderCount != 0) {
-							secSize = sectionSize + 1
-							remainderCount--
-						}
-					}
+				sections[i % sections.length].students.push(group[i])
 				}
 			}
 		}
 
 		const reducer = (stats, student) => {
+			stats.behavior += student.behaviorScore
 			if (student.sex === 'F') {
 				stats.females++
 			} else {
@@ -72,14 +60,16 @@ export default function place() {
 
 		for (let section of sections) {
 			let stats = section.students.reduce(reducer, {
+				behavior: 0,
 				females: 0,
 				males: 0,
 				count: 0
         })
+        stats['avgBehavior'] = stats.behavior / stats.count
         stats['genderRatio'] = stats.males / stats.females
         section.stats = stats
       }
-      let placement = { 'grade': 8, 'sections': sections }
-      return savePlacement(8, placement)
+      let placement = { 'grade': 7, 'sections': sections }
+      return savePlacement(7, placement)
     })
 }

@@ -1,58 +1,82 @@
-// TODO - replace with calls to database
-import fs from 'fs'
-import path from 'path'
-//not needed after the database is connected
-function getPath(studentID) {
-  const id = parseInt(studentID, 10)
-  let name
-  switch(id) {   
-    case 0:
-      name = 'kindergarten'
-      break
-    case 3:
-      name = 'third'
-      break
-    case 6:
-      name = 'sixth'
-      break
-    default:
-      console.log('error finding path for studentid' + studentID)
-  }
-  return path.join(__dirname, `../mock-data/raw/${name}-students-raw.json`)
+export function getStudents(db) {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
 }
 
-export function getStudent(studentID) {
+export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    const filepath = getPath(studentID)
-    fs.readFile(filepath, function (err, data) {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
+}
+
+export function updateStudent(student, db) {
+  return new Promise((resolve, reject) => {
+    var studentUpdate = {
+      id: student.id,
+      lastName: student.lastName,
+      firstName: student.firstName,
+      sex: student.sex,
+      dob: student.dob,
+      dial4: student.dial4
+    }
+    delete student['lastName']
+    delete student['firstName']
+    delete student['sex']
+    delete student['dob']
+    delete student['dial4']
+    db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
+      [studentUpdate, student.id, student, student.id], function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+export function deleteStudent(studentID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?', [studentID, studentID], function (err) {
       if (err) {
         reject(err)
       } else {
-        resolve(JSON.parse(data))
+        resolve()
       }
     })
   })
 }
 
-export function updateStudent(student) {
-  const filepath = getPath(student.id)
+export function createStudent(student, db) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filepath, JSON.stringify(student, null, 2), 'utf8', function (err) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(student)
-      }
-    })
+    db.query('INSERT INTO `student` (`id`, `lastName`, `firstName`, `sex`, `dob`, `dial4`) VALUES(?, ?, ?, ?, ?,?);' +
+      'INSERT INTO `ydsd` VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+      [student.id, student.lastName, student.firstName, student.sex, student.dob, student.dial4,
+      student.id, student.year, student.comments, student.homeroomTeacher, student.asp, student.nextMeetingSch,
+      student.advancedMath, student.speechLanguage, student.studentDevelopment, student.mathEnrichment, student.IUreadingServices,
+      student.IUmathServices, student.earobics, student.behavior, student.workEthic, student.youngestChild, student.onlyChild,
+      student.newStudent, student.medicalConcern, student.hmp, student.dra, student.raz, student.wtw, student.iStation, student.mathBench,
+      student.Dibels, student.cogAT, student.IOWA, student.elaTotal, student.ExtendedELA, student.mathTotal, student.facultyStudent], function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
   })
-}
-
-export function deleteStudent(studentID) {
-  //not implemented rn since parsing a file is too much effort
-  //connect this to database
-  return
-}
-
-export function createStudent(student){
-  //not implemented yet since its not necessary until db is connected
 }

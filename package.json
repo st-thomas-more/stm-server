@@ -43,17 +43,19 @@
     "url": "git+https://github.com/st-thomas-more/stm-server#readme"
   },
   "dependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
     "cors": "^2.7.1",
+    "dotenv": "^2.0.0",
     "express": "^4.13.3",
+    "mysql": "^2.12.0",
     "resource-router-middleware": "^0.5.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.9.0",
-    "babel-core": "^6.9.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.5.0",
     "eslint": "^3.1.1",
     "fast-csv": "^2.3.0",
