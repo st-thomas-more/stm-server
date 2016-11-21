@@ -8,7 +8,7 @@ export default ({ config, db }) => resource({
 
 	/** GET / - Return all students */
 	list(req, res) {
-		studentDAO.getStudents()
+		studentDAO.getStudents(db)
 			.then(students => {
 				res.status(200).json(students)
 			})

@@ -1,20 +1,37 @@
 import studentRaw from '../mock-data/raw/student-raw'
 
+export function getStudents(db) {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `classroomBehavior` AS `behavior`, `facStudent` AS `facultyStudent`, `newStudent`, `medicalConcern`, ' +
+             '`HMP` AS `hmp`, `workHabits` AS `workEthic`, `mathBenchmark` AS `mathBench`, `DRA` AS `dra`, `aspDate` AS `asp`  FROM `student` NATURAL JOIN `ydsd`',
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+    })
+  })
+}
+
 export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `classroomBehavior` AS `behavior`, `facStudent` AS `facultyStudent`, `newStudent`, `medicalConcern`, `HMP` AS `hmp`, `workHabits` AS `workEthic`, `mathBenchmark` AS `mathBench`, `DRA` AS `dra`, `aspDate` AS `asp`  FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID, function (err, entities){
-      if (err) {
-        reject(err)
-      } else {
-        resolve(entities)
-      }
+    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `classroomBehavior` AS `behavior`, `facStudent` AS `facultyStudent`, `newStudent`, `medicalConcern`, ' +
+             '`HMP` AS `hmp`, `workHabits` AS `workEthic`, `mathBenchmark` AS `mathBench`, `DRA` AS `dra`, `aspDate` AS `asp` ' +
+             'FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+      function (err, entities){
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
     })
   })
 }
 
 export function updateStudent(student, db) {
   return new Promise((resolve, reject) => {
-    var student_update = {
+    var studentUpdate = {
       id: student.id,
       lastName: student.lastName,
       firstName: student.firstName,
@@ -28,7 +45,7 @@ export function updateStudent(student, db) {
     delete student['dob']
     delete student['dial4']
     db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
-    [student_update, student.id, student, student.id], function (err) {
+    [studentUpdate, student.id, student, student.id], function (err) {
       if (err) {
         reject(err)
       } else {
