@@ -2,9 +2,7 @@ import studentRaw from '../mock-data/raw/student-raw'
 
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `dob`, `dial4`, `behavior`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
-             '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT` ' +
-             'FROM `student` NATURAL JOIN `ydsd`',
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
       function (err, entities) {
         if (err) {
           reject(err)
@@ -17,9 +15,7 @@ export function getStudents(db) {
 
 export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `dob`, `dial4`, `behavior`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
-             '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT` ' +
-             'FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
       function (err, entities){
         if (err) {
           reject(err)
