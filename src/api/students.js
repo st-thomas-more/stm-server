@@ -8,7 +8,7 @@ export default ({ config, db }) => resource({
 
 	/** GET / - Return all students */
 	list(req, res) {
-		studentDAO.getStudents()
+		studentDAO.getStudents(db)
 			.then(students => {
 				res.status(200).json(students)
 			})
@@ -20,7 +20,7 @@ export default ({ config, db }) => resource({
 	
 	/** GET /:studentID - Return a given student */
 	read(req, res) {
-		studentDAO.getStudent(req.params.studentID)
+		studentDAO.getStudent(req.params.studentID, db)
 			.then(student => {
 				res.status(200).json(student)
 			})
@@ -32,7 +32,7 @@ export default ({ config, db }) => resource({
 
 	/** POST - Create a new student */
 	create(req, res) {
-		studentDAO.createStudent(req.body.student)
+		studentDAO.createStudent(req.body.student, db)
 			.then(() => {
 				res.sendStatus(201)
 			})
@@ -44,7 +44,7 @@ export default ({ config, db }) => resource({
 
 	/** PUT / - Update a students info, this expects a json object of all of the students data */
 	update(req, res) {
-		studentDAO.updateStudent(req.body.student)
+		studentDAO.updateStudent(req.body.student, db)
 			.then(() => {
 				res.sendStatus(200)
 			})
@@ -56,7 +56,7 @@ export default ({ config, db }) => resource({
 
 	/** DELETE /:studentID - Delete a given student based on their id */
 	delete(req, res) {
-		studentDAO.deleteStudent(req.params.studentID)
+		studentDAO.deleteStudent(req.params.studentID, db)
 			.then(() => {
 				res.sendStatus(204)
 			})
