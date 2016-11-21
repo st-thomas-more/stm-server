@@ -4,6 +4,13 @@ Student classroom management server for St. Thomas More (www.stmschoolpa.com)
 ## Installation
 1. Clone this repository - `git clone https://github.com/st-thomas-more/stm-server.git`
 2. Install dependencies - `npm install`
+3. Create a `.env` file in the root directory containing:
+<br>
+    MYSQL_USER=YOUR_USER
+<br>
+    MYSQL_PASSWORD=YOUR_PASSWORD
+<br>
+    MYSQL_HOST=YOUR_HOST_IP
 
 ## Development
 
