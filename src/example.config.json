@@ -1,0 +1,8 @@
+{
+	"port": 8080,
+	"bodyLimit": "100kb",
+	"corsHeaders": ["Link"],
+    "mysql_user": "?????",
+    "mysql_password": "????",
+    "mysql_host": "?????"
+}
