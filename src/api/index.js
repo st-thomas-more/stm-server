@@ -10,7 +10,7 @@ export default ({ config, db }) => {
 	let api = Router()
 
 	api.use('/placements', placements({ config, db }))
-	api.use('/placements/similar', similar-student({ config, db }))
+	api.use('/placements/similar-student', similar-student({ config, db }))
 	api.use('/sections', sections({ config, db }))
 	api.use('/grades', grades({ config, db }))
 	api.use('/students', students({ config, db }))
