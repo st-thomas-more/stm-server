@@ -2,7 +2,4 @@
 	"port": 8080,
 	"bodyLimit": "100kb",
 	"corsHeaders": ["Link"],
-    "mysql_user": "root",
-    "mysql_password": "tracysell",
-    "mysql_host": "104.197.192.209"
 }
