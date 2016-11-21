@@ -4,5 +4,5 @@
 /node_modules
 /.vscode
 /src/mock-data/placements/*placement.json
-/src/config.json
+.env
 .DS_Store
