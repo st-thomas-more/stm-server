@@ -10,21 +10,27 @@ function parse_csv(err,filename) {
     
     if (err) throw err;
     //console.log('in testing_csvjson');
-    //console.log(filename);
+    console.log(filename);
     var data = fs.readFileSync(filename, { encoding : 'utf8'});
-    
+    console.log(data);
     var options = { delimiter : ','};
     var result = csvjson.toObject(data, options);
-    
+    console.log(result);
     for (var i in result) {
-        model.insert_student([result[i].ID, result[i].LName, result[i].FName, result[i].DOB], function (err) {
+        console.log(result[i].id);
+        model.insert_student([result[i].id, result[i].lastName, result[i].firstName,result[i].sex, result[i].dob], function (err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        });
+        model.insert_ydsd([result[i].id, "YEAR", result[i].comments ,result[i].homeroomTeacher ,result[i].asp ,result[i].nextMeetingSch ,result[i].advancedMath ,result[i].speechLanguage ,result[i].studentDevelopment ,result[i].mathEnrichment ,result[i].IUreadingServices ,result[i].IUmathServices ,result[i].earobics ,result[i].behavior ,result[i].workEthic ,result[i].youngestChild ,result[i].onlyChild ,result[i].newStudent ,result[i].medicalConcern ,result[i].hmp ,result[i].dra ,result[i].RAZ ,result[i].WTW ,result[i].iStation ,result[i].mathBench ,result[i].Dibels ,result[i].cogAT ,result[i].IOWA ,result[i].elaTotal ,result[i].ExtendedELA ,result[i].mathTotal ,result[i].facultyStudent ,result[i].potentialDelay ,result[i].ge ,result[i].behaviorObservation ,result[i].selfHelp ,result[i].socialEmotional ,result[i].dial4 ,result[i].gradeEntering], function (err) {
             if (err) {
                 console.log(err);
                 return;
             }
         });
     }
-    console.log("just before result");
     return result;
 }
 
