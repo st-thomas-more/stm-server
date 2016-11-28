@@ -15,7 +15,7 @@ export default ({ config, db }) => resource({
 	read(req, res) {
 		const grade = parseInt(req.params.grade)
 		if (grade >= 0 && grade <= 8) {
-			placementDao.getPlacement(grade)
+		    placementDao.getPlacement(grade,db)
 				.then(placement => {
 					res.status(200).json(placement)
 				})

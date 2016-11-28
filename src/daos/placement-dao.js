@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import gradeDao from './grade-dao.js'
+import * as gradeDao from './grade-dao.js'
 
 function getPath(grade) {
   let name
@@ -36,21 +36,37 @@ function getPath(grade) {
   return path.join(__dirname, `../mock-data/placements/${name}-placement.json`)
 }
 
-// TODO - replace with calls to database
-export function getPlacement(grade,db) {
-  return new Promise((resolve, reject) => {
-    var result = []
-    
-    const filepath = getPath(grade)
-    fs.readFile(filepath, function (err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(JSON.parse(data))
-      }
-    })
-  })
+export function getPlacement(grade, db) {
+    var result = {grade: grade}
+    console.log(grade);
+    var studentGrade = grade - 1
+	console.log(studentGrade)
+    return new Promise((resolve, reject) => {
+	    gradeDao.getStudentsInGrade(studentGrade, db)
+            .then(students => {
+                result.students = students
+                gradeDao.getTeachersInGrade(grade, db)
+		.then(teachers => {
+                        result.teachers = teachers
+                        gradeDao.getSections(grade, db)
+			.then(sections => {
+                                result.sections = sections.length
+                                resolve(result)
+                            })
+			.catch(err => {
+                                reject(err)
+                            })
+			    })
+		.catch(err => {
+                        reject(err)
+                    })
+		    })
+            .catch(err => {
+		    reject(err)
+		})
+	 })
 }
+
 
 export function savePlacement(grade, placement) {
   return new Promise((resolve, reject) => {

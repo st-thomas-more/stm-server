@@ -104,7 +104,7 @@ export function getTeachersInGrade(grade, db) {
     })
 }
 
-function getSections(grade, db) {
+export function getSections(grade, db) {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM `section` WHERE `grade` = ?', grade, function (err, entities) {
             if (err) {
@@ -116,7 +116,7 @@ function getSections(grade, db) {
     })
 }
 
-function getStudentsInSection(sectionId, db) {
+export function getStudentsInSection(sectionId, db) {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` WHERE `sectionId` = ?', sectionId, function (err, entities) {
             if (err) {
@@ -168,7 +168,7 @@ export function getGrade(grade, db) {
     })
 }
 
-function convertToKindJSON(entity) {
+export function convertToKindJSON(entity) {
     return {
         id: entity.id,
         firstName: entity.studentFName,
@@ -183,7 +183,7 @@ function convertToKindJSON(entity) {
     }
 }
 
-function convertToStudentJSON(entity) {
+export function convertToStudentJSON(entity) {
     return {
         id: entity.id,
         firstName: entity.studentFName,
@@ -220,7 +220,7 @@ function convertToStudentJSON(entity) {
     }
 }
 
-function getSectionIndex(sectionID, sections) {
+export function getSectionIndex(sectionID, sections) {
     for (var i in sections) {
         if (sections[i].sectionID == sectionID) {
             return i
