@@ -8,7 +8,8 @@ export default ({ config, db }) => resource({
 
 	/** GET / - Return all grades */
 	list(req, res) {
-		gradeDao.getGrades()
+		
+		gradeDao.getGrades(db)
 			.then(grades => {
 				res.status(200).json(grades)
 			})
@@ -20,7 +21,7 @@ export default ({ config, db }) => resource({
 
 	/** GET /:grade - Return grade by # */
 	read(req, res) {
-		gradeDao.getGrade(req.params.grade)
+		gradeDao.getGrade(req.params.grade,db)
 			.then(grade => {
 				res.status(200).json(grade)
 			})

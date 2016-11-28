@@ -19,9 +19,10 @@ export default ({ config, db }) => resource({
     
     	form.multiples = true;
     	form.uploadDir = path.join(__dirname, '../services/csvUpload/uploads');
-        //console.log(form.uploadDir);
+        console.log(form.uploadDir);
       	form.on('file', function rename_file(field, file) {
-        	fs.rename(file.path, path.join(form.uploadDir, file.name), parse_csv(null,file.path));
+        	fs.renameSync(file.path, path.join(form.uploadDir, file.name));
+            parse_csv(null,path.join(form.uploadDir, file.name));
     	});
 
     	form.on('error', function(err) {
