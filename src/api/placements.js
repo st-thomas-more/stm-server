@@ -29,9 +29,11 @@ export default ({ config, db }) => resource({
 	},
 	/** PUT /:id - Run the algorithm */
 	update(req, res) {
+	    console.log("in update in placements.js")
 		switch (parseInt(req.params.grade)) {
 			case 0:
-				placeKindergarten()
+			        console.log("going to  placeKindergarten() in update")
+				placeKindergarten(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -41,7 +43,8 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 3:
-				placeThird()
+				console.log("going to placeThird() in update")    
+				placeThird(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -51,7 +54,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 6:
-				placeSixth()
+				placeSixth(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -61,7 +64,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 7:
-				placeSeventh()
+				placeSeventh(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -71,7 +74,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 8:
-				placeEigth()
+				placeEigth(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -81,6 +84,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			default:
+				    console.log("NOT FOUND- in update placements.js");
 				res.sendStatus(404)
 			}
 		},

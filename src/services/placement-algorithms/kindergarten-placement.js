@@ -1,11 +1,13 @@
 import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place() {
-  return getGrade(0)
+
+export default function place(db) {
+    console.log("doing placement for new kindergarteners...");
+    return getGrade(0,db)
     .then(data => {
       let students = data.students
-
+	    
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
       const ageWeight = .35
@@ -28,7 +30,7 @@ export default function place() {
       let pool = {
         girls: [], boys: [], flags: []
       }
-
+	    console.log("here1 in kindergarten-p.js")
       for (let student of students) {
         // get weighted quantitative score
         let agePercentage = (student.age - minAge) / maxAge
@@ -63,6 +65,8 @@ export default function place() {
         })
       }
 
+
+	    console.log("here2 in kp.js");
       // distribute the students
       for (let key in pool) {
         if (pool.hasOwnProperty(key)) {
@@ -107,6 +111,8 @@ export default function place() {
         section.stats = stats
       }
       let placement = { 'grade': 0, 'sections': sections }
-      return savePlacement(0, placement)
+      console.log("about to save the placement");
+      return savePlacement(0, placement,db)
+      
     })
 }

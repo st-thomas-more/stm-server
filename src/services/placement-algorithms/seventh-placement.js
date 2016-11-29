@@ -1,8 +1,8 @@
 import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place() {
-  return getGrade(7)
+export default function place(db) {
+    return getGrade(7,db)
     .then(data => {
 		let students = data.students
 
@@ -70,6 +70,6 @@ export default function place() {
         section.stats = stats
       }
       let placement = { 'grade': 7, 'sections': sections }
-      return savePlacement(7, placement)
+		return savePlacement(7, placement,db)
     })
 }
