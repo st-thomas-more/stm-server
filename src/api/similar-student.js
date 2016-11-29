@@ -4,11 +4,12 @@ import similarStudent from '../services/similar-student/similar-student'
 export default ({ config, db }) => resource({
 	
 	/** GET / - get section and student for use in similar student function */
-	read(req, res) {
+	create(req, res) {
+		console.log("here")
 		const { student, section } = req.body
-		similarStudent(student, section)
-			.then(() => {
-				res.status(200).json(similarStudent)
+		let list = similarStudent(student, section)
+			.then(() => { // this isnt a thing
+				res.status(200).json(similarStudents)
 			})
 			.catch(err => {
 				console.error(err)
