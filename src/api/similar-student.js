@@ -8,12 +8,8 @@ export default ({ config, db }) => resource({
 		console.log("here")
 		const { student, section } = req.body
 		let list = similarStudent(student, section)
-			.then(() => { // this isnt a thing
-				res.status(200).json(similarStudents)
-			})
-			.catch(err => {
-				console.error(err)
-				res.sendStatus(404)
-			})
+			res.status(200).json(list)
+			//console.error(err)
+			//res.sendStatus(404)
 	}
 })
