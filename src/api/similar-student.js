@@ -5,11 +5,12 @@ export default ({ config, db }) => resource({
 	
 	/** GET / - get section and student for use in similar student function */
 	create(req, res) {
-		console.log("here")
 		const { student, section } = req.body
 		let list = similarStudent(student, section)
+		if (list.length > 0){
 			res.status(200).json(list)
-			//console.error(err)
-			//res.sendStatus(404)
+		}else{
+			res.sendStatus(404)
+		}
 	}
 })

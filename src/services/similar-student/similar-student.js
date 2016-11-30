@@ -6,7 +6,7 @@ export default function similarStudent(student, section){
 	
 	let similarStudents = []
 	
-	for ( let i = 0; i < swapSection.length; i++ ){
+	for ( let i = 0; i < swapSection.students.length; i++ ){
 		swapSection.students[i].dif =  Math.abs(swapStudent.weightedScore - swapSection.students[i].weightedScore)
 		if(swapStudent.sex === swapSection.students[i].sex)
 			similarStudents.push(swapSection.students[i])
