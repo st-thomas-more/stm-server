@@ -54,6 +54,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 6:
+				    console.log("heading to placeSixth")
 				placeSixth(db)
 					.then(() => {
 						res.sendStatus(200)

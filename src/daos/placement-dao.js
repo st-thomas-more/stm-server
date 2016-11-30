@@ -122,7 +122,7 @@ function insertStudent(section,student,grade,db){
 		     + student.mathTotal + "','"
 		     + student.facultyStudent + "','"
 		     + "''" + "','" //potential delay
-		     + student.ge + "','"
+		     //+ student.ge + "','"
 		     + student.behavior + "','" //behaviorObservation in db
 		     + "''" + "','" //self help
 		     + "''" + "','" //social emotional
