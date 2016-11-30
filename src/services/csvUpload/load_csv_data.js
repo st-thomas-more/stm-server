@@ -32,6 +32,15 @@ function insert_student (data, cb) {
 
 function insert_ydsd(data,cb){
   var connection = getConnection();
+    var comment = connection.query(
+    'SELECT comments from ydsd where id = ?;',
+    data[0],
+    cb
+    );
+    if(commment!='' && data[2] ==''){
+       data[2] = commment;
+    }
+
   var data2 = data;
   var data3 = data2.concat(data);
   console.log(data3);
@@ -40,6 +49,7 @@ function insert_ydsd(data,cb){
       data3,
       cb
     );
+
   connection.end();
 }
 
