@@ -232,7 +232,7 @@ export function getSectionIndex(sectionID, sections) {
 export function getGradeForAlg(grade, db) {
     var result = {grade: grade}
 	return new Promise((resolve, reject) => {
-        getStudentsInGrade(grade, db)
+        getStudentsInGrade(grade-1, db)
             .then(students => {
                 result.students = students
                 getTeachersInGrade(grade, db)

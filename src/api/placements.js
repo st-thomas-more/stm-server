@@ -32,7 +32,6 @@ export default ({ config, db }) => resource({
 	    console.log("in update in placements.js")
 		switch (parseInt(req.params.grade)) {
 			case 0:
-			        console.log("going to  placeKindergarten() in update")
 				placeKindergarten(db)
 					.then(() => {
 						res.sendStatus(200)
@@ -42,9 +41,8 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-			case 3:
-				console.log("going to placeThird() in update")    
-				placeThird(db)
+			case 1: case 2: case 3:
+				placeThird(parseInt(req.params.grade), db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -53,9 +51,8 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-			case 6:
-				    console.log("heading to placeSixth")
-				placeSixth(db)
+			case 4: case 5: case 6:
+				placeSixth(parseInt(req.params.grade), db)
 					.then(() => {
 						res.sendStatus(200)
 					})
