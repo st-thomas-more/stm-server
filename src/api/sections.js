@@ -8,7 +8,7 @@ export default ({ config, db }) => resource({
 
 	/** GET /:sectionID - Return a given entity */
 	read(req, res) {
-		sectionDAO.getSection(req.params.sectionID)
+		sectionDAO.getSection(req.params.sectionID, db)
 			.then(section => {
 				res.status(200).json(section)
 			})

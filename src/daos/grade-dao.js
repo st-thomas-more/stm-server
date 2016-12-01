@@ -68,32 +68,32 @@ export function getGrades(db) {
   })
 }
 
-function getStudentsInGrade(grade, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `behavior`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
-      '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
-      'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
-      function (err, entities) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(entities)
-        }
-      })
-  })
+export function getStudentsInGrade(grade, db) {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `behavior`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
+                 '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
+                 'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
+        function (err, entities) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(entities)
+            }
+        })
+    })
 }
 
-function getTeachersInGrade(grade, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT `firstName`, `lastName` FROM `staff` NATURAL JOIN `teaches` NATURAL JOIN `section` WHERE `grade` = ?', grade,
-      function (err, entities) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(entities)
-        }
-      })
-  })
+export function getTeachersInGrade(grade, db) {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT `firstName`, `lastName` FROM `staff` NATURAL JOIN `teaches` NATURAL JOIN `section` WHERE `grade` = ?', grade,
+        function (err, entities) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(entities)
+            }
+        })
+    })
 }
 
 function getSections(grade, db) {
