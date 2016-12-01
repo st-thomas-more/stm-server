@@ -2,85 +2,85 @@ import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place(db) {
-  return getGradeForAlg(8, db)
-    .then(data => {
-		let students = data.students
-		let numSections = data.teachers.length
+	return getGradeForAlg(8, db)
+		.then(data => {
+			let students = data.students
+			let numSections = data.teachers.length
 
-		let pool = {
-			girls: [], boys: []
-		}
-
-		for (let student of students) {
-			if (student.sex === 'F') {
-				pool.girls.push(student)
-			} else {
-				pool.boys.push(student)
+			let pool = {
+				girls: [], boys: []
 			}
-		}
 
-		// sort alphabetically by last name
-		pool.girls.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-		pool.boys.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+			for (let student of students) {
+				if (student.sex === 'F') {
+					pool.girls.push(student)
+				} else {
+					pool.boys.push(student)
+				}
+			}
 
-		
-		// initialize the sections
-		let sections = []
-		for (let i = 0; i < numSections; i++) {
-			sections.push({
-				teacher: {
-		            firstName: data.teachers[i].firstName,
-		            lastName: data.teachers[i].lastName
-		          },
-				students: [],
-				stats: {}
-			})
-		}
+			// sort alphabetically by last name
+			pool.girls.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+			pool.boys.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
 
-		// distribute the students
-		for (let key in pool) {
-			if (pool.hasOwnProperty(key)) {
-				let group = pool[key]
-				let sectionSize = Math.floor(group.length / sections.length)
-				let remainderCount = group.length % sections.length
-				let sectionNum = 0
-				let pushCount = 0
-				let secSize = sectionSize
-				for (let i = 0; i < group.length; i++) {
-					sections[sectionNum].students.push(group[i])
-					pushCount++
-					if(pushCount === secSize){
-						sectionNum++
-						pushCount = 0
-						if (remainderCount !== 0) {
-							secSize = sectionSize + 1
-							remainderCount--
+
+			// initialize the sections
+			let sections = []
+			for (let i = 0; i < numSections; i++) {
+				sections.push({
+					teacher: {
+						firstName: data.teachers[i].firstName,
+						lastName: data.teachers[i].lastName
+					},
+					students: [],
+					stats: {}
+				})
+			}
+
+			// distribute the students
+			for (let key in pool) {
+				if (pool.hasOwnProperty(key)) {
+					let group = pool[key]
+					let sectionSize = Math.floor(group.length / sections.length)
+					let remainderCount = group.length % sections.length
+					let sectionNum = 0
+					let pushCount = 0
+					let secSize = sectionSize
+					for (let i = 0; i < group.length; i++) {
+						sections[sectionNum].students.push(group[i])
+						pushCount++
+						if (pushCount === secSize) {
+							sectionNum++
+							pushCount = 0
+							if (remainderCount !== 0) {
+								secSize = sectionSize + 1
+								remainderCount--
+							}
 						}
 					}
 				}
 			}
-		}
 
-		const reducer = (stats, student) => {
-			if (student.sex === 'F') {
-				stats.females++
-			} else {
-				stats.males++
+			const reducer = (stats, student) => {
+				if (student.sex === 'F') {
+					stats.females++
+				} else {
+					stats.males++
+				}
+				stats.count++
+				return stats
 			}
-			stats.count++
-			return stats
-		}
 
-		for (let section of sections) {
-			let stats = section.students.reduce(reducer, {
-				females: 0,
-				males: 0,
-				count: 0
-        })
-        stats['genderRatio'] = stats.males / stats.females
-        section.stats = stats
-      }
-      let placement = { 'grade': 8, 'sections': sections }
-      return savePlacement(8, placement)
-    })
+			for (let section of sections) {
+				let stats = section.students.reduce(reducer, {
+					females: 0,
+					males: 0,
+					count: 0
+				})
+				stats['genderRatio'] = stats.males / stats.females
+				section.stats = stats
+			}
+			let placement = { 'grade': 8, 'sections': sections }
+			return savePlacement(8, placement)
+		})
 }
