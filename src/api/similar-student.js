@@ -3,7 +3,7 @@ import similarStudent from '../services/similar-student/similar-student'
 
 export default ({ config, db }) => resource({
 	
-	/** GET / - get section and student for use in similar student function */
+	/** POST / - get section and student for use in similar student function */
 	create(req, res) {
 		const { student, section } = req.body
 		let list = similarStudent(student, section)
