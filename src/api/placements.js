@@ -27,9 +27,24 @@ export default ({ config, db }) => resource({
 			res.sendStatus(404)
 		}
 	},
-	/** PUT /:id - Run the algorithm */
+	/** PUT /:id - Update the placement */
 	update(req, res) {
-		switch (parseInt(req.params.grade)) {
+		const grade = parseInt(req.params.grade)
+		const { placement } = req.body
+		placementDao.savePlacement(grade, placement).then(() => {
+				res.sendStatus(200)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+		})
+	},
+
+	/** POST - Run the algorithm
+		Grade is given as a JSON object in the body */
+	create(req, res) {
+		console.log("running algorithm for grade " + req.body.grade)
+		switch (parseInt(req.body.grade)) {
 			case 0:
 				placeKindergarten()
 					.then(() => {
@@ -82,22 +97,23 @@ export default ({ config, db }) => resource({
 				break
 			default:
 				res.sendStatus(404)
-			}
-		},
-		/** DELETE /:id - Delete a given entity */
-		delete(req, res) {
-			const grade = parseInt(req.params.grade)
-			if (grade >= 0 && grade <= 8) {
-				placementDao.deletePlacement(grade)
-					.then(() => {
-						res.sendStatus(204)
-					})
-					.catch(err => {
-						console.error(err)
-						res.sendStatus(404)
-					})
-			} else {
-				res.sendStatus(404)
-			}
 		}
+	},
+
+	/** DELETE /:id - Delete a given entity */
+	delete(req, res) {
+		const grade = parseInt(req.params.grade)
+		if (grade >= 0 && grade <= 8) {
+			placementDao.deletePlacement(grade)
+				.then(() => {
+					res.sendStatus(204)
+				})
+				.catch(err => {
+					console.error(err)
+					res.sendStatus(404)
+				})
+		} else {
+			res.sendStatus(404)
+		}
+	}
 })
