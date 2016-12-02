@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import gradeDao from './grade-dao.js'
 
 function getPath(grade) {
   let name
@@ -36,8 +37,10 @@ function getPath(grade) {
 }
 
 // TODO - replace with calls to database
-export function getPlacement(grade) {
+export function getPlacement(grade,db) {
   return new Promise((resolve, reject) => {
+    var result = []
+    
     const filepath = getPath(grade)
     fs.readFile(filepath, function (err, data) {
       if (err) {

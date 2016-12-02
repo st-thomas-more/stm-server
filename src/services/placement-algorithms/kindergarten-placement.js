@@ -1,11 +1,11 @@
-import { getGrade } from '../../daos/grade-dao'
+import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place() {
-  return getGrade(0)
+export default function place(db) {
+  return getGradeForAlg(0, db)
     .then(data => {
       let students = data.students
-
+      let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
       const ageWeight = .35
@@ -50,13 +50,15 @@ export default function place() {
 
       // sort by behavior
       pool.flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
-
+      console.log(data.teachers)
+      console.log('num sections: ' + data.sections)
       // initialize the sections
       let sections = []
-      for (let i = 0; i < data.sections; i++) {
+      for (let i = 0; i < numSections; i++) {
         sections.push({
           teacher: {
-            name: data.teachers[i].name
+            firstName: data.teachers[i].firstName,
+            lastName: data.teachers[i].lastName
           },
           students: [],
           stats: {}
