@@ -1,4 +1,3 @@
-
 export function getSection(sectionID, db) {
     return new Promise((resolve, reject) => {
         db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +

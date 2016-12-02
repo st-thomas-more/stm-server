@@ -1,4 +1,3 @@
-
 export function getGrades(db) {
     let result = []
     return new Promise((resolve, reject) => {
@@ -69,10 +68,11 @@ export function getGrade(grade, db) {
       'from student natural join ydsd natural join takes natural join section natural join teaches, staff where grade = ? and staff.emailID = teaches.emailID',
       grade,
       function (err, entities) {
-        if ([0,1,2,3,4,5,6,7,8].indexOf(grade) == -1) {
-            reject("Grade " + grade + "Not Found")
-        } else if (err) {
+        grade = parseInt(grade, 10)
+        if (err) {
           reject(err)
+        } else if ([0,1,2,3,4,5,6,7,8].indexOf(grade) === -1) {
+            reject(new Error(`Grade ${grade} not found`))
         } else {
           let result = {
             grade: grade,
@@ -80,7 +80,7 @@ export function getGrade(grade, db) {
           }
           for (let i in entities) {
             let sectionIndex = getSectionIndex(entities[i].sectionID, result.sections)
-            if (sectionIndex == -1) {
+            if (sectionIndex === -1) {
               result.sections.push({
                 sectionID: entities[i].sectionID,
                 students: []
@@ -93,7 +93,7 @@ export function getGrade(grade, db) {
               firstName: entities[i].firstName
             }
             let students = result.sections[sectionIndex].students
-            if (grade == 0) {
+            if (grade === 0) {
               students.push(convertToKindJSON(entities[i]))
             } else {
               students.push(convertToStudentJSON(entities[i]))
