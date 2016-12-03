@@ -65,7 +65,7 @@ export function getTeachersInGrade(grade, db) {
     })
 }
 
-function getSections(grade, db) {
+export function getSections(grade, db) {
   return new Promise((resolve, reject) => {
 	  var year = '2016'
 	  db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities) {
