@@ -25,6 +25,21 @@ export function getGrades(db) {
 export function getStudentsInGrade(grade, db) {
     return new Promise((resolve, reject) => {
         db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
+		     function (err, entities) {
+			 if (err) {
+			     reject(err)
+			 } else {
+			     resolve(entities)
+			 }
+		     })
+	})
+	}
+
+export function getStudentsInGrade(grade, db) {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `behaviorObservation`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
+                 '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
+                 'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
         function (err, entities) {
             if (err) {
                 reject(err)
@@ -33,7 +48,7 @@ export function getStudentsInGrade(grade, db) {
             }
         })
     })
-}
+    }
 
 
 export function getStudentRisingGrade(gradeEntering, db){
@@ -53,7 +68,8 @@ export function getStudentRisingGrade(gradeEntering, db){
 
 export function getTeachersInGrade(grade, db) {
     return new Promise((resolve, reject) => {
-        db.query('SELECT `firstName`, `lastName` FROM `staff` NATURAL JOIN `teaches` NATURAL JOIN `section` WHERE `grade` = ?', grade,
+	    var year = '2016';
+	    db.query('SELECT `firstName`, `lastName`,`emailID` FROM `staff` NATURAL JOIN `teaches` NATURAL JOIN `section` WHERE `grade` = ? AND  `year` = ?', [grade,year],
         function (err, entities) {
             if (err) {
                 reject(err)
@@ -64,9 +80,10 @@ export function getTeachersInGrade(grade, db) {
     })
 }
 
-function getSections(grade, db) {
+export function getSections(grade, db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM `section` WHERE `grade` = ?', grade, function (err, entities) {
+	  var year = '2016'
+	  db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities) {
       if (err) {
         reject(err)
       } else {
