@@ -70,20 +70,30 @@ export function getPlacement(grade, db) {
 
 
 export function savePlacement(grade, placement,db){
-    //get sections
+    var promise = deletePlacement(grade,db);
+    promise.then( () => {
+	    savePlaceHelper(grade,placement,db);
+	    }).catch(err => {
+		    reject(err)
+		})
+		   }
+		     
+
+export function savePlaceHelper(grade,placement,db){
     var year = 1950;
     console.log("in savePlacement");
-    console.log(placement)
+    //console.log(placement)
     var sectCount = 1;
     for(let section of placement.sections){
-	console.log("attempting to do things to this section: " + section)
+	//console.log("attempting to do things to this section: " + section)
 	console.log("in section: " + sectCount);
 	insertSection(section,sectCount,grade,db)
-	    .then(res => {
-		    console.log("finished an insert section- moving on to insert students & teaches")
-		    insertStudents(section,sectCount,grade,db) //also inserts the 'takes' table
-		    insertTeaches(section,sectCount,grade,db)
+	    .then(sectC => {
+		    //console.log("finished an insert section- moving on to insert students & teaches")
+		    insertStudents(section,sectC,grade,db) //also inserts the 'takes' table
+		    insertTeaches(section,sectC,grade,db)
 		    .then(res2 => {
+			    resolve()
 			})
 		})
 	    sectCount++
@@ -92,54 +102,60 @@ export function savePlacement(grade, placement,db){
 
 function insertStudent(section,student,grade,db){
     var year = '1950';
+    console.log("in insertStudent")
+	//console.log(student)
     return new Promise((resolve, reject) => {
             db.query("INSERT into ydsd values ('" 
 		     + student.id + "','" 
 		     + year + "','"
-		     + student.comments + "',' "
-		     + student.presentTeacher + "','"
+		     + student.comments + "','"
+		     + student.homeroomTeacher + "','"
 		     + student.asp + "','"
-		     + "''" + "','" //nextMeetingSch ??
+		     + student.nextMeetingSch + "','"
 		     + student.advancedMath + "','"
-		     + "''" + "','" //speechLanguage
-		     + '' + ',' //studentDevelopment
-		     + "''" + "','" //mathEnrichment 
-		     + student.iuRreadingSvcs + "','"
-		     + student.iuMathSvcs + "','"
+		     + student.speechLanguage + "','" 
+		     + student.studentDevelopment + "','"
+		     + student.mathEnrichment + "','"
+		     + student.IUreadingServices + "','"
+		     + student.IUmathServices + "','"
 		     + student.earobics + "','"
-		     + student.behavior + "','"
+		     //+ "earobicsValue" + "','"
+		     //+ student.behaviorObservation + "','"
 		     + student.workEthic + "','"
-		     + student.youngest + "','" //youngestChild in db
-		     + student.only + "','" //onlyChild in db
+		     + student.youngestChild + "','" 
+		     + student.onlyChild + "','" 
 		     + student.newStudent + "','"
 		     + student.medicalConcern + "','"
-		     + student.hpm + "','"
+		     + student.hmp + "','"
 		     + student.dra + "','"
-		     + student.raz + "','"
-		     + student.wtwBook + "','"
-		     + "''" + "','" //iStation
+		     + student.RAZ + "','"
+		     + student.WTW + "','"
+		     + student.iStation + "','" 
 		     + student.mathBench + "','"
-		     + student.dibels + "','"
-		     + "''" + "','" //cogAT
-		     + "''" + "','" //IOWA
+		     + student.Dibels + "','"
+		     + student.cogAT + "','" 
+		     + student.IOWA + "','" 
 		     + student.elaTotal + "','"
-		     + student.extendedEla + "','"
+		     + student.ExtendedELA + "','"
 		     + student.mathTotal + "','"
 		     + student.facultyStudent + "','"
-		     + "''" + "','" //potential delay
-		     + student.behavior + "','" //behaviorObservation in db
-		     + "''" + "','" //self help
-		     + "''" + "','" //social emotional
+		     + student.potentialDelay + "','" //potential delay
+		     + student.behaviorObservation + "','" //behaviorObservation in db
+		     + student.selfHelp + "','" //self help
+		     + student.socialEmotional + "','" //social emotional
 		     + student.dial4 + "','"
 		     + student.gradeEntering + "','"
-		     + student.ge + "','" 
-		     + "');"
+		     + student.ge + "'" 
+		     + ");"
                      , function (err, entities){
                          if(err){
 			     console.log("error insterting ydsd student " + student.id + " " + year)
+			     console.log(err);
+			     console.log(student)
                              reject(err)
                          } else {
-                             resolve(entities)
+			     console.log("success with ydsd for: " + student.id + " " + year)
+                             resolve()
                          }
                      })
         })
@@ -149,13 +165,15 @@ function insertTakes(section,sectID,student,grade,db){
     console.log("in insertTakes")
     var year = 1950;
     return new Promise((resolve, reject) => {
-            db.query("INSERT into takes values ('" + student.id + "','" + year + "','" + sectID + "');"
+	    var q = "INSERT into takes values ('" + student.id + "','" + year + "','" + sectID + "');";
+            db.query(q
                      , function (err, entities){
                          if(err){
-			     console.log("error inserting into takes values " + student.id + " " + year + " " + sectID) 
+			     console.log("error with: " + q)
                              reject(err)
                          } else {
-                             resolve(entities)
+			     console.log("success with: " + q)
+                             resolve()
                          }
                      })
         })
@@ -163,14 +181,15 @@ function insertTakes(section,sectID,student,grade,db){
 
 function insertStudents(section,sectID,grade,db){
     console.log("in insertStudents")
-    console.log(section)
+	//console.log(section)
     var year = 1950;
-    for(var student in section.students){
-	console.log("attempting to insert data for my man: " + student.id + " " + student.firstName)
+    for(let student of section.students){
+	//console.log("attempting to insert data for my man: " + student.id + " " + student.firstName)
 	insertStudent(section,student,grade,db)
 	    .then(res => {
 		    insertTakes(section,sectID,student,grade,db)
 		    .then(res2 => {
+			    resolve()
 			})
 		})
 	    }
@@ -180,31 +199,35 @@ function insertTeaches(section,sectID,grade,db){
     console.log("in insertTeaches")
     var year = 1950;
     return new Promise((resolve, reject) => {
-            db.query("INSERT into teaches values ('" + section.teacher.emailID + "','" + sectID + "','" + year + "');"
+	    var q = "INSERT into teaches values ('" + section.teacher.emailID + "','" + sectID + "','" + year + "');";
+            db.query(q
                      , function (err, entities){
                          if(err){
-			     console.log("error inserting into teaches values " + section.teacher.emailID + " " + sectID + " " + year)
+			     console.log("error with: " + q)
                              reject(err)
                          } else {
-                             resolve(entities)
+			     console.log("success with : " + q)
+                             resolve()
                          }
                      })
         })
 }	    
 
 function insertSection(section,id,grade,db){
+    console.log("in insertSection")
     var year = 1950;
-    console.log("attempting to insert section: " + id + " in year " + year);
+    //console.log("attempting to insert section: " + id + " in year " + year);
     return new Promise((resolve, reject) => {
 	    var q = "INSERT into section values ('" + id + "','" + year + "','" + grade + "');"
-	    console.log("our query:" + q)
+	    //console.log("our query:" + q)
 	    db.query(q
 		     , function (err, entities){
 			 if(err){
-			     console.log("error inserting into section values " + id + " " + year + " " + grade);
+			     console.log("error with " + q);
 			     reject(err)
 			 } else {
-			     resolve(entities)
+			     console.log("success with: " + q);
+			     resolve(id)
 			 }
 		     })
 	})
@@ -212,6 +235,8 @@ function insertSection(section,id,grade,db){
 
 export function deletePlacement(grade,db){
     var year = 1950;
+    //console.log("in deletePlacement");
+    return new Promise((resolve, reject) => {
     deleteSection(grade,year,db)
 	.then(res => {
 		deleteStudents(grade,year,db)
@@ -220,59 +245,90 @@ export function deletePlacement(grade,db){
 			.then(res3 => {
 				deleteTakes(grade,year,db)
 				.then(res4 => {
+					resolve()
 				    })
+				.catch(err => {
+					reject(err)
+				    })    
+				    })
+			.catch(err => {
+				reject(err)
 			    })
+			    })
+		.catch(err => {
+			reject(err)
 		    })
+		    })
+	.catch(err => {
+		reject(err)
 	    })
-	}
+	})
+	     }
+
 
 function deleteTakes(grade,year,db){
+    //console.log("in delete takes")
     return new Promise((resolve, reject) => {
-            db.query('DELETE from "takes" where year ="' + year + '"'
-                     , function (err, entities){
+	    var q = 'DELETE from takes where year ="' + year + '"'
+            db.query(q
+                     , function (err){
                          if(err){
+			     //console.log("failture with " + q);
                              reject(err)
                          } else {
-                             resolve(entities)
+			     //console.log("success with " + q);
+                             resolve()
                          }
                      })
         })
 	}
 
 function deleteTeaches(grade,year,db){
+    //console.log("in deleteTeaches")
     return new Promise((resolve, reject) => {
-            db.query('DELETE from "teaches" where year ="' + year + '"'
-                     , function (err, entities){
+	    var q = 'DELETE from teaches where year ="' + year + '"';
+            db.query(q
+                     , function (err){
                          if(err){
+			     //console.log("failture with " + q);
                              reject(err)
                          } else {
-                             resolve(entities)
+			     //console.log("success with " + q);
+			     resolve()
                          }
                      })
         })
 	}
 
 function deleteSection(grade,year,db){
+    //console.log("in deleteSection")
     return new Promise((resolve, reject) => {
-            db.query('DELETE from "section" where year ="' + year + '"'
-                     , function (err, entities){
+	    var q = 'DELETE from section where year ="' + year + '"'
+            db.query(q
+                     , function (err){
                          if(err){
+			     //console.log("failture with " + q);
                              reject(err)
                          } else {
-                             resolve(entities)
+			     //console.log("success with " + q);
+			     resolve()
                          }
                      })
         })
 }
 
 function deleteStudents(grade,year,db){
+    //console.log("in deleteStudents")
     return new Promise((resolve, reject) => {
-            db.query('DELETE from "ydsd" where year ="' + year + '"'
-                     , function (err, entities){
+	    var q = 'DELETE from ydsd where year ="' + year + '"';
+            db.query(q
+                     , function (err){
                          if(err){
+			     //console.log("failture with " + q);
                              reject(err)
                          } else {
-                             resolve(entities)
+			     //console.log("success with " + q);
+			     resolve()
                          }
                      })
         })
