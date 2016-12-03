@@ -1,5 +1,28 @@
 
 export function getStudents(db) {
+    let students = []
+    return new Promise((resolve, reject) => {
+        db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+                 'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
+            function (err, entities) {
+                if (err) {
+                    reject(err)
+                }
+                for (let i in entities) {
+                    entities[i].teacher = {
+                        firstName: entities[i].teacherFName,
+                        lastName: entities[i].teacherLName
+                    }
+                    delete entities[i].teacherFName
+                    delete entities[i].teacherLName
+                }
+                resolve(entities)
+            }
+        )
+    })
+}
+
+/*export function getStudents(db) {
     return new Promise((resolve, reject) => {
         getStudentsInfo(db)
             .then(students => {
@@ -39,7 +62,7 @@ export function getStudents(db) {
                 })
             })
     })
-}
+}*/
 
 function getStudentsInfo(db) {
   return new Promise((resolve, reject) => {
