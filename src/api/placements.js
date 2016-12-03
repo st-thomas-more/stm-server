@@ -29,7 +29,6 @@ export default ({ config, db }) => resource({
 	},
 	/** PUT /:id - Run the algorithm */
 	update(req, res) {
-	    console.log("in update in placements.js")
 		switch (parseInt(req.params.grade)) {
 			case 0:
 				placeKindergarten(db)

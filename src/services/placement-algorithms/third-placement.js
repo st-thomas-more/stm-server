@@ -10,6 +10,8 @@ export default function place(grade, db) {
     .then(data => {
       let students = data.students
       let numSections = data.teachers.length
+	    //console.log('here in thirdgradeplc. algo')
+	    //console.log(students)
       //constants for the calculating weighted quantitative score
       const draWeight = .6
       const mathBenchWeight = .4
@@ -61,13 +63,15 @@ export default function place(grade, db) {
         }
       }
 
+
       // initialize the sections
       let sections = []
       for (let i = 0; i < numSections; i++) {
         sections.push({
           teacher: {
             firstName: data.teachers[i].firstName,
-            lastName: data.teachers[i].lastName
+            lastName: data.teachers[i].lastName,
+	    emailID: data.teachers[i].emailID
           },
           students: [],
           stats: {}
@@ -134,8 +138,10 @@ export default function place(grade, db) {
         stats['genderRatio'] = stats.males / stats.females
         section.stats = stats
       }
-      let placement = { 'grade': 3, 'sections': sections }
-      return savePlacement(3, placement,db)
+
+      let placement = { 'grade': grade, 'sections': sections }
+
+      return savePlacement(grade, placement,db)
 
     })
 }

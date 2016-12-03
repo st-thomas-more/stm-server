@@ -73,22 +73,27 @@ export function savePlacement(grade, placement,db){
     //get sections
     var year = 1950;
     console.log("in savePlacement");
-    for(var section in placement.sections){
-	console.log("in section: " + section.sectionID);
-	insertSection(section,grade,db)
+    console.log(placement)
+    var sectCount = 1;
+    for(let section of placement.sections){
+	console.log("attempting to do things to this section: " + section)
+	console.log("in section: " + sectCount);
+	insertSection(section,sectCount,grade,db)
 	    .then(res => {
-		    insertStudents(section,grade,db) //also inserts the 'takes' table
-		    insertTeaches(section,grade,db)
+		    console.log("finished an insert section- moving on to insert students & teaches")
+		    insertStudents(section,sectCount,grade,db) //also inserts the 'takes' table
+		    insertTeaches(section,sectCount,grade,db)
 		    .then(res2 => {
 			})
 		})
+	    sectCount++
 	    }
 }
 
 function insertStudent(section,student,grade,db){
-    var year = 1950;
+    var year = '1950';
     return new Promise((resolve, reject) => {
-            db.query("INSERT into 'ydsd' values ('" 
+            db.query("INSERT into ydsd values ('" 
 		     + student.id + "','" 
 		     + year + "','"
 		     + student.comments + "',' "
@@ -131,6 +136,7 @@ function insertStudent(section,student,grade,db){
 		     + "');"
                      , function (err, entities){
                          if(err){
+			     console.log("error insterting ydsd student " + student.id + " " + year)
                              reject(err)
                          } else {
                              resolve(entities)
@@ -139,12 +145,14 @@ function insertStudent(section,student,grade,db){
         })
 }
 
-function insertTakes(section,student,grade,db){
+function insertTakes(section,sectID,student,grade,db){
+    console.log("in insertTakes")
     var year = 1950;
     return new Promise((resolve, reject) => {
-            db.query('INSERT into "takes" values (' + student.id + ',' + year + ',' + section.sectionID + ');'
+            db.query("INSERT into takes values ('" + student.id + "','" + year + "','" + sectID + "');"
                      , function (err, entities){
                          if(err){
+			     console.log("error inserting into takes values " + student.id + " " + year + " " + sectID) 
                              reject(err)
                          } else {
                              resolve(entities)
@@ -153,24 +161,29 @@ function insertTakes(section,student,grade,db){
         })
 }
 
-function insertStudents(section,grade,db){
+function insertStudents(section,sectID,grade,db){
+    console.log("in insertStudents")
+    console.log(section)
     var year = 1950;
     for(var student in section.students){
+	console.log("attempting to insert data for my man: " + student.id + " " + student.firstName)
 	insertStudent(section,student,grade,db)
 	    .then(res => {
-		    insertTakes(section,student,grade,db)
+		    insertTakes(section,sectID,student,grade,db)
 		    .then(res2 => {
 			})
 		})
 	    }
 }
     
-function insertTeaches(section,grade,db){
+function insertTeaches(section,sectID,grade,db){
+    console.log("in insertTeaches")
     var year = 1950;
     return new Promise((resolve, reject) => {
-            db.query('INSERT into "teaches" values (' + section.teacher.emailID + ',' + section.sectionID + ',' + year + ');'
+            db.query("INSERT into teaches values ('" + section.teacher.emailID + "','" + sectID + "','" + year + "');"
                      , function (err, entities){
                          if(err){
+			     console.log("error inserting into teaches values " + section.teacher.emailID + " " + sectID + " " + year)
                              reject(err)
                          } else {
                              resolve(entities)
@@ -179,14 +192,16 @@ function insertTeaches(section,grade,db){
         })
 }	    
 
-function insertSection(section,grade,db){
+function insertSection(section,id,grade,db){
     var year = 1950;
-    console.log("attempting to insert section: " + section.sectionID + " in year " + year);
+    console.log("attempting to insert section: " + id + " in year " + year);
     return new Promise((resolve, reject) => {
-	    db.query('INSERT into "section" values (' + section.sectionID + ',' + year + ',' + grade + ');'
+	    var q = "INSERT into section values ('" + id + "','" + year + "','" + grade + "');"
+	    console.log("our query:" + q)
+	    db.query(q
 		     , function (err, entities){
 			 if(err){
-			     console.log("we had a terrible error!");
+			     console.log("error inserting into section values " + id + " " + year + " " + grade);
 			     reject(err)
 			 } else {
 			     resolve(entities)

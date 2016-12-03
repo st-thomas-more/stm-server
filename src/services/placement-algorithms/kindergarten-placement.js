@@ -28,7 +28,7 @@ export default function place(db) {
       let pool = {
         girls: [], boys: [], flags: []
       }
-	    console.log("here1 in kindergarten-p.js")
+      //console.log("here1 in kindergarten-p.js")
       for (let student of students) {
         // get weighted quantitative score
         let agePercentage = (student.age - minAge) / maxAge
@@ -50,15 +50,18 @@ export default function place(db) {
 
       // sort by behavior
       pool.flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
-      console.log(data.teachers)
-      console.log('num sections: ' + data.sections)
+      //console.log("*****printing data****")
+      //console.log(data);
+      //console.log(data.teachers)
+      //console.log('num sections: ' + data.sections)
       // initialize the sections
       let sections = []
       for (let i = 0; i < numSections; i++) {
         sections.push({
           teacher: {
             firstName: data.teachers[i].firstName,
-            lastName: data.teachers[i].lastName
+            lastName: data.teachers[i].lastName,
+	    emailID: data.teachers[i].emailID
           },
           students: [],
           stats: {}
@@ -66,7 +69,7 @@ export default function place(db) {
       }
 
 
-	    console.log("here2 in kp.js");
+      //console.log("here2 in kp.js");
       // distribute the students
       for (let key in pool) {
         if (pool.hasOwnProperty(key)) {
@@ -112,6 +115,7 @@ export default function place(db) {
       }
       let placement = { 'grade': 0, 'sections': sections }
       console.log("about to save the placement");
+      console.log(placement);
       return savePlacement(0, placement,db)
       
     })
