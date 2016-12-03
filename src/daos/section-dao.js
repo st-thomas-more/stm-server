@@ -1,4 +1,3 @@
-
 export function getSection(sectionID, db) {
     return new Promise((resolve, reject) => {
         db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
@@ -7,12 +6,12 @@ export function getSection(sectionID, db) {
                 if (err) {
                     reject(err)
                 } else {
-                    var result = {
+                    let result = {
                         sectionID: sectionID,
                         students: []
                     }
 
-                    for (var i in entities) {
+                    for (let i in entities) {
                         result.teacher = {
                             emailID: entities[i].emailID,
                             firstName: entities[i].firstName,
