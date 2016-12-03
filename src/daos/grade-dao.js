@@ -24,9 +24,7 @@ export function getGrades(db) {
 
 export function getStudentsInGrade(grade, db) {
     return new Promise((resolve, reject) => {
-        db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `behavior`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
-                 '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
-                 'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
+        db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
         function (err, entities) {
             if (err) {
                 reject(err)
@@ -35,6 +33,22 @@ export function getStudentsInGrade(grade, db) {
             }
         })
     })
+}
+
+
+export function getStudentRisingGrade(gradeEntering, db){
+  return new Promise((resolve, reject)=>{
+    db.query('SELECT `id`, `sex`, `firstName`, `lastName`,`behaviorObservation`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
+                 '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
+                 'FROM `student` NATURAL JOIN `ydsd` WHERE `gradeEntering` = ?', gradeEntering,
+    function (err, entities){
+      if(err){
+        reject(err)
+      }else{
+        resolve(entities)
+      }
+    })
+  })
 }
 
 export function getTeachersInGrade(grade, db) {
@@ -169,7 +183,7 @@ function getSectionIndex(sectionID, sections) {
 export function getGradeForAlg(grade, db) {
   let result = { grade: grade }
   return new Promise((resolve, reject) => {
-    getStudentsInGrade(grade - 1, db)
+    getStudentRisingGrade(grade, db)
       .then(students => {
         result.students = students
         getTeachersInGrade(grade, db)

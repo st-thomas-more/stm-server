@@ -9,6 +9,7 @@ export default function place(grade, db) {
   return getGradeForAlg(grade, db)
     .then(data => {
       let students = data.students
+      console.log(data)
       let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const draWeight = .6
