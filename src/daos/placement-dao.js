@@ -76,17 +76,17 @@ export function savePlacement(grade, placement,db){
     console.log(placement)
     var sectCount = 1;
     for(let section of placement.sections){
-	console.log("attempting to do things to this section: " + section)
-	console.log("in section: " + sectCount);
-	insertSection(section,sectCount,grade,db)
-	    .then(res => {
-		    console.log("finished an insert section- moving on to insert students & teaches")
-		    insertStudents(section,sectCount,grade,db) //also inserts the 'takes' table
-		    insertTeaches(section,sectCount,grade,db)
-		    .then(res2 => {
-			})
-		})
-	    sectCount++
+    	console.log("attempting to do things to this section: " + section)
+    	console.log("in section: " + sectCount);
+    	insertSection(section,sectCount,grade,db)
+    	    .then(res => {
+    		    console.log("finished an insert section- moving on to insert students & teaches")
+    		    insertStudents(section,sectCount,grade,db) //also inserts the 'takes' table
+    		    insertTeaches(section,sectCount,grade,db)
+    		    .then(res2 => {
+    			})
+    		})
+        sectCount++
 	    }
 }
 
