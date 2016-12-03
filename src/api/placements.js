@@ -43,7 +43,7 @@ export default ({ config, db }) => resource({
 	/** POST - Run the algorithm
 		Grade is given as a JSON object in the body */
 	create(req, res) {
-		console.log("running algorithm for grade " + req.body.grade)
+		console.log('running algorithm for grade ' + req.body.grade)
 		switch (parseInt(req.body.grade)) {
 			case 0:
 				placeKindergarten()
