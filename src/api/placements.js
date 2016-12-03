@@ -31,7 +31,7 @@ export default ({ config, db }) => resource({
 	update(req, res) {
 		switch (parseInt(req.params.grade)) {
 			case 0:
-				placeKindergarten()
+				placeKindergarten(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -40,8 +40,8 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-			case 3:
-				placeThird()
+			case 1: case 2: case 3:
+				placeThird(parseInt(req.params.grade), db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -50,8 +50,8 @@ export default ({ config, db }) => resource({
 						res.sendStatus(404)
 					})
 				break
-			case 6:
-				placeSixth()
+			case 4: case 5: case 6:
+				placeSixth(parseInt(req.params.grade), db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -61,7 +61,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 7:
-				placeSeventh()
+				placeSeventh(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
@@ -71,7 +71,7 @@ export default ({ config, db }) => resource({
 					})
 				break
 			case 8:
-				placeEigth()
+				placeEigth(db)
 					.then(() => {
 						res.sendStatus(200)
 					})
