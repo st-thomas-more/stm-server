@@ -18,7 +18,6 @@ export default ({ config, db }) => {
 	api.use('/upload', upload({config, db}))
 	api.use('/increment-year', incrementYear({config, db}))
 	api.use('/csv-template', csvTemplate({config, db}))
-	
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
 		res.json({ version })

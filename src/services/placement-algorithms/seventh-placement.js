@@ -31,7 +31,8 @@ export default function place(db) {
 				sections.push({
 					teacher: {
 						firstName: data.teachers[i].firstName,
-						lastName: data.teachers[i].lastName
+						lastName: data.teachers[i].lastName,
+						emailID: data.teachers[i].emailID
 					},
 					students: [],
 					stats: {}
@@ -72,6 +73,6 @@ export default function place(db) {
 				section.stats = stats
 			}
 			let placement = { 'grade': 7, 'sections': sections }
-			return savePlacement(7, placement)
+			return savePlacement(7, placement,db)
 		})
 }

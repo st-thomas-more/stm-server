@@ -1,4 +1,69 @@
 export function getStudents(db) {
+  let students = []
+  return new Promise((resolve, reject) => {
+    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+      'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        }
+        for (let i in entities) {
+          entities[i].teacher = {
+            firstName: entities[i].teacherFName,
+            lastName: entities[i].teacherLName
+          }
+          delete entities[i].teacherFName
+          delete entities[i].teacherLName
+        }
+        resolve(entities)
+      }
+    )
+  })
+}
+
+/*export function getStudents(db) {
+    return new Promise((resolve, reject) => {
+        getStudentsInfo(db)
+            .then(students => {
+                let curr = getStudentSectionAndTeacher(students[0].id, db)
+                for (let i = 1; i < students.length; i++) {
+                    curr = curr
+                        .then(hrinfo => {
+                            if (hrinfo.length == 0) {
+                                return getStudentSectionAndTeacher(students[i].id, db)
+                            }
+                            students[i-1].teacher = {
+                                firstName: hrinfo[0].firstName,
+                                lastName: hrinfo[0].lastName
+                            }
+                            students[i-1].sectionID = hrinfo[0].sectionID
+                            students[i-1].grade = hrinfo[0].grade
+                            return getStudentSectionAndTeacher(students[i].id, db)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+                }
+                curr.then(hrinfo => {
+                    if (hrinfo.length == 0) {
+                        resolve(students)
+                    }
+                    students[students.length-1].teacher = {
+                        firstName: hrinfo[0].firstName,
+                        lastName: hrinfo[0].lastName
+                    }
+                    students[students.length-1].sectionID = hrinfo[0].sectionID
+                    students[students.length-1].grade = hrinfo[0].grade
+                    resolve(students)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+            })
+    })
+}*/
+
+function getStudentsInfo(db) {
   return new Promise((resolve, reject) => {
     db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
       function (err, entities) {
@@ -12,29 +77,29 @@ export function getStudents(db) {
 }
 
 function getStudentSectionAndTeacher(studentID, db) {
-    return new Promise((resolve, reject) => {
-      db.query('select * from takes natural join section natural join teaches natural join staff where ID = ?;', studentID,
-        function (err, entities) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(entities)
-          }
-        })
-    })
+  return new Promise((resolve, reject) => {
+    db.query('select * from takes natural join section natural join teaches natural join staff where ID = ?;', studentID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
 }
 
 function getStudentInfo(studentID, db) {
-    return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
-            function (err, entities) {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(entities)
-                }
-            })
-    })
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
 }
 
 export function getStudent(studentID, db) {
@@ -43,7 +108,6 @@ export function getStudent(studentID, db) {
       .then(student => {
         getStudentSectionAndTeacher(studentID, db)
           .then(result => {
-            console.log(result[0].firstName)
             student[0].teacher = {
               firstName: result[0].firstName,
               lastName: result[0].lastName
