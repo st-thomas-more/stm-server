@@ -2,7 +2,7 @@ import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
 export default function place(grade, db) {
-  if(grade < 1 || grade > 3){
+  if (grade < 1 || grade > 3) {
     console.log('ERROR: grade' + grade + ' outside of bounds for third grade placement')
     return false
   }
@@ -69,7 +69,7 @@ export default function place(grade, db) {
           teacher: {
             firstName: data.teachers[i].firstName,
             lastName: data.teachers[i].lastName,
-	    emailID: data.teachers[i].emailID
+            emailID: data.teachers[i].emailID
           },
           students: [],
           stats: {}
@@ -137,7 +137,7 @@ export default function place(grade, db) {
         section.stats = stats
       }
       let placement = { 'grade': grade, 'sections': sections }
-      return savePlacement(grade, placement,db)
+      return savePlacement(grade, placement, db)
     })
 }
 

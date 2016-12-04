@@ -1,3 +1,4 @@
+
 import * as currentYearDao from './current-year-dao.js'
 
 /*gets a staff member and all of its points including the section they are teaching by the members emailID*/
@@ -50,14 +51,15 @@ export function createStaff(data, db){
 		db.query('INSERT INTO `staff` (`emailID`, `access_level`, `firstName`, `lastName`, `gradeTeaching`) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE  `emailID` = ?, `access_level`= ?, `firstName`=?, `lastName`= ?, `gradeTeaching`=?;',
 			 data3,
              function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-        })
-        })
+		        if (err) {
+		          reject(err)
+		        } else {
+		          resolve()
+		        }
+      })
+  })
 }
+
 
 /*deletes staff from the db*/
 export function deleteStaff(emailID,db){
@@ -71,4 +73,17 @@ export function deleteStaff(emailID,db){
 	        }
 	        })
 	})
+}
+
+export function getGrade(emailID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('select * from staff WHERE emailID = ?;', emailID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities[0].gradeTeaching)
+        }
+      })
+  })
 }
