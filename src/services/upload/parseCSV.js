@@ -8,6 +8,7 @@ export default function parse_csv(filename,db) {
     var options = { delimiter : ','};
     var result = csvjson.toObject(data, options);
 
+
     for (var i in result) 
     {
         model.insertStudent([result[i].id, result[i].lastName, result[i].firstName,result[i].sex, result[i].dob], db);

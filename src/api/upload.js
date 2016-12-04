@@ -9,7 +9,6 @@ export default ({config, db}) => resource({
 
     /** POST - Create a new upload */
     create(req, res) {
-
         let form = new formidable.IncomingForm();
         
         form.multiples = true;
