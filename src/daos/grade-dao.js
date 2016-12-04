@@ -24,6 +24,27 @@ export function getGrades(db) {
     })
 }
 
+export function getStudentsForPlacement(grade, db) {
+    return new Promise((resolve, reject) => {
+            currentYearDao.getDashYear(db)
+            .then(y => {
+		    var year = y+1
+                    db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHER\
+E `grade` = ? and year = ?', [grade,year],
+                             function (err, entities) {
+                                 if (err) {
+                                     reject(err)
+                                 } else {
+                                     resolve(entities)
+                                 }
+                             })
+                })
+            .catch(err => {
+                    reject(err)
+                })
+                })
+        }
+
 export function getStudentsInGrade(grade, db) {
     return new Promise((resolve, reject) => {
 	    currentYearDao.getDashYear(db)
@@ -77,6 +98,26 @@ export function getTeachersInGrade(grade, db) {
         })
     })
 }
+
+export function getSectionsForPlacement(grade, db) {
+    return new Promise((resolve, reject) => {
+	    currentYearDao.getDashYear(db)
+	    .then(y => {
+		    var year = y
+		    db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities\
+														 ) {
+				 if (err) {
+				     reject(err)
+				 } else {
+				     resolve(entities)
+				 }
+			     })
+		})
+	    .catch(err => {
+		    reject(err)
+		})
+		})
+	}
 
 export function getSections(grade, db) {
   return new Promise((resolve, reject) => {

@@ -9,13 +9,13 @@ export function getPlacement(grade, db) {
     //console.log(studentGrade)
     return new Promise((resolve, reject) => {
 	    //gradeDao.getStudentsInGrade(studentGrade, db)
-	    gradeDao.getStudentsRisingGrade(grade, db) 
+	    gradeDao.getStudentsForPlacement(grade, db) 
             .then(students => {
                 result.students = students
                 gradeDao.getTeachersInGrade(grade, db)
 		.then(teachers => {
                         result.teachers = teachers
-                        gradeDao.getSections(grade, db)
+                        gradeDao.getSectionsForPlacement(grade, db)
 			.then(sections => {
                                 result.sections = sections.length
                                 resolve(result)
