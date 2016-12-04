@@ -4,10 +4,11 @@ import * as currentYearDao from './current-year-dao.js'
 export function getPlacement(grade, db) {
     var result = {grade: grade}
     console.log(grade);
-    var studentGrade = grade - 1;
+    //var studentGrade = grade - 1;
     console.log(studentGrade)
     return new Promise((resolve, reject) => {
-	    gradeDao.getStudentsInGrade(studentGrade, db)
+	    //gradeDao.getStudentsInGrade(studentGrade, db)
+	    gradeDao.getStudentsRisingGrade(grade, db) 
             .then(students => {
                 result.students = students
                 gradeDao.getTeachersInGrade(grade, db)
@@ -54,6 +55,7 @@ export function savePlacement(grade, placement,db){
 export function savePlaceHelper(grade,placement,db,year){
     var sectCount = 1;
     for(let section of placement.sections){
+	console.log(section)
 	insertSection(section,sectCount,grade,db,year)
 	    .then(sectC => {
 		    insertStudents(section,sectC,grade,db,year) //also inserts the 'takes' table
@@ -124,9 +126,9 @@ function insertTakes(section,sectID,student,grade,db,year){
             db.query(q
                      , function (err, entities){
                          if(err){
-                             reject(err)
+			     reject(err)
                          } else {
-                             resolve()
+			     resolve()
                          }
                      })
         })
@@ -150,9 +152,9 @@ function insertTeaches(section,sectID,grade,db,year){
             db.query(q
                      , function (err, entities){
                          if(err){
-	                     reject(err)
+			     reject(err)
                          } else {
-	                     resolve()
+			     resolve()
                          }
                      })
         })
@@ -166,7 +168,7 @@ function insertSection(section,id,grade,db,year){
 			 if(err){
 			     reject(err)
 			 } else {
-			     resolve()
+			     resolve(id)
 			 }
 		     })
 	})

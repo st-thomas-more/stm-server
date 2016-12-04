@@ -36,20 +36,20 @@ export function getStudentsInGrade(grade, db) {
 	})
 	}
 
-/*export function getStudentsInGrade(grade, db) {
+export function getStudentsRisingGrade(gradeEntering, db) {
     return new Promise((resolve, reject) => {
-        db.query('SELECT `id`, `sex`, `firstName`, `lastName`, `behaviorObservation`, `facultyStudent`, `newStudent`, `medicalConcern`, ' +
-                 '`hmp`, `workEthic`, `mathBench`, `dra`, `asp`, `elaTotal`, `mathTotal`, `cogAT`' +
-                 'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ?', grade,
-        function (err, entities) {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(entities)
-            }
+            db.query('SELECT *' +
+                     'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `\
+gradeEntering` = ?', gradeEntering,
+                     function (err, entities) {
+                         if (err) {
+                             reject(err)
+                         } else {
+                             resolve(entities)
+                         }
+                     })
         })
-    })
-    }*/
+        }
 
 export function getTeachersInGrade(grade, db) {
     return new Promise((resolve, reject) => {
