@@ -1,40 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import * as gradeDao from './grade-dao.js'
-
-function getPath(grade) {
-  let name
-  switch(grade) {   
-    case 0:
-      name = 'kindergarten'
-      break
-    case 1:
-      name = 'first'
-      break
-    case 2:
-      name = 'second'
-      break
-    case 3:
-      name = 'third'
-      break
-    case 4:
-      name = 'fourth'
-      break
-    case 5:
-      name = 'fifth'
-      break
-    case 6:
-      name = 'sixth'
-      break
-    case 7:
-      name = 'seventh'
-      break
-    case 8:
-      name = 'eighth'
-      break
-  }
-  return path.join(__dirname, `../mock-data/placements/${name}-placement.json`)
-}
+import * as currentYearDao from './current-year-dao.js'
 
 export function getPlacement(grade, db) {
     var result = {grade: grade}
@@ -70,23 +35,29 @@ export function getPlacement(grade, db) {
 
 
 export function savePlacement(grade, placement,db){
-    var promise = deletePlacement(grade,db);
-    promise.then( () => {
-	    savePlaceHelper(grade,placement,db);
-	    }).catch(err => {
-		    reject(err)
-		})
-		   }
-		     
+    currentYearDao.getDashYear(db)
+	.then(results => {
+		var year = results+1
+		var promise = deletePlacement(grade,db,year);
+		promise.then( () => {
+			savePlaceHelper(grade,placement,db,year);
+		    }).catch(err => {
+			    reject(err)
+			})
+			   })
+	.catch(err => {
+		reject(err)
+	    })
+	}
 
-export function savePlaceHelper(grade,placement,db){
-    var year = 1950;
+
+export function savePlaceHelper(grade,placement,db,year){
     var sectCount = 1;
     for(let section of placement.sections){
-	insertSection(section,sectCount,grade,db)
+	insertSection(section,sectCount,grade,db,year)
 	    .then(sectC => {
-		    insertStudents(section,sectC,grade,db) //also inserts the 'takes' table
-		    insertTeaches(section,sectC,grade,db)
+		    insertStudents(section,sectC,grade,db,year) //also inserts the 'takes' table
+		    insertTeaches(section,sectC,grade,db,year)
 		    .then(res2 => {
 			    resolve()
 			})
@@ -95,8 +66,7 @@ export function savePlaceHelper(grade,placement,db){
 	    }
 }
 
-function insertStudent(section,student,grade,db){
-    var year = '1950';
+function insertStudent(section,student,grade,db,year){
     return new Promise((resolve, reject) => {
             db.query("INSERT into ydsd values ('" 
 		     + student.id + "','" 
@@ -148,8 +118,7 @@ function insertStudent(section,student,grade,db){
         })
 }
 
-function insertTakes(section,sectID,student,grade,db){
-    var year = 1950;
+function insertTakes(section,sectID,student,grade,db,year){
     return new Promise((resolve, reject) => {
 	    var q = "INSERT into takes values ('" + student.id + "','" + year + "','" + sectID + "');";
             db.query(q
@@ -163,12 +132,11 @@ function insertTakes(section,sectID,student,grade,db){
         })
 }
 
-function insertStudents(section,sectID,grade,db){
-    var year = 1950;
+function insertStudents(section,sectID,grade,db,year){
     for(let student of section.students){
-	insertStudent(section,student,grade,db)
+	insertStudent(section,student,grade,db,year)
 	    .then(res => {
-		    insertTakes(section,sectID,student,grade,db)
+		    insertTakes(section,sectID,student,grade,db,year)
 		    .then(res2 => {
 			    resolve()
 			})
@@ -176,23 +144,21 @@ function insertStudents(section,sectID,grade,db){
 	    }
 }
     
-function insertTeaches(section,sectID,grade,db){
-    var year = 1950;
+function insertTeaches(section,sectID,grade,db,year){
     return new Promise((resolve, reject) => {
 	    var q = "INSERT into teaches values ('" + section.teacher.emailID + "','" + sectID + "','" + year + "');";
             db.query(q
                      , function (err, entities){
                          if(err){
-                             reject(err)
+	                     reject(err)
                          } else {
-                             resolve()
+	                     resolve()
                          }
                      })
         })
 }	    
 
-function insertSection(section,id,grade,db){
-    var year = 1950;
+function insertSection(section,id,grade,db,year){
     return new Promise((resolve, reject) => {
 	    var q = "INSERT into section values ('" + id + "','" + year + "','" + grade + "');"
 	    db.query(q
@@ -200,16 +166,15 @@ function insertSection(section,id,grade,db){
 			 if(err){
 			     reject(err)
 			 } else {
-			     resolve(id)
+			     resolve()
 			 }
 		     })
 	})
 }
 
-export function deletePlacement(grade,db){
-    var year = 1950;
+export function deletePlacement(grade,db,year){
     return new Promise((resolve, reject) => {
-    deleteSection(grade,year,db)
+	    deleteSection(grade,year,db)
 	.then(res => {
 		deleteStudents(grade,year,db)
 		.then(res2 => {
