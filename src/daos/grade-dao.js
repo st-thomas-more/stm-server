@@ -29,7 +29,7 @@ export function getStudentsForPlacement(grade, db) {
             currentYearDao.getDashYear(db)
             .then(y => {
 		    var year = y+1
-                    db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ? and year = ?;', [grade,year],
+                    db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN takes NATURAL JOIN section WHERE `grade` = ? and year = ?;', [grade,year],
                              function (err, entities) {
                                  if (err) {
                                      reject(err)
@@ -102,7 +102,7 @@ export function getSectionsForPlacement(grade, db) {
     return new Promise((resolve, reject) => {
 	    currentYearDao.getDashYear(db)
 	    .then(y => {
-		    var year = y
+		    var year = y + 1
 		    db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities) {
 				 if (err) {
 				     reject(err)
