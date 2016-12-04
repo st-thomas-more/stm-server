@@ -40,9 +40,11 @@ export function getStudentsInGrade(grade, db) {
 
 export function getStudentsRisingGrade(gradeEntering, db) {
     return new Promise((resolve, reject) => {
+	    currentYearDao.getDashYear(db)
+	    .then(year => {
             db.query('SELECT *' +
-                     'FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `\
-gradeEntering` = ?', gradeEntering,
+                     'FROM `student` NATURAL JOIN `ydsd` WHERE `\
+gradeEntering` = ? and year = ?', [gradeEntering,year],
                      function (err, entities) {
                          if (err) {
                              reject(err)
@@ -50,7 +52,11 @@ gradeEntering` = ?', gradeEntering,
                              resolve(entities)
                          }
                      })
-        })
+		})
+	    .catch(err => {
+		    reject(err)
+		})
+		})
 	}
 
 export function getTeachersInGrade(grade, db) {
@@ -193,7 +199,7 @@ export function getGradeForAlg(grade, db) {
   return new Promise((resolve, reject) => {
     getStudentsRisingGrade(grade, db)
       .then(students => {
-        result.students = students
+	      result.students = students
         getTeachersInGrade(grade, db)
           .then(teachers => {
             result.teachers = teachers

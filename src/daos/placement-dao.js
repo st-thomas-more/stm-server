@@ -4,9 +4,9 @@ import * as staffDao from './staff-dao.js'
 
 export function getPlacement(grade, db) {
     var result = {grade: grade}
-    console.log(grade);
+    //console.log(grade);
     //var studentGrade = grade - 1;
-    console.log(studentGrade)
+    //console.log(studentGrade)
     return new Promise((resolve, reject) => {
 	    //gradeDao.getStudentsInGrade(studentGrade, db)
 	    gradeDao.getStudentsRisingGrade(grade, db) 
@@ -56,7 +56,7 @@ export function savePlacement(grade, placement,db){
 export function savePlaceHelper(grade,placement,db,year){
     var sectCount = 1;
     for(let section of placement.sections){
-	console.log(section)
+	//console.log(section)
 	insertSection(section,sectCount,grade,db,year)
 	    .then(sectC => {
 		    insertStudents(section,sectC,grade,db,year) //also inserts the 'takes' table
@@ -108,7 +108,7 @@ function insertStudent(section,student,grade,db,year){
 		     + student.selfHelp + "','" //self help
 		     + student.socialEmotional + "','" //social emotional
 		     + student.dial4 + "','"
-		     + student.gradeEntering + "','"
+		     + (parseInt(student.gradeEntering) + 1) + "','"
 		     + student.ge + "'" 
 		     + ");"
                      , function (err, entities){
