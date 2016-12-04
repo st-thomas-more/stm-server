@@ -1,3 +1,5 @@
+import * as currentYearDao from './current-year-dao.js'
+
 export function getGrades(db) {
     let result = []
     return new Promise((resolve, reject) => {
@@ -49,11 +51,11 @@ gradeEntering` = ?', gradeEntering,
                          }
                      })
         })
+	}
 
 export function getTeachersInGrade(grade, db) {
     return new Promise((resolve, reject) => {
-	    var year = '2016';
-	    db.query('SELECT `firstName`, `lastName`,`emailID` FROM `staff` NATURAL JOIN `teaches` NATURAL JOIN `section` WHERE `grade` = ? AND  `year` = ?', [grade,year],
+	    db.query('SELECT `firstName`, `lastName`,`emailID` FROM `staff` where gradeTeaching = ?', grade,
         function (err, entities) {
             if (err) {
                 reject(err)
@@ -66,17 +68,22 @@ export function getTeachersInGrade(grade, db) {
 
 export function getSections(grade, db) {
   return new Promise((resolve, reject) => {
-	  var year = '2016'
-	  db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(entities)
+	  currentYearDao.getDashYear(db)
+	  .then(year => {
+		  db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade,year], function (err, entities) {
+			  if (err) {
+			      reject(err)
+			  } else {
+			      resolve(entities)
+			  }
+		      })
+	      })
+	  .catch(err => {
+		  reject(err)
+	      })
+	      })
       }
-    })
-  })
-}
-
+      
 export function getGrade(grade, db) {
   return new Promise((resolve, reject) => {
     db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
@@ -184,7 +191,7 @@ function getSectionIndex(sectionID, sections) {
 export function getGradeForAlg(grade, db) {
   let result = { grade: grade }
   return new Promise((resolve, reject) => {
-    getStudentRisingGrade(grade, db)
+    getStudentsRisingGrade(grade, db)
       .then(students => {
         result.students = students
         getTeachersInGrade(grade, db)

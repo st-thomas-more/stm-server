@@ -1,5 +1,6 @@
 import * as gradeDao from './grade-dao.js'
 import * as currentYearDao from './current-year-dao.js'
+import * as staffDao from './staff-dao.js'
 
 export function getPlacement(grade, db) {
     var result = {grade: grade}
@@ -31,7 +32,7 @@ export function getPlacement(grade, db) {
 		    reject(err)
 		})
 	 })
-}
+	 }
 
 
 
@@ -49,7 +50,7 @@ export function savePlacement(grade, placement,db){
 	.catch(err => {
 		reject(err)
 	    })
-	}
+	    }
 
 
 export function savePlaceHelper(grade,placement,db,year){
