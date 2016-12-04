@@ -2,7 +2,7 @@ import * as gradeDao from './grade-dao.js'
 import * as currentYearDao from './current-year-dao.js'
 import * as staffDao from './staff-dao.js'
 
-export function getPlacement(grade, db) {
+/*export function getPlacement(grade, db) {
     var result = {grade: grade}
     //console.log(grade);
     //var studentGrade = grade - 1;
@@ -33,7 +33,19 @@ export function getPlacement(grade, db) {
 		})
 	 })
 	 }
+*/
 
+export function getPlacement(grade, db) {
+    return new Promise((resolve, reject) => {
+        gradeDao.getGradeForPlacement(grade, db)
+            .then(result => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+}
 
 
 export function savePlacement(grade, placement,db){
