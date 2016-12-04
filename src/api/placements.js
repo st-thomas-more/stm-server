@@ -27,12 +27,12 @@ export default ({ config, db }) => resource({
 			res.sendStatus(404)
 		}
 	},
+
 	/** PUT /:id - Update the placement */
 	update(req, res) {
-		const grade = parseInt(req.params.grade)
-		const { placement } = req.body
-		placementDao.savePlacement(grade, placement).then(() => {
-				res.sendStatus(200)
+		const placement = req.body
+		placementDao.savePlacement(placement).then(placement => {
+				res.status(200).json(placement)
 			})
 			.catch(err => {
 				console.error(err)
@@ -40,10 +40,8 @@ export default ({ config, db }) => resource({
 		})
 	},
 
-	/** POST - Run the algorithm
-		Grade is given as a JSON object in the body */
+	/** POST - Run the algorithm grade is given as a JSON object in the body */
 	create(req, res) {
-		console.log('running algorithm for grade ' + req.body.grade)
 		switch (parseInt(req.body.grade)) {
 			case 0:
 				placeKindergarten()
