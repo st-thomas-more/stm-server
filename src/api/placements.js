@@ -17,6 +17,9 @@ export default ({ config, db }) => resource({
 		if (grade >= 0 && grade <= 8) {
 			placementDao.getPlacement(grade)
 				.then(placement => {
+					placement.sections.forEach(section => {
+						section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+					})
 					res.status(200).json(placement)
 				})
 				.catch(err => {
@@ -31,6 +34,9 @@ export default ({ config, db }) => resource({
 	/** PUT /:id - Update the placement */
 	update(req, res) {
 		const placement = req.body
+		placement.sections.forEach(section => {
+			section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+		})
 		placementDao.savePlacement(placement).then(placement => {
 				res.status(200).json(placement)
 			})
