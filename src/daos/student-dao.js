@@ -1,25 +1,24 @@
-
 export function getStudents(db) {
-    let students = []
-    return new Promise((resolve, reject) => {
-        db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
-                 'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
-            function (err, entities) {
-                if (err) {
-                    reject(err)
-                }
-                for (let i in entities) {
-                    entities[i].teacher = {
-                        firstName: entities[i].teacherFName,
-                        lastName: entities[i].teacherLName
-                    }
-                    delete entities[i].teacherFName
-                    delete entities[i].teacherLName
-                }
-                resolve(entities)
-            }
-        )
-    })
+  let students = []
+  return new Promise((resolve, reject) => {
+    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+      'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        }
+        for (let i in entities) {
+          entities[i].teacher = {
+            firstName: entities[i].teacherFName,
+            lastName: entities[i].teacherLName
+          }
+          delete entities[i].teacherFName
+          delete entities[i].teacherLName
+        }
+        resolve(entities)
+      }
+    )
+  })
 }
 
 /*export function getStudents(db) {
@@ -78,29 +77,29 @@ function getStudentsInfo(db) {
 }
 
 function getStudentSectionAndTeacher(studentID, db) {
-    return new Promise((resolve, reject) => {
-      db.query('select * from takes natural join section natural join teaches natural join staff where ID = ?;', studentID,
-        function (err, entities) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(entities)
-          }
-        })
-    })
+  return new Promise((resolve, reject) => {
+    db.query('select * from takes natural join section natural join teaches natural join staff where ID = ?;', studentID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
 }
 
 function getStudentInfo(studentID, db) {
-    return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
-            function (err, entities) {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(entities)
-                }
-            })
-    })
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
+  })
 }
 
 export function getStudent(studentID, db) {
