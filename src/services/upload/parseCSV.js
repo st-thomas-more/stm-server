@@ -2,11 +2,11 @@ import * as fs from 'fs'
 import csvjson from 'csvjson'
 import * as model from './insertToDB'
 
-export default function parse_csv(filename,db) {
+export default function parse_csv(filename, db) {
 
-    let data = fs.readFileSync(filename, { encoding : 'utf8'})
-    let options = { delimiter : ','}
-    let result = csvjson.toObject(data, options)
+  let data = fs.readFileSync(filename, { encoding: 'utf8' })
+  let options = { delimiter: ',' }
+  let result = csvjson.toObject(data, options)
 
     return new Promise((resolve, reject)=>{
 	    for (let i in result) 
@@ -22,4 +22,3 @@ export default function parse_csv(filename,db) {
 	  }
 
 )}
-

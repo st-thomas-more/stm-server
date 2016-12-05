@@ -21,48 +21,6 @@ export function getStudents(db) {
   })
 }
 
-/*export function getStudents(db) {
-    return new Promise((resolve, reject) => {
-        getStudentsInfo(db)
-            .then(students => {
-                let curr = getStudentSectionAndTeacher(students[0].id, db)
-                for (let i = 1; i < students.length; i++) {
-                    curr = curr
-                        .then(hrinfo => {
-                            if (hrinfo.length == 0) {
-                                return getStudentSectionAndTeacher(students[i].id, db)
-                            }
-                            students[i-1].teacher = {
-                                firstName: hrinfo[0].firstName,
-                                lastName: hrinfo[0].lastName
-                            }
-                            students[i-1].sectionID = hrinfo[0].sectionID
-                            students[i-1].grade = hrinfo[0].grade
-                            return getStudentSectionAndTeacher(students[i].id, db)
-                        })
-                        .catch(err => {
-                            reject(err)
-                        })
-                }
-                curr.then(hrinfo => {
-                    if (hrinfo.length == 0) {
-                        resolve(students)
-                    }
-                    students[students.length-1].teacher = {
-                        firstName: hrinfo[0].firstName,
-                        lastName: hrinfo[0].lastName
-                    }
-                    students[students.length-1].sectionID = hrinfo[0].sectionID
-                    students[students.length-1].grade = hrinfo[0].grade
-                    resolve(students)
-                })
-                .catch(err => {
-                    reject(err)
-                })
-            })
-    })
-}*/
-
 function getStudentsInfo(db) {
   return new Promise((resolve, reject) => {
     db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
@@ -134,13 +92,13 @@ export function updateStudent(student, db) {
       firstName: student.firstName,
       sex: student.sex,
       dob: student.dob,
-      dial4: student.dial4
+      //dial4: student.dial4
     }
     delete student['lastName']
     delete student['firstName']
     delete student['sex']
     delete student['dob']
-    delete student['dial4']
+    //delete student['dial4']
     db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {

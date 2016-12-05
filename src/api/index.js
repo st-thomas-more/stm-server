@@ -8,12 +8,14 @@ import upload from './upload'
 import incrementYear from './increment-year'
 import staff from './staff'
 import csvTemplate from './csv-template'
+import similarStudent from './similar-student'
 
 
 export default ({ config, db }) => {
 	let api = Router()
 
 	api.use('/placements', placements({ config, db }))
+	api.use('/students/similar-student', similarStudent({ config, db }))
 	api.use('/sections', sections({ config, db }))
 	api.use('/grades', grades({ config, db }))
 	api.use('/students', students({ config, db }))

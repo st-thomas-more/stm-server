@@ -50,29 +50,7 @@ export default function place(db) {
 				}
 			}
 
-			const reducer = (stats, student) => {
-				stats.behavior += student.behaviorScore
-				if (student.sex === 'F') {
-					stats.females++
-				} else {
-					stats.males++
-				}
-				stats.count++
-				return stats
-			}
-
-			for (let section of sections) {
-				let stats = section.students.reduce(reducer, {
-					behavior: 0,
-					females: 0,
-					males: 0,
-					count: 0
-				})
-				stats['avgBehavior'] = stats.behavior / stats.count
-				stats['genderRatio'] = stats.males / stats.females
-				section.stats = stats
-			}
 			let placement = { 'grade': 7, 'sections': sections }
-			return savePlacement(7, placement,db)
+			return savePlacement(placement, db)
 		})
 }
