@@ -1,4 +1,4 @@
-import * as currentYearDao from './current-year-dao.js'
+ import * as currentYearDao from './current-year-dao.js'
 
 /*gets a staff member and all of its points including the section they are teaching by the members emailID*/
 export function getStaff(emailID, db) {
