@@ -42,13 +42,11 @@ export function getAllStaff(db) {
 }
 
 /* creates or updates a staff and all of its columns*/
-export function createStaff(data, db) {
+export function createStaff(staff, db) {
   return new Promise((resolve, reject) => {
-    var data2 = data
-    var data3 = data2.concat(data)
-    console.log(data3)
-    db.query('INSERT INTO `staff` (`emailID`, `access_level`, `firstName`, `lastName`, `gradeTeaching`) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE  `emailID` = ?, `access_level`= ?, `firstName`=?, `lastName`= ?, `gradeTeaching`=?;',
-      data3,
+    var data = [staff.emailID, staff.accessLevel, staff.firstName, staff.lastName, staff.gradeTeaching, staff.accessLevel, staff.gradeTeaching]
+    db.query('INSERT INTO staff (emailID, accessLevel, firstName, lastName, gradeTeaching) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE accessLevel = ?, gradeTeaching = ?;',
+      data,
       function (err) {
         if (err) {
           reject(err)
