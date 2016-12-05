@@ -220,14 +220,17 @@ function calculateStats(placement) {
 }
 
 export function savePlacement(placement, db) {
+    let year = 0
     return new Promise((resolve, reject) => {
         calculateStats(placement)
             .then(() => {
-                currentYearDao.getDashYear(db).then(result => {
-                    console.log(result)
-                    resolve(placement)
-                })
+                return currentYearDao.getDashYear(db)
             })
-            .catch(() => {})
+            .then(result => {
+                year = result
+                for (let section of placement.sections) {
+                    
+                }
+            })
     })
 }

@@ -113,7 +113,7 @@ export default ({ config, db }) => resource({
 		placement.sections.forEach(section => {
 			section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
 		})
-		placementDao.savePlacement(placement).then(placement => {
+		placementDao.savePlacement(placement, db).then(placement => {
 				res.status(200).json(placement)
 			})
 			.catch(err => {
