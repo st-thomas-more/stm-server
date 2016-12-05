@@ -93,58 +93,9 @@ export default function place(grade, db) {
         }
       }
 
-      const reducer = (stats, student) => {
-        stats.behavior += student.behaviorScore
-        stats.score += student.weightedScore
-        if (student.sex === 'F') {
-          stats.females++
-        } else {
-          stats.males++
-        }
-        if (student.asp) {
-          stats.asps++
-        }
-        if (student.hmp) {
-          stats.hmps++
-        }
-        if (student.advancedMath) {
-          stats.advancedMaths++
-        }
-        if (student.medicalConcern) {
-          stats.medicalConcerns++
-        }
-        if (student.facultyStudent) {
-          stats.facultyStudents++
-        }
-        if (student.newStudent) {
-          stats.newStudents++
-        }
-        stats.count++
-        return stats
-      }
-
-      for (let section of sections) {
-        let stats = section.students.reduce(reducer, {
-          asps: 0,
-          hmps: 0,
-          advancedMaths: 0,
-          behavior: 0,
-          score: 0,
-          females: 0,
-          males: 0,
-          medicalConcerns: 0,
-          facultyStudents: 0,
-          newStudents: 0,
-          count: 0
-        })
-        stats['avgBehavior'] = stats.behavior / stats.count
-        stats['avgTestScore'] = stats.score / stats.count
-        stats['genderRatio'] = stats.males / stats.females
-        section.stats = stats
-      }
-      let placement = { 'grade': grade, 'sections': sections }
-      return savePlacement(grade, placement, db)
-    })
+      let placement = { 'grade': 6, 'sections': sections }
+      return savePlacement(placement)
+		})
 }
 
 function pushStudent(student, females, males) {

@@ -11,25 +11,9 @@ export default ({ config, db }) => resource({
   /** Property name to store preloaded entity on `request`. */
   id: 'grade',
 
-  /** GET /:id - Return a given entity */
-  read(req, res) {
-    const grade = parseInt(req.params.grade)
-    if (grade >= 0 && grade <= 8) {
-      placementDao.getPlacement(grade, db)
-        .then(placement => {
-          res.status(200).json(placement)
-        })
-        .catch(err => {
-          console.error(err)
-          res.sendStatus(404)
-        })
-    } else {
-      res.sendStatus(404)
-    }
-  },
-  /** PUT /:id - Run the algorithm */
-  update(req, res) {
-    switch (parseInt(req.params.grade)) {
+  /** POST / - Run the algorithm */
+  create(req, res) {
+    switch (parseInt(req.body.grade)) {
       case 0:
         placeKindergarten(db)
           .then(() => {
@@ -85,6 +69,7 @@ export default ({ config, db }) => resource({
         res.sendStatus(404)
     }
   },
+
   /** DELETE /:id - Delete a given entity */
   delete(req, res) {
     const grade = parseInt(req.params.grade)
@@ -100,5 +85,40 @@ export default ({ config, db }) => resource({
     } else {
       res.sendStatus(404)
     }
-  }
+  },
+
+	/** GET /:id - Return a given entity */
+	read(req, res) {
+		const grade = parseInt(req.params.grade)
+		if (grade >= 0 && grade <= 8) {
+			placementDao.getPlacement(grade)
+				.then(placement => {
+					placement.sections.forEach(section => {
+						section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+					})
+					res.status(200).json(placement)
+				})
+				.catch(err => {
+					console.error(err)
+					res.sendStatus(404)
+				})
+		} else {
+			res.sendStatus(404)
+		}
+	},
+
+	/** PUT /:id - Update the placement */
+	update(req, res) {
+		const placement = req.body
+		placement.sections.forEach(section => {
+			section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+		})
+		placementDao.savePlacement(placement).then(placement => {
+				res.status(200).json(placement)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+		})
+	}
 })

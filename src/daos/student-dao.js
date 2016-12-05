@@ -92,13 +92,13 @@ export function updateStudent(student, db) {
       firstName: student.firstName,
       sex: student.sex,
       dob: student.dob,
-      dial4: student.dial4
+      //dial4: student.dial4
     }
     delete student['lastName']
     delete student['firstName']
     delete student['sex']
     delete student['dob']
-    delete student['dial4']
+    //delete student['dial4']
     db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {

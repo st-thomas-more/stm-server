@@ -79,39 +79,11 @@ export default function place(db) {
         }
       }
 
-      const reducer = (stats, student) => {
-        stats.behavior += student.behaviorObservation
-        stats.dial4 += student.dial4
-        stats.age += student.age
-        if (student.sex === 'F') {
-          stats.females++
-        } else {
-          stats.males++
-        }
-        if (student.potentialDelay) {
-          stats.potentialDelays++
-        }
-        stats.count++
-        return stats
-      }
-
-      for (let section of sections) {
-        let stats = section.students.reduce(reducer, {
-          behavior: 0,
-          dial4: 0,
-          age: 0,
-          females: 0,
-          males: 0,
-          potentialDelays: 0,
-          count: 0
-        })
-        stats['avgBehavior'] = stats.behavior / stats.count
-        stats['avgDial4'] = stats.dial4 / stats.count
-        stats['avgAge'] = stats.age / stats.count
-        stats['genderRatio'] = stats.males / stats.females
-        section.stats = stats
-      }
       let placement = { 'grade': 0, 'sections': sections }
+<<<<<<< HEAD
       return savePlacement(0, placement, db)
+=======
+      return savePlacement(placement)
+>>>>>>> master
     })
 }
