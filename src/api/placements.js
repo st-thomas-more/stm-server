@@ -17,6 +17,7 @@ export default ({ config, db }) => resource({
       case 0:
         placeKindergarten(db)
           .then(() => {
+            console.log('in then for kindergarten-placement')
             res.sendStatus(200)
           })
           .catch(err => {
@@ -91,7 +92,7 @@ export default ({ config, db }) => resource({
 	read(req, res) {
 		const grade = parseInt(req.params.grade)
 		if (grade >= 0 && grade <= 8) {
-			placementDao.getPlacement(grade)
+			placementDao.getPlacement(grade, db)
 				.then(placement => {
 					placement.sections.forEach(section => {
 						section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })

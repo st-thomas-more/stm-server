@@ -1,4 +1,4 @@
-import * as currentYearDao from './current-year-dao.js'
+ import * as currentYearDao from './current-year-dao.js'
 
 /*gets a staff member and all of its points including the section they are teaching by the members emailID*/
 export function getStaff(emailID, db) {
@@ -44,10 +44,9 @@ export function getAllStaff(db) {
 /* creates or updates a staff and all of its columns*/
 export function createStaff(data, db) {
   return new Promise((resolve, reject) => {
-    var data2 = data
-    var data3 = data2.concat(data)
-    console.log(data3)
-    db.query('INSERT INTO `staff` (`emailID`, `access_level`, `firstName`, `lastName`, `gradeTeaching`) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE  `emailID` = ?, `access_level`= ?, `firstName`=?, `lastName`= ?, `gradeTeaching`=?;',
+    let data2 = data
+    let data3 = data2.concat(data)
+    db.query('INSERT INTO `staff` (`emailID`, `accessLevel`, `firstName`, `lastName`, `gradeTeaching`) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE  `emailID` = ?, `accessLevel`= ?, `firstName`=?, `lastName`= ?, `gradeTeaching`=?;',
       data3,
       function (err) {
         if (err) {

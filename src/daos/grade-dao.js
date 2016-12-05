@@ -69,7 +69,7 @@ export function getStudentsRisingGrade(gradeEntering, db) {
     currentYearDao.getDashYear(db)
       .then(year => {
         db.query('SELECT *' +
-          'FROM `student` NATURAL JOIN `ydsd` WHERE `\ gradeEntering` = ? and year = ?', [gradeEntering, year],
+          'FROM `student` NATURAL JOIN `ydsd` WHERE `gradeEntering` = ? and year = ?', [gradeEntering, year],
           function (err, entities) {
             if (err) {
               reject(err)
