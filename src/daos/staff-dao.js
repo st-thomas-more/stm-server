@@ -3,30 +3,25 @@ import * as currentYearDao from './current-year-dao.js'
 /*gets a staff member and all of its points including the section they are teaching by the members emailID*/
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(y => {
-        db.query('SELECT `*` FROM `teaches` NATURAL JOIN `staff` WHERE `emailID` = ? AND `year` = ?;',
-          [emailID, y],
+        db.query('SELECT `*` FROM `staff` WHERE `emailID` = ?;',
+          emailID,
           function (err, entities) {
             if (err) {
               reject(err)
             } else {
-              resolve(entities)
+              if (entities.length === 0) {
+                reject(new Error(emailID + ' Not Found'))
+              }
+              resolve(entities[0])
             }
           })
-      })
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 
 /*gets all staff members and the section they are teaching*/
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(y => {
-        db.query('SELECT `*` FROM `teaches` NATURAL JOIN `staff` WHERE `year`=?;', y,
+        db.query('SELECT `*` FROM `staff`;', 
           function (err, entities) {
             if (err) {
               reject(err)
@@ -34,10 +29,6 @@ export function getAllStaff(db) {
               resolve(entities)
             }
           })
-      })
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 
