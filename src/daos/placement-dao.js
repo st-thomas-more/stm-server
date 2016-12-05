@@ -2,39 +2,6 @@ import * as gradeDao from './grade-dao.js'
 import * as currentYearDao from './current-year-dao.js'
 import * as staffDao from './staff-dao.js'
 
-/*export function getPlacement(grade, db) {
-var result = {grade: grade}
-//console.log(grade);
-//var studentGrade = grade - 1;
-//console.log(studentGrade)
-return new Promise((resolve, reject) => {
-//gradeDao.getStudentsInGrade(studentGrade, db)
-gradeDao.getStudentsForPlacement(grade, db) 
-.then(students => {
-    result.students = students
-    gradeDao.getTeachersInGrade(grade, db)
-.then(teachers => {
-            result.teachers = teachers
-            gradeDao.getSectionsForPlacement(grade, db)
-.then(sections => {
-                    result.sections = sections.length
-                    resolve(result)
-                })
-.catch(err => {
-                    reject(err)
-                })
-})
-.catch(err => {
-            reject(err)
-        })
-})
-.catch(err => {
-reject(err)
-})
-})
-}
-*/
-
 export function getPlacement(grade, db) {
   return new Promise((resolve, reject) => {
     gradeDao.getGradeForPlacement(grade, db)
@@ -47,38 +14,48 @@ export function getPlacement(grade, db) {
   })
 }
 
-
 export function savePlacement(grade, placement, db) {
-  currentYearDao.getDashYear(db)
-    .then(results => {
-      var year = results + 1
-      var promise = deletePlacement(grade, db, year)
-      promise.then(() => {
-        savePlaceHelper(grade, placement, db, year)
-      }).catch(err => {
+  return new Promise((resolve, reject) => {
+    currentYearDao.getDashYear(db)
+      .then(results => {
+        var year = results + 1
+        var promise = deletePlacement(grade, db, year)
+        promise.then(() => {
+          savePlaceHelper(grade, placement, db, year)
+          resolve()
+        }).catch(err => {
+          reject(err)
+        })
+      })
+      .catch(err => {
         reject(err)
       })
-    })
-    .catch(err => {
-      reject(err)
-    })
+  })
 }
 
-
 export function savePlaceHelper(grade, placement, db, year) {
-  var sectCount = 1
-  for (let section of placement.sections) {
-    //console.log(section)
-    insertSection(section, sectCount, grade, db, year)
-      .then(sectC => {
-        insertStudents(section, sectC, grade, db, year) //also inserts the 'takes' table
-        insertTeaches(section, sectC, grade, db, year)
-          .then(res2 => {
-            resolve()
-          })
-      })
-    sectCount++
-  }
+  return new Promise((resolve, reject) => {
+    var sectCount = 1
+    for (let section of placement.sections) {
+      //console.log(section)
+      insertSection(section, sectCount, grade, db, year)
+        .then(sectC => {
+          insertStudents(section, sectC, grade, db, year) //also inserts the 'takes' table
+            .catch(err => {
+              reject(err)
+            })
+          insertTeaches(section, sectC, grade, db, year)
+            .catch(err => {
+              reject(err)
+            })
+        })
+        .catch(err => {
+          reject(err)
+        })
+      sectCount++
+    }
+    resolve()
+  })
 }
 
 function insertStudent(section, student, grade, db, year) {
@@ -148,15 +125,21 @@ function insertTakes(section, sectID, student, grade, db, year) {
 }
 
 function insertStudents(section, sectID, grade, db, year) {
-  for (let student of section.students) {
-    insertStudent(section, student, grade, db, year)
-      .then(res => {
-        insertTakes(section, sectID, student, grade, db, year)
-          .then(res2 => {
-            resolve()
-          })
-      })
-  }
+  return new Promise((resolve, reject) => {
+    for (let student of section.students) {
+      insertStudent(section, student, grade, db, year)
+        .then(() => {
+          insertTakes(section, sectID, student, grade, db, year)
+            .catch(err => {
+              reject(err)
+            })
+        })
+        .catch(err => {
+          reject(err)
+        })
+    }
+    resolve()
+  })
 }
 
 function insertTeaches(section, sectID, grade, db, year) {
@@ -190,13 +173,13 @@ function insertSection(section, id, grade, db, year) {
 export function deletePlacement(grade, db, year) {
   return new Promise((resolve, reject) => {
     deleteSection(grade, year, db)
-      .then(res => {
+      .then(() => {
         deleteStudents(grade, year, db)
-          .then(res2 => {
+          .then(() => {
             deleteTeaches(grade, year, db)
-              .then(res3 => {
+              .then(() => {
                 deleteTakes(grade, year, db)
-                  .then(res4 => {
+                  .then(() => {
                     resolve()
                   })
                   .catch(err => {
