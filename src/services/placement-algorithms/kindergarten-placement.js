@@ -80,10 +80,6 @@ export default function place(db) {
       }
 
       let placement = { 'grade': 0, 'sections': sections }
-<<<<<<< HEAD
-      return savePlacement(0, placement, db)
-=======
-      return savePlacement(placement)
->>>>>>> master
+      return savePlacement(placement, db)
     })
 }

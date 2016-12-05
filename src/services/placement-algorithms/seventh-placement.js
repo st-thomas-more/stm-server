@@ -51,6 +51,6 @@ export default function place(db) {
 			}
 
 			let placement = { 'grade': 7, 'sections': sections }
-			return savePlacement(placement)
+			return savePlacement(placement, db)
 		})
 }
