@@ -13,7 +13,6 @@ export default ({ config, db }) => resource({
 
   /** GET /:id - Return a given entity */
   read(req, res) {
-    console.log('in read')
     const grade = parseInt(req.params.grade)
     if (grade >= 0 && grade <= 8) {
       placementDao.getPlacement(grade)
