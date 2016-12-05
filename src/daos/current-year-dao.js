@@ -31,7 +31,6 @@ export function getDashYear(db) {
         if (err) {
           reject(err)
         } else {
-          console.log(entities[0].currentYear)
           resolve(entities[0].currentYear)
         }
       })
