@@ -11,30 +11,9 @@ export default ({ config, db }) => resource({
   /** Property name to store preloaded entity on `request`. */
   id: 'grade',
 
-  /** GET /:id - Return a given entity */
-  read(req, res) {
-    const grade = parseInt(req.params.grade)
-    if (grade >= 0 && grade <= 8) {
-      placementDao.getPlacement(grade)
-        .then(placement => {
-          placement.sections.forEach(section => {
-            section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-          })
-          res.status(200).json(placement)
-        })
-        .catch(err => {
-          console.error(err)
-          res.sendStatus(404)
-        })
-    } else {
-      res.sendStatus(404)
-    }
-  },
-
   /** POST / - Run the algorithm */
   create(req, res) {
-    const { grade } = req.body
-    switch (grade) {
+    switch (parseInt(req.body.grade)) {
       case 0:
         placeKindergarten(db)
           .then(() => {
@@ -47,7 +26,7 @@ export default ({ config, db }) => resource({
           })
         break
       case 1: case 2: case 3:
-        placeThird(grade, db)
+        placeThird(parseInt(req.params.grade), db)
           .then(() => {
             res.sendStatus(200)
           })
@@ -57,7 +36,7 @@ export default ({ config, db }) => resource({
           })
         break
       case 4: case 5: case 6:
-        placeSixth(grade, db)
+        placeSixth(parseInt(req.params.grade), db)
           .then(() => {
             res.sendStatus(200)
           })
@@ -87,24 +66,9 @@ export default ({ config, db }) => resource({
           })
         break
       default:
-        console.error(`Unknown placement grade: ${grade}`)
+        console.log('NOT FOUND- in update placements.js')
         res.sendStatus(404)
     }
-  },
-
-  /** PUT /:id - Update the placement */
-  update(req, res) {
-    const placement = req.body
-    placement.sections.forEach(section => {
-      section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-    })
-    placementDao.savePlacement(placement, db).then(placement => {
-      res.status(200).json(placement)
-    })
-      .catch(err => {
-        console.error(err)
-        res.sendStatus(404)
-      })
   },
 
   /** DELETE /:id - Delete a given entity */
@@ -122,5 +86,40 @@ export default ({ config, db }) => resource({
     } else {
       res.sendStatus(404)
     }
-  }
+  },
+
+	/** GET /:id - Return a given entity */
+	read(req, res) {
+		const grade = parseInt(req.params.grade)
+		if (grade >= 0 && grade <= 8) {
+			placementDao.getPlacement(grade, db)
+				.then(placement => {
+					placement.sections.forEach(section => {
+						section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+					})
+					res.status(200).json(placement)
+				})
+				.catch(err => {
+					console.error(err)
+					res.sendStatus(404)
+				})
+		} else {
+			res.sendStatus(404)
+		}
+	},
+
+	/** PUT /:id - Update the placement */
+	update(req, res) {
+		const placement = req.body
+		placement.sections.forEach(section => {
+			section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+		})
+		placementDao.savePlacement(placement, db).then(placement => {
+				res.status(200).json(placement)
+			})
+			.catch(err => {
+				console.error(err)
+				res.sendStatus(404)
+		})
+	}
 })

@@ -66,7 +66,7 @@ export function getStudentsInGrade(grade, db) {
 
 export function getStudentsRisingGrade(gradeEntering, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
+    return currentYearDao.getDashYear(db)
       .then(year => {
         db.query('SELECT *' +
           'FROM `student` NATURAL JOIN `ydsd` WHERE `gradeEntering` = ? and year = ?', [gradeEntering, year],
