@@ -3,16 +3,22 @@ export function incrementDashYear(db) {
   return new Promise((resolve, reject) => {
 	  getDashYear(db)
 	  .then(year => {
-		  updateYDSD(year,db)
-		  .then( () => {
-			  incrementYear(db)
-			  .then(() => {
-				  resolve()
-			      })
+		  deleteFutureYDSD(year,db)
+		  .then(() => {
+			  updateYDSD(year,db)
+			  .then( () => {
+				  incrementYear(year,db)
+				  .then(() => {
+					  resolve()
+				      })
+				  .catch(err => {
+					  reject(err)
+				      })
+				      })
 			  .catch(err => {
 				  reject(err)
 			      })
-		      })
+			      })
 		  .catch(err => {
 			  reject(err)
 		      })
@@ -22,6 +28,20 @@ export function incrementDashYear(db) {
 	      })
 	      })
       }
+
+//This function has year+1 as the year value since you need to delete the ydsd of the next year if it exists so that there are no conflicts when writing to the db in updateYDSD
+export function deleteFutureYDSD(year,db){
+    return new Promise((resolve, reject) => {
+	    db.query('set SQL_SAFE_UPDATES = 0; delete from ydsd where year = ?; set SQL_SAFE_UPDATES = 1;',year + 1,
+		     function (err) {
+                         if (err) {
+                             reject(err)
+                         } else {
+			     resolve()
+                         }
+                     })
+	})
+}
 
 export function updateYDSD(year,db){
     return new Promise((resolve, reject) => {
@@ -36,9 +56,9 @@ export function updateYDSD(year,db){
 	})
 	}
 
-export function incrementYear(db){
+export function incrementYear(year,db){
     return new Promise((resolve, reject) => {
-	    db.query('UPDATE currentDashboardYear set currentYear = currentYear + 1;'
+	    db.query('UPDATE currentDashboardYear set currentYear = currentYear + 1 WHERE currentYear = ?;',year
 		     , function (err) {
 			 if (err) {
 			     reject(err)
