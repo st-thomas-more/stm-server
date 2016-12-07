@@ -4,6 +4,7 @@
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
         db.query('SELECT `*` FROM `staff` natural join `section` WHERE `emailID` = ?;',
+           emailID,
             function (err, entities) {
             if (err) {
               reject(err)
@@ -19,7 +20,6 @@ export function getStaff(emailID, db) {
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
         db.query('SELECT `*` FROM `staff` nautral join `section`;',
-          emailID,
           function (err, entities) {
             if (err) {
               reject(err)
