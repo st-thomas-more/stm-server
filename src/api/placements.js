@@ -88,38 +88,38 @@ export default ({ config, db }) => resource({
     }
   },
 
-	/** GET /:id - Return a given entity */
-	read(req, res) {
-		const grade = parseInt(req.params.grade)
-		if (grade >= 0 && grade <= 8) {
-			placementDao.getPlacement(grade, db)
-				.then(placement => {
-					placement.sections.forEach(section => {
-						section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-					})
-					res.status(200).json(placement)
-				})
-				.catch(err => {
-					console.error(err)
-					res.sendStatus(404)
-				})
-		} else {
-			res.sendStatus(404)
-		}
-	},
+  /** GET /:id - Return a given entity */
+  read(req, res) {
+    const grade = parseInt(req.params.grade)
+    if (grade >= 0 && grade <= 8) {
+      placementDao.getPlacement(grade, db)
+        .then(placement => {
+          placement.sections.forEach(section => {
+            section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+          })
+          res.status(200).json(placement)
+        })
+        .catch(err => {
+          console.error(err)
+          res.sendStatus(404)
+        })
+    } else {
+      res.sendStatus(404)
+    }
+  },
 
-	/** PUT /:id - Update the placement */
-	update(req, res) {
-		const placement = req.body
-		placement.sections.forEach(section => {
-			section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
-		})
-		placementDao.savePlacement(placement, db).then(placement => {
-				res.status(200).json(placement)
-			})
-			.catch(err => {
-				console.error(err)
-				res.sendStatus(404)
-		})
-	}
+  /** PUT /:id - Update the placement */
+  update(req, res) {
+    const placement = req.body
+    placement.sections.forEach(section => {
+      section.students.sort((a, b) => { return a.lastName.localeCompare(b.lastName) })
+    })
+    placementDao.savePlacement(placement, db).then(placement => {
+      res.status(200).json(placement)
+    })
+      .catch(err => {
+        console.error(err)
+        res.sendStatus(404)
+      })
+  }
 })
