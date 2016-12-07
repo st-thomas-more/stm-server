@@ -1,11 +1,10 @@
  import * as currentYearDao from './current-year-dao.js'
 
-/*gets a staff member and all of its points including the section they are teaching by the members emailID*/
+
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff` WHERE `emailID` = ?;',
-          emailID,
-          function (err, entities) {
+        db.query('SELECT `*` FROM `staff` natural join `section` WHERE `emailID` = ?;',
+            function (err, entities) {
             if (err) {
               reject(err)
             } else {
@@ -17,11 +16,10 @@ export function getStaff(emailID, db) {
           })
   })
 }
-
-/*gets all staff members and the section they are teaching*/
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff`;', 
+        db.query('SELECT `*` FROM `staff` nautral join `section`;',
+          emailID,
           function (err, entities) {
             if (err) {
               reject(err)
@@ -31,6 +29,7 @@ export function getAllStaff(db) {
           })
   })
 }
+
 
 /* creates or updates a staff and all of its columns*/
 export function createStaff(staff, db) {
