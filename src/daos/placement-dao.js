@@ -220,14 +220,13 @@ function calculateStats(placement) {
   })
 }
 
-function insertSection(year, gradeSection, grade, db) {
-  let sectionIn = [gradeSection, year, grade, gradeSection, year, grade]
+function insertSection(selectionInsert, db) {
   return new Promise((resolve, reject) => {
-    let sectionIn = [gradeSection, year, grade, gradeSection, year, grade]
-    db.query('INSERT INTO `section` (sectionID, year,grade) VALUES(?,?,?) ON DUPLICATE KEY UPDATE `sectionID` =?, `year`=?, `grade`=?;',
-      sectionIn,
+    db.query('INSERT INTO `section` (sectionID, year,grade) VALUES ?', 
+      [selectionInsert],
       function (err) {
         if (err) {
+          console.log("error in insertSection")
           reject(err)
         } else {
           resolve()
@@ -236,13 +235,13 @@ function insertSection(year, gradeSection, grade, db) {
   })
 }
 
-function insertTeaches(year, gradeSection, emailID, db) {
+function insertTeaches(teachesInsert, db) {
   return new Promise((resolve, reject) => {
-    let teachIn = [emailID, gradeSection, year, emailID, gradeSection, year]
-    db.query('INSERT INTO `teaches` (emailID,sectionID, year) VALUES(?,?,?) ON DUPLICATE KEY UPDATE `emailID`=?,`sectionID` =?, `year`=?;',
-      teachIn,
+    db.query('INSERT INTO `teaches` (emailID,sectionID, year) VALUES ?', 
+      [teachesInsert],
       function (err) {
         if (err) {
+          console.log("error in insertTeaches")
           reject(err)
         } else {
           resolve()
@@ -251,15 +250,14 @@ function insertTeaches(year, gradeSection, emailID, db) {
   })
 }
 
-function insertTakes(year, gradeSection, id, db) {
-  console.log('in insertTakes')
+function insertTakes(takesInsert, db) {
+  console.log(takesInsert)
   return new Promise((resolve, reject) => {
-    let takesIn = [id, year, gradeSection, id, year, gradeSection]
-    db.query('INSERT INTO `takes` (ID, year,sectionID) VALUES(?,?,?) ON DUPLICATE KEY UPDATE `ID`=?, `year`=?, `sectionID`=?;',
-      takesIn,
+    db.query('INSERT INTO `takes` (ID, year,sectionID) VALUES ?', 
+      [takesInsert],
       function (err) {
         if (err) {
-          console.log('not working')
+          console.log('error in insertTakes')
           reject(err)
         } else {
           resolve()
@@ -293,19 +291,18 @@ export function savePlacement(placement, db) {
             deletePlacement(year, db)
               .then(() => {
                 for (let section of placement.sections) {
-                  gradeSection = `${placement.grade}${sectionNum.toString()}`
+                  let sectionID = `${placement.grade}${sectionNum.toString()}`
                   sectionNum++
-                  sectionQueries.push(year, gradeSection, placement.grade,year, gradeSection, placement.grade)
-                  teachesQueries.push(year, gradeSection, section.teacher.emailID,year, gradeSection, section.teacher.emailID)
-                  //sectionPromises.push(insertSection(year, gradeSection, placement.grade, db))
-                  //sectionPromises.push(insertTeaches(year, gradeSection, section.teacher.emailID, db))
-                  //console.log(section.student)
+                  let grade = placement.grade
+                  let emailID  = section.teacher.emailID
+                  sectionQueries.push([sectionID,year,grade],)// gradeSection, placement.grade],)
+                  teachesQueries.push([emailID,sectionID,year],)//section.teacher.emailID,gradeSection,year],)
                   for (let student of section.students) {
-                    studentQueries.push(year, gradeSection, student.id,year, gradeSection, student.id)
-                    //studentPromises.push(insertTakes(year, gradeSection, student.id, db))
+                    let ID = student.id
+                    studentQueries.push([ID,year,sectionID],)
                   }
                  }
-                sectionPromises.push(insertSections(sectionQueries,db));
+                sectionPromises.push(insertSection(sectionQueries,db));
                 teachesPromises.push(insertTeaches(teachesQueries,db));
                 studentPromises.push(insertTakes(studentQueries,db));
 
@@ -328,7 +325,9 @@ export function savePlacement(placement, db) {
       .catch(err => {
         reject(err)
       })
-  })
+      }).catch(err => {
+        reject(err)
+      })
 }
 
 
