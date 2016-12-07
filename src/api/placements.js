@@ -17,7 +17,6 @@ export default ({ config, db }) => resource({
       case 0:
         placeKindergarten(db)
           .then(() => {
-            console.log('in then for kindergarten-placement')
             res.sendStatus(200)
           })
           .catch(err => {
