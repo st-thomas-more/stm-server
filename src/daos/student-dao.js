@@ -1,5 +1,4 @@
 export function getStudents(db) {
-  let students = []
   return new Promise((resolve, reject) => {
     db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
       'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
@@ -91,14 +90,12 @@ export function updateStudent(student, db) {
       lastName: student.lastName,
       firstName: student.firstName,
       sex: student.sex,
-      dob: student.dob,
-      //dial4: student.dial4
+      dob: student.dob
     }
     delete student['lastName']
     delete student['firstName']
     delete student['sex']
     delete student['dob']
-    //delete student['dial4']
     db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {

@@ -1,7 +1,7 @@
 import resource from 'resource-router-middleware'
 import formidable from 'formidable'
 import * as fs from 'fs'
-import parse_csv from '../services/upload/parseCSV'
+import insertCSV from '../services/upload/insert-csv'
 import path from 'path'
 
 
@@ -17,8 +17,7 @@ export default ({config, db}) => resource({
 
     form.on('file', function rename_file(field, file) {
       fs.renameSync(file.path, path.join(form.uploadDir, file.name))
-
-      parse_csv(path.join(form.uploadDir, file.name), db)
+      insertCSV(path.join(form.uploadDir, file.name), db)
     })
 
     form.on('error', function (err) {
