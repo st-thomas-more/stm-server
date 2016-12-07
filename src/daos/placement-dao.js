@@ -230,7 +230,6 @@ function insertSection(year, gradeSection, grade, db) {
         if (err) {
           reject(err)
         } else {
-          //console.log('success2')
           resolve()
         }
       })
@@ -246,7 +245,6 @@ function insertTeaches(year, gradeSection, emailID, db) {
         if (err) {
           reject(err)
         } else {
-          //console.log('success1')
           resolve()
         }
       })
@@ -264,7 +262,6 @@ function insertTakes(year, gradeSection, id, db) {
           console.log('not working')
           reject(err)
         } else {
-          //console.log('success')
           resolve()
         }
       })
@@ -275,9 +272,18 @@ export function savePlacement(placement, db) {
   let year = 0
   let sectionNum = 0
   let gradeSection = ''
+  let sectionQueries = []
+  let teachesQueries = []
+  let studentQueries = []
+
+
   let sectionPromises = []
   let teachesPromises = []
   let studentPromises = []
+
+
+
+
   return new Promise((resolve, reject) => {
     calculateStats(placement)
       .then(() => {
@@ -289,13 +295,20 @@ export function savePlacement(placement, db) {
                 for (let section of placement.sections) {
                   gradeSection = `${placement.grade}${sectionNum.toString()}`
                   sectionNum++
-                  sectionPromises.push(insertSection(year, gradeSection, placement.grade, db))
-                  sectionPromises.push(insertTeaches(year, gradeSection, section.teacher.emailID, db))
-                  console.log(section.student)
+                  sectionQueries.push(year, gradeSection, placement.grade,year, gradeSection, placement.grade)
+                  teachesQueries.push(year, gradeSection, section.teacher.emailID,year, gradeSection, section.teacher.emailID)
+                  //sectionPromises.push(insertSection(year, gradeSection, placement.grade, db))
+                  //sectionPromises.push(insertTeaches(year, gradeSection, section.teacher.emailID, db))
+                  //console.log(section.student)
                   for (let student of section.students) {
-                    studentPromises.push(insertTakes(year, gradeSection, student.id, db))
+                    studentQueries.push(year, gradeSection, student.id,year, gradeSection, student.id)
+                    //studentPromises.push(insertTakes(year, gradeSection, student.id, db))
                   }
-                }
+                 }
+                sectionPromises.push(insertSections(sectionQueries,db));
+                teachesPromises.push(insertTeaches(teachesQueries,db));
+                studentPromises.push(insertTakes(studentQueries,db));
+
                 Promise.all(sectionPromises).then(() => {
                   Promise.all(teachesPromises).then(() => {
                     Promise.all(studentPromises).then(() => {

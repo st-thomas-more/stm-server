@@ -27,7 +27,8 @@ export function getAllStaff(db) {
               resolve(entities)
             }
           })
-
+  })
+}
 
 /* creates or updates a staff and all of its columns*/
 export function createStaff(staff, db) {
