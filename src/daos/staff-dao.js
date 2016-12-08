@@ -19,7 +19,7 @@ export function getStaff(emailID, db) {
 }
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff` nautral join `section`;',
+        db.query('SELECT `*` FROM `staff` NATURAL JOIN `teaches`;',
           function (err, entities) {
             if (err) {
               reject(err)
