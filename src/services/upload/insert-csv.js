@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import csvjson from 'csvjson'
 
+import * as util from '../../lib/util'
 
 export default function insertCSV(filename, db) {
 
