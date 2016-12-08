@@ -65,6 +65,9 @@ export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
     getStudentInfo(studentID, db)
       .then(student => {
+        if (student.length === 0) {
+            reject(new Error('Student Not Found'))
+        }
         getStudentSectionAndTeacher(studentID, db)
           .then(result => {
             if (result.length === 0) {
@@ -127,7 +130,9 @@ export function updateStudent(student, db) {
 
 export function deleteStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?', [studentID, studentID], function (err) {
+    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?; ' +
+      'DELETE FROM `takes` WHERE `id` = ?',
+      [studentID, studentID, studentID], function (err) {
       if (err) {
         reject(err)
       } else {
@@ -146,16 +151,23 @@ export function createStudent(student, db) {
             sex: student.sex,
             dob: student.dob
         }
+        let takesData = {
+            ID: student.id,
+            sectionID: student.sectionID
+        }
         delete student.lastName
         delete student.firstName
         delete student.sex
         delete student.dob
+        delete student.sectionID
         currentYearDao.getDashYear(db)
             .then(year => {
                 student.year = year
+                takesData.year = year
                 db.query('INSERT INTO `student` SET ?;' +
-                    'INSERT INTO `ydsd` SET ?;',
-                    [studentData, student], function (err) {
+                    'INSERT INTO `ydsd` SET ?; ' +
+                    'INSERT INTO `takes` SET ?;',
+                    [studentData, student, takesData], function (err) {
                       if (err) {
                         reject(err)
                       } else {
