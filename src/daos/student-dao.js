@@ -2,97 +2,49 @@ import * as currentYearDao from './current-year-dao.js'
 
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
-      'sectionID, grade from takes natural join section natural join teaches natural join staff, student natural join ydsd where takes.ID = student.id;',
-      function (err, entities) {
+    db.query('select student.id, student.firstName, student.lastName, student.sex, section.grade, section.sectionID, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID'
+      + ' from student join takes on student.id = takes.id join teaches on takes.sectionID = teaches.sectionID join staff on teaches.emailID = staff.emailID join section on takes.sectionID = section.sectionID',
+      function (err, students) {
+        console.log(err)
+        console.log(students)
         if (err) {
           reject(err)
         }
-        for (let i in entities) {
-          entities[i].teacher = {
-            firstName: entities[i].teacherFName,
-            lastName: entities[i].teacherLName
+        for (let student of students) {
+          student.teacher = {
+            firstName: student.teacherFirstName,
+            lastName: student.teacherLastName,
+            emailID: student.teacherEmailID
           }
-          delete entities[i].teacherFName
-          delete entities[i].teacherLName
+          delete student.teacherFirstName
+          delete student.teacherLastName
+          delete student.teacherEmailID
         }
-        resolve(entities)
+        resolve(students)
       }
     )
   })
 }
-
-function getStudentsInfo(db) {
+export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
-      function (err, entities) {
+    db.query('select student.*, ydsd.*, takes.sectionID, section.grade, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID' +
+      ' from student join ydsd on student.id = ydsd.id join takes on student.id = takes.id join section on takes.sectionID = section.sectionID join teaches on teaches.sectionID = takes.sectionID join staff on teaches.emailID = staff.emailID' +
+      ' where student.id = ?', studentID,
+      function (err, student) {
         if (err) {
           reject(err)
         } else {
-          resolve(entities)
+          student = student[0]
+          student.teacher = {
+            firstName: student.teacherFirstName,
+            lastName: student.teacherLastName,
+            emailID: student.teacherEmailID
+          }
+          delete student.teacherFirstName
+          delete student.teacherLastName
+          delete student.teacherEmailID
+          resolve(student)
         }
-      })
-  })
-}
-
-function getStudentSectionAndTeacher(studentID, db) {
-  return new Promise((resolve, reject) => {
-    db.query('select * from takes natural join section natural join teaches natural join staff where ID = ?;', studentID,
-      function (err, entities) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(entities)
-        }
-      })
-  })
-}
-
-function getStudentInfo(studentID, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
-      function (err, entities) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(entities)
-        }
-      })
-  })
-}
-
-export function getStudent(studentID, db) {
-  return new Promise((resolve, reject) => {
-    getStudentInfo(studentID, db)
-      .then(student => {
-        if (student.length === 0) {
-            reject(new Error('Student Not Found'))
-        }
-        getStudentSectionAndTeacher(studentID, db)
-          .then(result => {
-            if (result.length === 0) {
-                student[0].teacher = {
-                    firstName: null,
-                    lastName: null
-                }
-                student[0].sectionID = null
-                student[0].grade = null
-            } else {
-                student[0].teacher = {
-                  firstName: result[0].firstName,
-                  lastName: result[0].lastName
-                }
-                student[0].sectionID = result[0].sectionID
-                student[0].grade = result[0].grade
-                }
-            resolve(student[0])
-          })
-          .catch(err => {
-            reject(err)
-          })
-      })
-      .catch(err => {
-        reject(err)
       })
   })
 }
@@ -133,50 +85,50 @@ export function deleteStudent(studentID, db) {
     db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?; ' +
       'DELETE FROM `takes` WHERE `id` = ?',
       [studentID, studentID, studentID], function (err) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
   })
 }
 
 export function createStudent(student, db) {
-    return new Promise((resolve, reject) => {
-        let studentData = {
-            id: student.id,
-            lastName: student.lastName,
-            firstName: student.firstName,
-            sex: student.sex,
-            dob: student.dob
-        }
-        let takesData = {
-            ID: student.id,
-            sectionID: student.sectionID
-        }
-        delete student.lastName
-        delete student.firstName
-        delete student.sex
-        delete student.dob
-        delete student.sectionID
-        if (student.grade) {
-            delete student.grade
-        }
-        currentYearDao.getDashYear(db)
-            .then(year => {
-                student.year = year
-                takesData.year = year
-                db.query('INSERT INTO `student` SET ?;' +
-                    'INSERT INTO `ydsd` SET ?; ' +
-                    'INSERT INTO `takes` SET ?;',
-                    [studentData, student, takesData], function (err) {
-                      if (err) {
-                        reject(err)
-                      } else {
-                        resolve()
-                      }
-                    })
-            })
-    })
+  return new Promise((resolve, reject) => {
+    let studentData = {
+      id: student.id,
+      lastName: student.lastName,
+      firstName: student.firstName,
+      sex: student.sex,
+      dob: student.dob
+    }
+    let takesData = {
+      ID: student.id,
+      sectionID: student.sectionID
+    }
+    delete student.lastName
+    delete student.firstName
+    delete student.sex
+    delete student.dob
+    delete student.sectionID
+    if (student.grade) {
+      delete student.grade
+    }
+    currentYearDao.getDashYear(db)
+      .then(year => {
+        student.year = year
+        takesData.year = year
+        db.query('INSERT INTO `student` SET ?;' +
+          'INSERT INTO `ydsd` SET ?; ' +
+          'INSERT INTO `takes` SET ?;',
+          [studentData, student, takesData], function (err) {
+            if (err) {
+              reject(err)
+            } else {
+              resolve()
+            }
+          })
+      })
+  })
 }
