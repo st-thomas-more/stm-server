@@ -270,27 +270,27 @@ export function savePlacement(placement, db) {
           .then(year => {
             let sections = []
             for (let i = 0; i < placement.sections.length; i++) {
-              sections.push([placement.grade, `${placement.grade}${i}`])
+              sections.push([placement.grade, `${placement.grade}${i}`, year+1])
             }
-            db.query('INSERT INTO section SET ? ON DUPLICATE KEY UPDATE ?;', [sections, sections], function (err) {
+            db.query('REPLACE INTO section (grade, sectionID, year) VALUES ?;', [sections], function (err) {
               if (err) {
                 reject(err)
               } else {
                 let teaches = []
                 for (let i = 0; i < placement.sections.length; i++) {
-                  teaches.push([placement.sections[i].teacher.emailID, `${placement.grade}${i}`])
+                  teaches.push([placement.sections[i].teacher.emailID, `${placement.grade}${i}`, year+1])
                 }
-                db.query('REPLACE teaches (emailID, sectionID, year) VALUES ?, year = (SELECT year FROM time) + 1;', teaches, function (err) {
+                db.query('REPLACE teaches (emailID, sectionID, year) VALUES ?;', [teaches], function (err) {
                   if (err) {
                     reject(err)
                   } else {
                     let takes = []
                     for (let i = 0; i < placement.sections.length; i++) {
                       for (let student of placement.sections[i].students) {
-                        takes.push([student.id, `${placement.grade}${i}`])
+                        takes.push([student.id, `${placement.grade}${i}`, year+1])
                       }
                     }
-                    db.query('REPLACE takes (id, sectionID, year) VALUES ?, year = (SELECT year FROM time) + 1;', takes, function (err) {
+                    db.query('REPLACE takes (id, sectionID, year) VALUES ?;', [takes], function (err) {
                       if (err) {
                         reject(err)
                       } else {

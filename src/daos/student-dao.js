@@ -1,7 +1,7 @@
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
     db.query('SELECT student.id, student.firstName, student.lastName, student.sex, section.grade, section.sectionID, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID'
-      + ' FROM student JOIN takes on student.id = takes.id JOIN teaches on takes.sectionID = teaches.sectionID JOIN staff on teaches.emailID = staff.emailID JOIN section on takes.sectionID = section.sectionID',
+      + ' FROM student JOIN takes on student.id = takes.id JOIN teaches on takes.sectionID = teaches.sectionID JOIN staff on teaches.emailID = staff.emailID JOIN section on takes.sectionID = section.sectionID WHERE section.year = (SELECT year FROM time);',
       function (err, students) {
         if (err) {
           reject(err)
@@ -26,7 +26,7 @@ export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
     db.query('SELECT student.*, ydsd.*, takes.sectionID, section.grade, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID' +
       ' FROM student JOIN ydsd on student.id = ydsd.id JOIN takes on student.id = takes.id JOIN section on takes.sectionID = section.sectionID JOIN teaches on teaches.sectionID = takes.sectionID JOIN staff on teaches.emailID = staff.emailID' +
-      ' WHERE student.id = ?', studentID,
+      ' WHERE student.id = ? and section.year = (select year from time)', studentID,
       function (err, student) {
         if (err) {
           reject(err)
