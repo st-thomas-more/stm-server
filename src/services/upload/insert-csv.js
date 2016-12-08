@@ -11,6 +11,7 @@ export default function insertCSV(filename, db) {
 	let ydsdPromises = []
 	let takesPromises = []
 	let validatePromises = []
+	let sectionPromises = []
 
 	return new Promise((resolve, reject) => {
 		console.log("above result printout")
@@ -31,6 +32,10 @@ export default function insertCSV(filename, db) {
 							sectionID: student.sectionID,
 							year: student.year
 						}
+						let sectionData = {
+							grade: student.gradeEntering,
+							sectionID: student.sectionID
+						}
 						delete student.sectionID
 						delete student.firstName
 						delete student.lastName
@@ -41,6 +46,7 @@ export default function insertCSV(filename, db) {
 						console.log('adding to arrays')
 						studentPromises.push(insertStudent(studentData, db))
 						ydsdPromises.push(insertYdsd(student, db))
+						sectionPromises.push(insertSection(sectionData,db))
 						takesPromises.push(insertTakes(takesData,db))
 						resolve()
 					})
@@ -63,9 +69,11 @@ export default function insertCSV(filename, db) {
 				console.log(takesPromises.length)
 				Promise.all(studentPromises).then(() => {
 					Promise.all(ydsdPromises).then(() => {
-						Promise.all(takesPromises).then(() => {
-							console.log('resolved insertCSV successfully')
-							resolve()
+						Promise.all(sectionPromises).then(() =>{
+							Promise.all(takesPromises).then(() => {
+								console.log('resolved insertCSV successfully')
+								resolve()
+							})
 						})
 					})
 				})
@@ -144,7 +152,7 @@ export default function insertCSV(filename, db) {
 				}
 				if(('workEthic' in  student) && student.workEthic !== ''){
 					const workEthic = parseInt(student.workEthic,10)
-					if(workEthic < 0 || workEthic >2){
+					if(workEthic < 0 || workEthic >3){
 						reject(new Error(`workEthic not in range: ${workEthic}`))
 					}
 				}
@@ -222,6 +230,25 @@ export default function insertCSV(filename, db) {
 					})
 			})
 		}
+		function insertSection(data,db){
+			console.log("in insertSection")
+			return new Promise((resolve, reject) =>{
+				db.query(
+					'INSERT INTO `section` SET ? ON DUPLICATE KEY UPDATE ?;',
+					[data,data],
+					function (err){
+						if(err){
+							reject(err)
+						}
+						else{
+							resolve()
+						}
+					})
+			})
+		}
+
+
+
 		function insertYdsd(data, db) {
 			console.log("in insertYdsd")
 			return new Promise((resolve, reject) => {
