@@ -3,7 +3,7 @@
 
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff` natural join `section` WHERE `emailID` = ?;',
+        db.query('SELECT `*` FROM `staff` where `emailID` = ?;',// natural join `section` WHERE `emailID` = ?;',
            emailID,
             function (err, entities) {
             if (err) {
@@ -19,10 +19,10 @@ export function getStaff(emailID, db) {
 }
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-      currentYearDao.getDashYear(db)
-      .then(year =>{
-        db.query('SELECT `*` FROM `staff` NATURAL JOIN `teaches` WHERE `year`= ?;',
-          year,
+      //currentYearDao.getDashYear(db)
+      //.then(year =>{
+        db.query('SELECT `*` FROM `staff`;', //NATURAL JOIN `teaches` WHERE `year`= ?;',
+          //year,
           function (err, entities) {
             if (err) {
               reject(err)
@@ -30,9 +30,9 @@ export function getAllStaff(db) {
               resolve(entities)
             }
           })
-      }).catch(err => {
-        reject(err)
-      })
+      //}).catch(err => {
+        //reject(err)
+      //})
     })
 }
 
