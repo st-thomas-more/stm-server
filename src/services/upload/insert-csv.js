@@ -4,49 +4,62 @@ import csvjson from 'csvjson'
 import * as util from '../../lib/util'
 
 export default function insertCSV(filename, db) {
-    console.log('starting insertCSV...')
+    console.log('starting insertCSV....')
 	let data = fs.readFileSync(filename, { encoding: 'utf8' })
 	const options = { delimiter: ',' }
 	let result = csvjson.toObject(data, options)
 
 	return new Promise((resolve, reject) => {
 		for (let i in result) {
-			if (result[i].id !== ' ') {
-                let rc = validateInput(result[i])
-                if (rc !== 'success') {
-                    reject(new Error(rc))
-                } else {
-				    insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db)
-				    insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db)
-				    	.catch(err => {
-				    		reject(err)
-				    	})
-                }
-			}
+		    console.log('here')
+		    if (result[i].id !== ' ') {
+			let rc = validateInput(result[i])
+			if (rc !== 'success') {
+			    console.log('reject')
+			    reject(new Error(rc))
+			} else {
+			    console.log('here3')
+			    insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db)
+			    insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db)
+			    .catch(err => {
+				    reject(err)
+				})
+				console.log('done with jawn')
+				}
+		    }
 		}
-        console.log('done insertCSV')
+		console.log('done insertCSV')
 		resolve()
-	}
-	)
-}
+	    }
+	    )
+	    }
 
 function validateInput(entity) {
-		
+    console.log('in validateInput')
+	let ret = 'default'
 	let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
 	let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4]
+	console.log('values lengths: ' + values.length)
+	//for(i in range(values.length)){
 	for (i = 0; i < values.length; i++){
-		let ret = validateScore(numericKeys[i],values[i]);
-		if (ret !== 'success'){
-			return ret
-		}
-		console.log(ret)
-		console.log(values[i])
+	    console.log('here bby')
+	    
+	    ret = validateScore(numericKeys[i],values[i]);
+	    console.log('here again bby')
+	    if (ret !== 'success'){
+		console.log('failure in validateInput')
+		    return ret
+		    }
+	    console.log('success in validateInput with: ' + ret)
+	    console.log(values[i])
 	}
+    console.log('returning from validateInput')
 	return ret
-}
+	}
 
 
 function validateScore(key, val){
+    console.log('in validateScore')
     if (typeof val === 'undefined' || val === null) {
       return 'success'
     } else if (isNaN(val)) {
@@ -62,6 +75,7 @@ function validateScore(key, val){
     } else if(!val){
       return 'error'
     }
+    console.log('in front of switch key in validateScore')
     switch(key){
       case 'mathBench':
         if(val < 0 || val > 100)
