@@ -96,6 +96,13 @@ export function updateStudent(student, db) {
     delete student['firstName']
     delete student['sex']
     delete student['dob']
+
+    //remove fields added in by student-dao
+    delete student['teacher']
+    delete student['sectionID']
+    delete student['grade']
+
+    console.log(student)
     db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {
