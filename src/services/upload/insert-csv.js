@@ -31,8 +31,75 @@ export default function insertCSV(filename, db) {
 }
 
 function validateInput(entity) {
-    return 'success'
+	
+	let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
+	let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4]
+	for (i = 0; i < values.length; i++){
+		let ret = validateScore(numericKeys[i],values[i]);
+		if {ret !== success){
+			return ret
+		}
+	}
+	return ret
 }
+
+
+function validateScore(key, val){
+    if (typeof val === 'undefined' || val === null) {
+      return 'success'
+    } else if (isNaN(val)) {
+      return 'error'
+    } else if (typeof val === 'string') {
+      if(!val)
+        return 'success'
+      else {
+        val = parseInt(val,10)
+        if(isNaN(val))
+          return 'error'
+      }
+    } else if(!val){
+      return 'error'
+    }
+    switch(key){
+      case 'mathBench':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'cogAT':
+        if(val < 0 || val > 160)
+          return 'error'
+        else
+          return 'success'
+      case 'dra':
+        if(val < 0 || val > 70)
+          return 'error'
+        else
+          return 'success'
+      case 'elaTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'mathTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'behaviorObservation':
+        if(val < 0 || val > 54)
+          return 'error'
+        else
+          return 'success'
+      case 'dial4':
+        if(val < 0 || val > 105)
+          return 'error'
+        else
+          return 'success'
+      default:
+        return null
+    }
+  }
 
 function insertStudent(data, db) {
 	return new Promise((resolve, reject) => {
@@ -53,15 +120,7 @@ function insertStudent(data, db) {
 
 function insertYdsd(data, db) {
 	return new Promise((resolve, reject) => {
-        let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
-        let values = [data[23], data[25],data[19],data[27], data[29], data[32], data[34]]
-        for (let i = 0; i < numericKeys.length; i++) {
-            let key = numericKeys[i]
-            let val = values[i]
-            if (utils.validateScore(key,val) ==='error') {
-      	        let err = 'Invalid format for student '+data[0]
-      	        reject(err)
-            } else {
+        
                 let data2 = data
                 let data3 = data2.concat(data)
                 db.query(
@@ -73,7 +132,7 @@ function insertYdsd(data, db) {
 					        resolve()
 				        }
 			        })
-	        }
-       }
+	        
+       
    })
 }
