@@ -160,6 +160,9 @@ export function createStudent(student, db) {
         delete student.sex
         delete student.dob
         delete student.sectionID
+        if (student.grade) {
+            delete student.grade
+        }
         currentYearDao.getDashYear(db)
             .then(year => {
                 student.year = year
