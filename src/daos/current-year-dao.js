@@ -72,12 +72,12 @@ export function decrementYear(db) {
 
 export function getDashYear(db) {
   return new Promise((resolve, reject) => {
-    db.query('select * from currentDashboardYear;'
+    db.query('select * from time;'
       , function (err, entities) {
         if (err) {
           reject(err)
         } else {
-          resolve(entities[0].currentYear)
+          resolve(entities[0])
         }
       })
   })
