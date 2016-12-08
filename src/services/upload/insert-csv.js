@@ -4,35 +4,118 @@ import csvjson from 'csvjson'
 import * as util from '../../lib/util'
 
 export default function insertCSV(filename, db) {
-    console.log('starting insertCSV...')
+    console.log('starting insertCSV....')
 	let data = fs.readFileSync(filename, { encoding: 'utf8' })
 	const options = { delimiter: ',' }
 	let result = csvjson.toObject(data, options)
 
 	return new Promise((resolve, reject) => {
 		for (let i in result) {
-			if (result[i].id !== ' ') {
-                let rc = validateInput(result[i])
-                if (rc !== 'success') {
-                    reject(new Error(rc))
-                } else {
-				    insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db)
-				    insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db)
-				    	.catch(err => {
-				    		reject(err)
-				    	})
-                }
-			}
+		    console.log('here')
+		    if (result[i].id !== ' ') {
+			let rc = validateInput(result[i])
+			if (rc !== 'success') {
+			    console.log('reject')
+			    reject(new Error(rc))
+			} else {
+			    console.log('here3')
+			    insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db)
+			    insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db)
+			    .catch(err => {
+				    reject(err)
+				})
+				console.log('done with jawn')
+				}
+		    }
 		}
-        console.log('done insertCSV')
+		console.log('done insertCSV')
 		resolve()
-	}
-	)
-}
+	    }
+	    )
+	    }
 
 function validateInput(entity) {
-    return 'success'
-}
+    console.log('in validateInput')
+	let ret = 'default'
+	let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
+	let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4]
+	console.log('values lengths: ' + values.length)
+	//for(i in range(values.length)){
+	for (i = 0; i < values.length; i++){
+	    console.log('here bby')
+	    
+	    ret = validateScore(numericKeys[i],values[i]);
+	    console.log('here again bby')
+	    if (ret !== 'success'){
+		console.log('failure in validateInput')
+		    return ret
+		    }
+	    console.log('success in validateInput with: ' + ret)
+	    console.log(values[i])
+	}
+    console.log('returning from validateInput')
+	return ret
+	}
+
+
+function validateScore(key, val){
+    console.log('in validateScore')
+    if (typeof val === 'undefined' || val === null) {
+      return 'success'
+    } else if (isNaN(val)) {
+      return 'error'
+    } else if (typeof val === 'string') {
+      if(!val)
+        return 'success'
+      else {
+        val = parseInt(val,10)
+        if(isNaN(val))
+          return 'error'
+      }
+    } else if(!val){
+      return 'error'
+    }
+    console.log('in front of switch key in validateScore')
+    switch(key){
+      case 'mathBench':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'cogAT':
+        if(val < 0 || val > 160)
+          return 'error'
+        else
+          return 'success'
+      case 'dra':
+        if(val < 0 || val > 70)
+          return 'error'
+        else
+          return 'success'
+      case 'elaTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'mathTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'behaviorObservation':
+        if(val < 0 || val > 54)
+          return 'error'
+        else
+          return 'success'
+      case 'dial4':
+        if(val < 0 || val > 105)
+          return 'error'
+        else
+          return 'success'
+      default:
+        return null
+    }
+  }
 
 function insertStudent(data, db) {
 	return new Promise((resolve, reject) => {
@@ -53,15 +136,7 @@ function insertStudent(data, db) {
 
 function insertYdsd(data, db) {
 	return new Promise((resolve, reject) => {
-        let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
-        let values = [data[23], data[25],data[19],data[27], data[29], data[32], data[34]]
-        for (let i = 0; i < numericKeys.length; i++) {
-            let key = numericKeys[i]
-            let val = values[i]
-            if (utils.validateScore(key,val) ==='error') {
-      	        let err = 'Invalid format for student '+data[0]
-      	        reject(err)
-            } else {
+        
                 let data2 = data
                 let data3 = data2.concat(data)
                 db.query(
@@ -73,7 +148,7 @@ function insertYdsd(data, db) {
 					        resolve()
 				        }
 			        })
-	        }
-       }
+	        
+       
    })
 }

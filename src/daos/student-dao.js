@@ -1,3 +1,5 @@
+import * as currentYearDao from './current-year-dao.js'
+
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
     db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
@@ -63,14 +65,26 @@ export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
     getStudentInfo(studentID, db)
       .then(student => {
+        if (student.length === 0) {
+            reject(new Error('Student Not Found'))
+        }
         getStudentSectionAndTeacher(studentID, db)
           .then(result => {
-            student[0].teacher = {
-              firstName: result[0].firstName,
-              lastName: result[0].lastName
-            }
-            student[0].sectionID = result[0].sectionID
-            student[0].grade = result[0].grade
+            if (result.length === 0) {
+                student[0].teacher = {
+                    firstName: null,
+                    lastName: null
+                }
+                student[0].sectionID = null
+                student[0].grade = null
+            } else {
+                student[0].teacher = {
+                  firstName: result[0].firstName,
+                  lastName: result[0].lastName
+                }
+                student[0].sectionID = result[0].sectionID
+                student[0].grade = result[0].grade
+                }
             resolve(student[0])
           })
           .catch(err => {
@@ -116,7 +130,9 @@ export function updateStudent(student, db) {
 
 export function deleteStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?', [studentID, studentID], function (err) {
+    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?; ' +
+      'DELETE FROM `takes` WHERE `id` = ?',
+      [studentID, studentID, studentID], function (err) {
       if (err) {
         reject(err)
       } else {
@@ -127,20 +143,37 @@ export function deleteStudent(studentID, db) {
 }
 
 export function createStudent(student, db) {
-  return new Promise((resolve, reject) => {
-    db.query('INSERT INTO `student` (`id`, `lastName`, `firstName`, `sex`, `dob`, `dial4`) VALUES(?, ?, ?, ?, ?,?);' +
-      'INSERT INTO `ydsd` VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-      [student.id, student.lastName, student.firstName, student.sex, student.dob, student.dial4,
-      student.id, student.year, student.comments, student.homeroomTeacher, student.asp, student.nextMeetingSch,
-      student.advancedMath, student.speechLanguage, student.studentDevelopment, student.mathEnrichment, student.IUreadingServices,
-      student.IUmathServices, student.earobics, student.behavior, student.workEthic, student.youngestChild, student.onlyChild,
-      student.newStudent, student.medicalConcern, student.hmp, student.dra, student.raz, student.wtw, student.iStation, student.mathBench,
-      student.Dibels, student.cogAT, student.IOWA, student.elaTotal, student.ExtendedELA, student.mathTotal, student.facultyStudent], function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
+    return new Promise((resolve, reject) => {
+        let studentData = {
+            id: student.id,
+            lastName: student.lastName,
+            firstName: student.firstName,
+            sex: student.sex,
+            dob: student.dob
         }
-      })
-  })
+        let takesData = {
+            ID: student.id,
+            sectionID: student.sectionID
+        }
+        delete student.lastName
+        delete student.firstName
+        delete student.sex
+        delete student.dob
+        delete student.sectionID
+        currentYearDao.getDashYear(db)
+            .then(year => {
+                student.year = year
+                takesData.year = year
+                db.query('INSERT INTO `student` SET ?;' +
+                    'INSERT INTO `ydsd` SET ?; ' +
+                    'INSERT INTO `takes` SET ?;',
+                    [studentData, student, takesData], function (err) {
+                      if (err) {
+                        reject(err)
+                      } else {
+                        resolve()
+                      }
+                    })
+            })
+    })
 }
