@@ -21,8 +21,8 @@ export default function place(db) {
 
       for (let student of students) {
 		student.age = getAge(student.dob)
-		console.log(student.dob)
-		console.log(student.age)
+		//console.log(student.dob)
+		//console.log(student.age)
 		let age = student.age
         if (age > maxAge) {
           maxAge = age
