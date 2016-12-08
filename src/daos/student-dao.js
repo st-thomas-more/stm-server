@@ -92,7 +92,7 @@ export function deleteStudent(studentID, db) {
   })
 }
 
-export function createStudent(student, db) {
+export function createStudent(db, student) {
   return new Promise((resolve, reject) => {
     let studentData = {
       id: student.id,
@@ -105,28 +105,24 @@ export function createStudent(student, db) {
       ID: student.id,
       sectionID: student.sectionID
     }
+    
     delete student.lastName
     delete student.firstName
     delete student.sex
     delete student.dob
     delete student.sectionID
-    if (student.grade) {
-      delete student.grade
-    }
-    currentYearDao.getDashYear(db)
-      .then(year => {
-        student.year = year
-        takesData.year = year
-        db.query('INSERT INTO `student` SET ?;' +
-          'INSERT INTO `ydsd` SET ?; ' +
-          'INSERT INTO `takes` SET ?;',
-          [studentData, student, takesData], function (err) {
-            if (err) {
-              reject(err)
-            } else {
-              resolve()
-            }
-          })
+    delete student.teacher
+    delete student.grade
+
+    db.query('INSERT INTO `student` SET ?;' +
+      'INSERT INTO `ydsd` SET ?; ' +
+      'INSERT INTO `takes` SET ?, year = (SELECT year FROM time);',
+      [studentData, student, takesData], function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
       })
   })
 }
