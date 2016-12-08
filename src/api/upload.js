@@ -18,6 +18,9 @@ export default ({config, db}) => resource({
     form.on('file', function rename_file(field, file) {
       fs.renameSync(file.path, path.join(form.uploadDir, file.name))
       insertCSV(path.join(form.uploadDir, file.name), db)
+      .catch(err => {
+        console.error(err)
+      })
     })
 
     form.on('error', function (err) {
