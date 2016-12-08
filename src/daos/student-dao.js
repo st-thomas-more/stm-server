@@ -2,11 +2,9 @@ import * as currentYearDao from './current-year-dao.js'
 
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('select student.id, student.firstName, student.lastName, student.sex, section.grade, section.sectionID, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID'
-      + ' from student join takes on student.id = takes.id join teaches on takes.sectionID = teaches.sectionID join staff on teaches.emailID = staff.emailID join section on takes.sectionID = section.sectionID',
+    db.query('SELECT student.id, student.firstName, student.lastName, student.sex, section.grade, section.sectionID, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID'
+      + ' FROM student JOIN takes on student.id = takes.id JOIN teaches on takes.sectionID = teaches.sectionID JOIN staff on teaches.emailID = staff.emailID JOIN section on takes.sectionID = section.sectionID',
       function (err, students) {
-        console.log(err)
-        console.log(students)
         if (err) {
           reject(err)
         }
@@ -25,11 +23,12 @@ export function getStudents(db) {
     )
   })
 }
+
 export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
-    db.query('select student.*, ydsd.*, takes.sectionID, section.grade, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID' +
-      ' from student join ydsd on student.id = ydsd.id join takes on student.id = takes.id join section on takes.sectionID = section.sectionID join teaches on teaches.sectionID = takes.sectionID join staff on teaches.emailID = staff.emailID' +
-      ' where student.id = ?', studentID,
+    db.query('SELECT student.*, ydsd.*, takes.sectionID, section.grade, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID' +
+      ' FROM student JOIN ydsd on student.id = ydsd.id JOIN takes on student.id = takes.id JOIN section on takes.sectionID = section.sectionID JOIN teaches on teaches.sectionID = takes.sectionID JOIN staff on teaches.emailID = staff.emailID' +
+      ' WHERE student.id = ?', studentID,
       function (err, student) {
         if (err) {
           reject(err)
@@ -49,9 +48,9 @@ export function getStudent(db, studentID) {
   })
 }
 
-export function updateStudent(student, db) {
+export function updateStudent(db, student) {
   return new Promise((resolve, reject) => {
-    var studentUpdate = {
+    const studentUpdate = {
       id: student.id,
       lastName: student.lastName,
       firstName: student.firstName,
@@ -68,8 +67,7 @@ export function updateStudent(student, db) {
     delete student['sectionID']
     delete student['grade']
 
-    console.log(student)
-    db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
+    db.query('UPDATE student SET ? WHERE id = ?; UPDATE ydsd SET ? WHERE id = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {
           reject(err)
