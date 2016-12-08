@@ -56,7 +56,7 @@ export function createStaff(staff, db) {
 /*deletes staff from the db*/
 export function deleteStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-    db.query('DELETE FROM `staff` WHERE `emailID`= ?', emailID,
+    db.query('SET SQL_SAFE_UPDATES = 0;DELETE FROM `staff` WHERE `emailID`= ?; SET SQL_SAFE_UPDATES = 1;', emailID,
       function (err) {
         if (err) {
           reject(err)
