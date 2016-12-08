@@ -8,114 +8,200 @@ export default function insertCSV(filename, db) {
 	let data = fs.readFileSync(filename, { encoding: 'utf8' })
 	const options = { delimiter: ',' }
 	let result = csvjson.toObject(data, options)
-
+	let studentPromises = []
+	let ydsdPromises = []
 	return new Promise((resolve, reject) => {
-		for (let i in result) {
-		    console.log('here')
-		    if (result[i].id !== ' ') {
-			let rc = validateInput(result[i])
-			if (rc !== 'success') {
-			    console.log('reject')
-			    reject(new Error(rc))
-			} else {
-			    console.log('here3')
-			    insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db)
-			    insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db)
-			    .catch(err => {
-				    reject(err)
-				})
-				console.log('done with jawn')
-				}
-		    }
-		}
-		console.log('done insertCSV')
-		resolve()
-	    }
-	    )
-	    }
+		validateInput(result)
+		.then(result => {
+			for (let i in result) {
+			    if (result[i].id !== ' ') {
+				studentPromises.push(insertStudent([result[i].id, result[i].lastName, result[i].firstName, result[i].sex, result[i].dob], db))
+				ydsdPromises.push(insertYdsd([result[i].id, result[i].year, result[i].comments, result[i].homeroomTeacher, result[i].asp, result[i].nextMeetingSch, result[i].advancedMath, result[i].speechLanguage, result[i].studentDevelopment, result[i].mathEnrichment, result[i].IUreadingServices, result[i].IUmathServices, result[i].earobics, result[i].workEthic, result[i].youngestChild, result[i].onlyChild, result[i].newStudent, result[i].medicalConcern, result[i].hmp, result[i].dra, result[i].RAZ, result[i].WTW, result[i].iStation, result[i].mathBench, result[i].Dibels, result[i].cogAT, result[i].IOWA, result[i].elaTotal, result[i].ExtendedELA, result[i].mathTotal, result[i].facultyStudent, result[i].potentialDelay, result[i].behaviorObservation, result[i].selfHelp, result[i].socialEmotional, result[i].dial4, result[i].gradeEntering, result[i].ge], db))
+			    }
+			}
+			//resolve
+			console.log('attempting to resolve insertCSV promises')
+			Promise.all(studentPromises).then(() => {
+				Promise.all(ydsdPromises).then(() => {
+					console.log('resolved insertCSV successfully')
+					resolve()
+				    })
+				.catch(err =>{
+					reject(err)
+				    })
+				    })
+			.catch(err => {
+				reject(err)
+			    })
+			    })
+		.catch(err => {
+			reject(err)
+		    })   
+		    })
+}
 
-function validateInput(entity) {
-    console.log('in validateInput')
-	let ret = 'default'
-	let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
-	let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4]
-	console.log('values lengths: ' + values.length)
-	//for(i in range(values.length)){
-	for (i = 0; i < values.length; i++){
-	    console.log('here bby')
-	    
-	    ret = validateScore(numericKeys[i],values[i]);
-	    console.log('here again bby')
-	    if (ret !== 'success'){
-		console.log('failure in validateInput')
-		    return ret
-		    }
-	    console.log('success in validateInput with: ' + ret)
-	    console.log(values[i])
-	}
-    console.log('returning from validateInput')
-	return ret
+function validateInput(result) {
+    console.log('in validate input')
+    let validationPromises = []
+    return new Promise((resolve, reject) => {
+	    for(let i in result){
+		//console.log('in loop')
+		//console.log(result[i])
+		let entity = result[i]
+		//console.log('derp')
+		let ret = 'default'
+		//console.log('here!')
+		let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4','dob']
+		let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4,entity.dob]
+		//console.log('values lengths: ' + values.length)
+		//for(i in range(values.length)){
+		for (i = 0; i < values.length; i++){
+		    validationPromises.push(validateScore(numericKeys[i],values[i]))
+		}
+	    }
+	    console.log('attempting to resolve validateInput promises..')
+	    console.log('length is: ' + validationPromises.length + '')
+	    console.log('here!')
+	    Promise.all(validationPromises).then(() =>{
+		    console.log('validationPromises worked!')
+		    resolve()
+		}).catch(reason => {
+			console.log('our all failed!')
+			console.log(reason)
+		    })
+	})
 	}
 
 
 function validateScore(key, val){
-    console.log('in validateScore')
-    if (typeof val === 'undefined' || val === null) {
-      return 'success'
-    } else if (isNaN(val)) {
-      return 'error'
-    } else if (typeof val === 'string') {
-      if(!val)
-        return 'success'
-      else {
-        val = parseInt(val,10)
-        if(isNaN(val))
-          return 'error'
-      }
-    } else if(!val){
-      return 'error'
-    }
-    console.log('in front of switch key in validateScore')
-    switch(key){
-      case 'mathBench':
-        if(val < 0 || val > 100)
-          return 'error'
-        else
-          return 'success'
-      case 'cogAT':
-        if(val < 0 || val > 160)
-          return 'error'
-        else
-          return 'success'
-      case 'dra':
-        if(val < 0 || val > 70)
-          return 'error'
-        else
-          return 'success'
-      case 'elaTotal':
-        if(val < 0 || val > 100)
-          return 'error'
-        else
-          return 'success'
-      case 'mathTotal':
-        if(val < 0 || val > 100)
-          return 'error'
-        else
-          return 'success'
-      case 'behaviorObservation':
-        if(val < 0 || val > 54)
-          return 'error'
-        else
-          return 'success'
-      case 'dial4':
-        if(val < 0 || val > 105)
-          return 'error'
-        else
-          return 'success'
-      default:
-        return null
-    }
-  }
+    //console.log(key)
+    //console.log(val)
+    return new Promise((resolve, reject) => {
+	    let toReject = 0
+	    let toResolve = 0;
+	    //console.log('in validateScore')
+	    if (typeof val === 'undefined' || val === null) {
+		toResolve = 1
+	    } else if (isNaN(val)) {
+		toReject = 1
+	    } else if (typeof val === 'string') {
+		if(!val){
+		    toResolve = 1
+		}else {
+		    val = parseInt(val,10)
+		    if(isNaN(val)){
+			toReject = 1
+		    }
+		}
+	    } else if(!val){
+		toReject = 1
+	    }else{
+		//console.log('in front of switch key in validateScore')
+		switch(key){
+		case 'mathBench':
+		val = parseInt(val,10)
+		if(val < 0 || val > 100){
+		    console.log('rejecting on mathBench')
+		    toReject = 1
+		}else{
+		    toResolve = 1
+		}
+		break;
+		case 'cogAT':
+		val = parseInt(val,10)
+		if(val < 0 || val > 160){
+		    console.log('rejecting cogAT')
+		    toReject = 1
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
+		case 'dob':
+		var pattern = new RegExp("/^\d{2}[./-]\d{2}[./-]\d{4}$")
+		var pattern2 = new RegExp("/^\d{1}[./-]\d{2}[./-]\d{4}$.test(val)")
+		if(! pattern.test(val)){
+		    if(pattern2.test(val)){
+		    val = '0'+val
+		    }else{
+			console.log('rejecting date: ' + val)
+			toReject = 1
+		    }
+		}
+		
+		// Parse the date parts to integers
+		var parts = val.split("/");
+		var day = parseInt(parts[1], 10);
+		var month = parseInt(parts[0], 10);
+		var year = parseInt(parts[2], 10);
+
+		// Check the ranges of month and year
+		if(year < 1000 || year > 3000 || month == 0 || month > 12)
+		    console.log('rejecting because year/month was no good')
+		    toReject = 1
+
+		var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+		// Adjust for leap years
+		if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+		    monthLength[1] = 29;
+
+		// Check the range of the day
+		if(day > 0 && day <= monthLength[month - 1]){
+		    toResolve = 1
+			}else{
+		    toReject = 1
+		}
+		break;
+                case 'dra':
+		val = parseInt(val,10)
+		if(val < 0 || val > 70)
+		    toReject = 1
+		    else
+			toResolve = 1
+			    break;
+		case 'elaTotal':
+		val = parseInt(val,10)
+		if(val < 0 || val > 100)
+		    toReject = 1
+		    else
+			toResolve = 1
+			    break;
+		case 'mathTotal':
+		val = parseInt(val,10)
+		if(val < 0 || val > 100)
+		    toReject = 1
+		    else
+			toResolve = 1
+			    break;
+		case 'behaviorObservation':
+		val = parseInt(val,10)
+		if(val < 0 || val > 54)
+		    toReject = 1
+		    else
+			toResolve = 1
+			    break;
+		case 'dial4':
+		val = parseInt(val,10)
+		if(val < 0 || val > 105)
+		    toReject = 1
+		    else
+			toResolve = 1
+			    break;
+		default:
+		}
+		//outside switch statement
+	    }
+	    //outside else statement
+	    if(toReject === 1){
+		reject('error')
+	    }else if(toResolve === 1){
+		resolve('success')
+	    }else{
+		reject('error')
+	    }
+	})
+	}
 
 function insertStudent(data, db) {
 	return new Promise((resolve, reject) => {
