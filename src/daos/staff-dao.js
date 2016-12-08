@@ -3,7 +3,7 @@
 
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff` where `emailID` = ?;',// natural join `section` WHERE `emailID` = ?;',
+        db.query('SELECT `*` FROM `staff` where `emailID` = ?;',
            emailID,
             function (err, entities) {
             if (err) {
@@ -19,10 +19,7 @@ export function getStaff(emailID, db) {
 }
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-      //currentYearDao.getDashYear(db)
-      //.then(year =>{
-        db.query('SELECT `*` FROM `staff`;', //NATURAL JOIN `teaches` WHERE `year`= ?;',
-          //year,
+        db.query('SELECT `*` FROM `staff`;',
           function (err, entities) {
             if (err) {
               reject(err)
@@ -30,9 +27,6 @@ export function getAllStaff(db) {
               resolve(entities)
             }
           })
-      //}).catch(err => {
-        //reject(err)
-      //})
     })
 }
 
@@ -40,7 +34,7 @@ export function getAllStaff(db) {
 export function createStaff(staff, db) {
   return new Promise((resolve, reject) => {
     let data = [staff.emailID, staff.accessLevel, staff.firstName, staff.lastName, staff.gradeTeaching, staff.accessLevel, staff.gradeTeaching]
-    db.query('INSERT INTO staff (emailID, accessLevel, firstName, lastName, gradeTeaching) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE accessLevel = ?, gradeTeaching = ?;',
+    db.query('INSERT INTO `staff` SET ? ON DUPLICATE KEY UPDATE ?;',
       data,
       function (err) {
         if (err) {
@@ -56,7 +50,7 @@ export function createStaff(staff, db) {
 /*deletes staff from the db*/
 export function deleteStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-    db.query('SET SQL_SAFE_UPDATES = 0;DELETE FROM `staff` WHERE `emailID`= ?; SET SQL_SAFE_UPDATES = 1;', emailID,
+    db.query('DELETE FROM `staff` WHERE `emailID`= ?;', emailID,
       function (err) {
         if (err) {
           reject(err)

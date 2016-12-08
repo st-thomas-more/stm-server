@@ -1,22 +1,21 @@
 export function getSection(sectionID, db) {
   return new Promise((resolve, reject) => {
-    db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
-      'from student natural join ydsd natural join takes natural join section natural join teaches, staff where sectionID = ? and staff.emailID = teaches.emailID',
+    db.query('select *, student.firstName as studentFName, student.lastName as studentLName' +
+      ' from ydsd natural join student natural join takes natural join section natural join teaches as test, staff where staff.emailID = test.emailID and test.sectionID = ?;',
       sectionID, function (err, entities) {
         if (err) {
           reject(err)
         } else {
           let result = {
             sectionID: sectionID,
-            students: []
-          }
-
-          for (let i in entities) {
-            result.teacher = {
-              emailID: entities[i].emailID,
-              firstName: entities[i].firstName,
-              lastName: entities[i].lastName
+            students: [],
+            teacher: {
+              emailID: entities[0].emailID,
+              firstName: entities[0].firstName,
+              lastName: entities[0].lastName
             }
+          }
+          for (let i in entities) {
             result.students.push(convertToStudentJSON(entities[i]))
           }
           resolve(result)
@@ -33,7 +32,7 @@ function convertToStudentJSON(entity) {
     sex: entity.sex,
     dob: entity.dob,
     dial4: entity.dial4,
-    presentTeacher: entity.firstName,
+    presentTeacher: entity.firstName + ' ' + entity.lastName,
     gradeEntering: entity.gradeEntering,
     asp: entity.asp,
     advancedMath: entity.advancedMath,
