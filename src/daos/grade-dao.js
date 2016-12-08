@@ -138,9 +138,8 @@ export function getGradeForPlacement(grade, db) {
   return new Promise((resolve, reject) => {
     currentYearDao.getDashYear(db)
       .then(year => {
-        db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
-          'from student natural join ydsd natural join takes natural join section natural join teaches, staff where grade = ? and staff.emailID = teaches.emailID and year = ?',
-          [grade, year + 1],
+        db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join takes natural join teaches natural join section, ydsd, staff  where teaches.emailID = staff.emailID and student.id = ydsd.id and takes.year = ? and grade = ?;',
+          [year + 1, grade],
           function (err, entities) {
             grade = parseInt(grade, 10)
             if (err) {
