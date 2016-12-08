@@ -1,5 +1,6 @@
 import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
+import { getAge } from '../../utils/utils'
 
 export default function place(db) {
   return getGradeForAlg(0, db)
@@ -13,15 +14,18 @@ export default function place(db) {
       const ageWeight = .35
       const dial4Score = 105
       const behaviorLimit = 5
-
-      // get min and max ages
+	  
+	  // get min and max ages
       let minAge = Number.POSITIVE_INFINITY
       let maxAge = Number.NEGATIVE_INFINITY
 
       for (let student of students) {
-        const age = student.age
+		student.age = getAge(student.dob)
+		console.log(student.dob)
+		console.log(student.age)
+		let age = student.age
         if (age > maxAge) {
-          maxAge = student.age
+          maxAge = age
         } else if (age < minAge) {
           minAge = age
         }
