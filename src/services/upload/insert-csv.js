@@ -31,12 +31,12 @@ export default function insertCSV(filename, db) {
 }
 
 function validateInput(entity) {
-	
+		
 	let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
 	let values = [entity.mathBench,entity.cogAT,entity.dra,entity.elaTotal,entity.mathTotal,entity.behaviorObservation,entity.dial4]
 	for (i = 0; i < values.length; i++){
 		let ret = validateScore(numericKeys[i],values[i]);
-		if {ret !== success){
+		if (ret !== success){
 			return ret
 		}
 	}
