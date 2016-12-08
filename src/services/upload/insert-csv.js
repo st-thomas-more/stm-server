@@ -28,6 +28,7 @@ function insertStudent(data, db) {
 	return new Promise((resolve, reject) => {
 		let data2 = data
 		let data3 = data2.concat(data)
+		[M @Z
 		db.query(
 			'INSERT INTO `student` (id, lastName, firstName, sex, dob) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE  id = ?, `lastName`= ?, `firstName`=?, `sex`= ?, `dob`=?;',
 			data3,
@@ -43,6 +44,17 @@ function insertStudent(data, db) {
 
 function insertYdsd(data, db) {
 	return new Promise((resolve, reject) => {
+	      let numericKeys = ['mathBench', 'cogAT', 'dra', 'elaTotal', 'mathTotal', 'behaviorObservation', 'dial4']
+              let values = [data[23], data[25],data[19],data[27], data[29], data[32], data[34]]
+              for (let i = 0; i < numericKeys.length; i++) {
+                  let key = numericKeys[i]
+		  let val = values[i]
+		   if(utils.validateScore(key,val) ==='error'){
+			   let err = 'Invalid format for student '+data[0]
+			   reject(err)
+		   }
+	      }else{
+	       
 		let data2 = data
 		let data3 = data2.concat(data)
 		db.query(
@@ -54,5 +66,5 @@ function insertYdsd(data, db) {
 					resolve()
 				}
 			})
-	})
+	      }})
 }
