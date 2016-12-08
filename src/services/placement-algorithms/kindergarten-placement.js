@@ -1,25 +1,31 @@
-import { getGrade } from '../../daos/grade-dao'
+import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
+import { getAge } from '../../utils/utils'
 
-export default function place() {
-  return getGrade(0)
+export default function place(db) {
+  return getGradeForAlg(0, db)
     .then(data => {
       let students = data.students
-
+      //console.log("students")
+      //console.log(students)
+      let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
       const ageWeight = .35
       const dial4Score = 105
       const behaviorLimit = 5
-
-      // get min and max ages
+	  
+	  // get min and max ages
       let minAge = Number.POSITIVE_INFINITY
       let maxAge = Number.NEGATIVE_INFINITY
 
       for (let student of students) {
-        const age = student.age
+		student.age = getAge(student.dob)
+		//console.log(student.dob)
+		//console.log(student.age)
+		let age = student.age
         if (age > maxAge) {
-          maxAge = student.age
+          maxAge = age
         } else if (age < minAge) {
           minAge = age
         }
@@ -50,13 +56,16 @@ export default function place() {
 
       // sort by behavior
       pool.flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
-
+      //console.log(data.teachers)
+      //console.log('num sections: ' + data.sections)
       // initialize the sections
       let sections = []
-      for (let i = 0; i < data.sections; i++) {
+      for (let i = 0; i < numSections; i++) {
         sections.push({
           teacher: {
-            name: data.teachers[i].name
+            firstName: data.teachers[i].firstName,
+            lastName: data.teachers[i].lastName,
+            emailID: data.teachers[i].emailID
           },
           students: [],
           stats: {}
@@ -75,6 +84,6 @@ export default function place() {
       }
 
       let placement = { 'grade': 0, 'sections': sections }
-      return savePlacement(placement)
+      return savePlacement(placement, db)
     })
 }

@@ -24,3 +24,61 @@ export function shuffle(a) {
 		[a[i - 1], a[j]] = [a[j], a[i - 1]]
 	}
 }
+
+
+export function validateScore(key, val){
+    if (typeof val === 'undefined' || val === null) {
+      return 'success'
+    } else if (isNaN(val)) {
+      return 'error'
+    } else if (typeof val === 'string') {
+      if(!val)
+        return 'success'
+      else {
+        val = parseInt(val,10)
+        if(isNaN(val))
+          return 'error'
+      }
+    } else if(!val){
+      return 'error'
+    }
+    switch(key){
+      case 'mathBench':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'cogAT':
+        if(val < 0 || val > 160)
+          return 'error'
+        else
+          return 'success'
+      case 'dra':
+        if(val < 0 || val > 70)
+          return 'error'
+        else
+          return 'success'
+      case 'elaTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'mathTotal':
+        if(val < 0 || val > 100)
+          return 'error'
+        else
+          return 'success'
+      case 'behaviorObservation':
+        if(val < 0 || val > 54)
+          return 'error'
+        else
+          return 'success'
+      case 'dial4':
+        if(val < 0 || val > 105)
+          return 'error'
+        else
+          return 'success'
+      default:
+        return null
+    }
+  }

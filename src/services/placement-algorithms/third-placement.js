@@ -1,10 +1,16 @@
-import { getGrade } from '../../daos/grade-dao'
+import { getGradeForAlg } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place() {
-  return getGrade(3)
+export default function place(grade, db) {
+  if (grade < 1 || grade > 3) {
+    console.log('ERROR: grade' + grade + ' outside of bounds for third grade placement')
+    return false
+  }
+  return getGradeForAlg(grade, db)
     .then(data => {
       let students = data.students
+      //console.log(data)
+      let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const draWeight = .6
       const mathBenchWeight = .4
@@ -58,10 +64,12 @@ export default function place() {
 
       // initialize the sections
       let sections = []
-      for (let i = 0; i < data.sections; i++) {
+      for (let i = 0; i < numSections; i++) {
         sections.push({
           teacher: {
-            name: data.teachers[i].name
+            firstName: data.teachers[i].firstName,
+            lastName: data.teachers[i].lastName,
+            emailID: data.teachers[i].emailID
           },
           students: [],
           stats: {}
@@ -80,7 +88,7 @@ export default function place() {
       }
 
       let placement = { 'grade': 3, 'sections': sections }
-      return savePlacement(placement)
+      return savePlacement(placement, db)
     })
 }
 

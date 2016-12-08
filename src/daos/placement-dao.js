@@ -1,43 +1,22 @@
-import fs from 'fs'
-import path from 'path'
+import * as gradeDao from './grade-dao.js'
+import * as currentYearDao from './current-year-dao.js'
 
-function getPath(grade) {
-  let name
-  switch (grade) {
-    case 0:
-      name = 'kindergarten'
-      break
-    case 1:
-      name = 'first'
-      break
-    case 2:
-      name = 'second'
-      break
-    case 3:
-      name = 'third'
-      break
-    case 4:
-      name = 'fourth'
-      break
-    case 5:
-      name = 'fifth'
-      break
-    case 6:
-      name = 'sixth'
-      break
-    case 7:
-      name = 'seventh'
-      break
-    case 8:
-      name = 'eighth'
-      break
-  }
-  return path.join(__dirname, `../mock-data/placements/${name}-placement.json`)
+export function getPlacement(grade, db) {
+  return new Promise((resolve, reject) => {
+    gradeDao.getGradeForPlacement(grade, db)
+      .then(placement => {
+        calculateStats(placement).then(() => {
+          resolve(placement)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }
 
 function calculateStats(placement) {
-  return new Promise(resolve => {
-    placement.stats = {}
+  return new Promise((resolve, reject) => {
     switch (placement.grade) {
       case 0:
         {
@@ -235,50 +214,154 @@ function calculateStats(placement) {
         }
         break
       default:
+        reject(new Error(`Invalid placement grade: ${placement.grade}`))
     }
     resolve()
   })
 }
 
-// TODO - replace with calls to database
-export function getPlacement(grade) {
+function insertSection(sectionInsert, db) {
   return new Promise((resolve, reject) => {
-    const filepath = getPath(grade)
-    fs.readFile(filepath, function (err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(JSON.parse(data))
-      }
-    })
-  })
-}
-
-export function savePlacement(placement) {
-  return new Promise((resolve, reject) => {
-    calculateStats(placement).then(() => {
-      const filepath = getPath(placement.grade)
-      fs.writeFile(filepath, JSON.stringify(placement, null, 2), 'utf8', function (err) {
+    db.query('INSERT INTO `section` (sectionID,year,grade) VALUES ?;', 
+      [sectionInsert],
+      function (err) {
         if (err) {
           reject(err)
         } else {
-          resolve(placement)
+          resolve()
+        }
+      })
+  })
+}
+
+function insertTeaches(teachesInsert, db) {
+  return new Promise((resolve, reject) => {
+    db.query('INSERT INTO `teaches` (emailID,sectionID,year) VALUES ?;', 
+      [teachesInsert],
+      function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+function insertTakes(takesInsert, db) {
+  return new Promise((resolve, reject) => {
+    db.query('INSERT INTO `takes` (ID,year,sectionID) VALUES ?;', 
+      [takesInsert],
+      function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+export function savePlacement(placement, db) {
+  let year = 0
+  let sectionNum = 0
+  let gradeSection = ''
+  let sectionQueries = []
+  let teachesQueries = []
+  let studentQueries = []
+  
+
+  let sectionDelete = []
+  let sectionPromises = []
+  let teachesPromises = []
+  let studentPromises = []
+  let sectionDeletePromises = []
+
+  return new Promise((resolve, reject) => {
+    calculateStats(placement)
+      .then(() => {
+        currentYearDao.getDashYear(db)
+          .then(result => {
+            year = result + 1
+                for (let section of placement.sections) {
+                  let sectionID = `${placement.grade}${sectionNum.toString()}`
+                  sectionDelete.push(deleteSection(year,sectionID,db))
+                  sectionDelete.push(deleteTeaches(year, sectionID, db))
+                  sectionDelete.push(deleteTakes(year, sectionID, db))
+
+                  sectionNum++
+                  let grade = placement.grade
+                  let emailID  = section.teacher.emailID
+                  sectionQueries.push([sectionID,year,grade],)
+                  teachesQueries.push([emailID,sectionID,year],)
+                  for (let student of section.students) {
+                    let ID = student.id
+                    studentQueries.push([ID,year,sectionID],)
+                  }
+                 }
+                sectionPromises.push(insertSection(sectionQueries,db))
+                teachesPromises.push(insertTeaches(teachesQueries,db))
+                studentPromises.push(insertTakes(studentQueries,db))
+
+
+                Promise.all(sectionDelete).then(() =>{
+                  Promise.all(sectionPromises).then(() => {
+                    Promise.all(teachesPromises).then(() => {
+                      Promise.all(studentPromises).then(() => {
+                        resolve(placement)
+                      })
+                    })
+                  })
+                })
+              }).catch(err => {
+              reject(err)
+            })
+          }).catch(err => {
+            reject(err)
+          })
+      })
+}
+
+
+
+function deleteTakes(year, sectionID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `takes` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;',
+      [year,sectionID], 
+      function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+function deleteTeaches(year,sectionID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `teaches` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;',
+       [year,sectionID], 
+      function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
+function deleteSection(year,sectionID, db) {
+  return new Promise((resolve, reject) => {
+    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `section` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;', 
+      [year,sectionID], 
+      function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
         }
       })
     })
-
-  })
-}
-
-export function deletePlacement(grade) {
-  return new Promise((resolve, reject) => {
-    const filepath = getPath(grade)
-    fs.unlink(filepath, function (err) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
-}
+  }
