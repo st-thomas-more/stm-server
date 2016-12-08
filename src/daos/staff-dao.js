@@ -19,7 +19,10 @@ export function getStaff(emailID, db) {
 }
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT `*` FROM `staff` NATURAL JOIN `teaches`;',
+      currentYearDao.getDashYear(db)
+      .then(year =>{
+        db.query('SELECT `*` FROM `staff` NATURAL JOIN `teaches` WHERE `year`= ?;',
+          year,
           function (err, entities) {
             if (err) {
               reject(err)
@@ -27,7 +30,10 @@ export function getAllStaff(db) {
               resolve(entities)
             }
           })
-  })
+      }).catch(err => {
+        reject(err)
+      })
+    })
 }
 
 /* creates or updates a staff and all of its columns*/
