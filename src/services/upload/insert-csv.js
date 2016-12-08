@@ -68,6 +68,7 @@ function validateInput(result) {
 		}).catch(reason => {
 			console.log('our all failed!')
 			console.log(reason)
+			reject(reason)
 		    })
 	})
 	}
@@ -79,22 +80,25 @@ function validateScore(key, val){
     return new Promise((resolve, reject) => {
 	    let toReject = 0
 	    let toResolve = 0;
+	    let rejectMessage = ''
 	    //console.log('in validateScore')
 	    if (typeof val === 'undefined' || val === null) {
 		toResolve = 1
-	    } else if (isNaN(val)) {
-		toReject = 1
 	    } else if (typeof val === 'string') {
 		if(!val){
 		    toResolve = 1
 		}else {
 		    val = parseInt(val,10)
 		    if(isNaN(val)){
+			console.log('isNaN failed- rejecting')
+			rejectMessage = 'val is NaN'
 			toReject = 1
 		    }
 		}
 	    } else if(!val){
+		console.log('no val- rejecting upload')
 		toReject = 1
+		rejectMessage = 'no value found'
 	    }else{
 		//console.log('in front of switch key in validateScore')
 		switch(key){
@@ -102,6 +106,7 @@ function validateScore(key, val){
 		val = parseInt(val,10)
 		if(val < 0 || val > 100){
 		    console.log('rejecting on mathBench')
+		    rejectMessage = 'illegal mathBench'
 		    toReject = 1
 		}else{
 		    toResolve = 1
@@ -111,6 +116,7 @@ function validateScore(key, val){
 		val = parseInt(val,10)
 		if(val < 0 || val > 160){
 		    console.log('rejecting cogAT')
+		    rejectMessage = 'illegal cogAT'
 		    toReject = 1
 		}
 		else{
@@ -125,6 +131,7 @@ function validateScore(key, val){
 		    val = '0'+val
 		    }else{
 			console.log('rejecting date: ' + val)
+			rejectMessage = 'illegal date of birth'
 			toReject = 1
 		    }
 		}
@@ -138,6 +145,7 @@ function validateScore(key, val){
 		// Check the ranges of month and year
 		if(year < 1000 || year > 3000 || month == 0 || month > 12)
 		    console.log('rejecting because year/month was no good')
+			rejectMessage = 'illegal date of birth'
 		    toReject = 1
 
 		var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
@@ -150,55 +158,78 @@ function validateScore(key, val){
 		if(day > 0 && day <= monthLength[month - 1]){
 		    toResolve = 1
 			}else{
+		    console.log('rejecting on day / monthLength ')
+		    rejectMessage = 'illegal date of birth'
 		    toReject = 1
 		}
 		break;
                 case 'dra':
 		val = parseInt(val,10)
-		if(val < 0 || val > 70)
+		if(val < 0 || val > 70){
+		    console.log('rejecting dra')
+		    rejectMessage = 'illegal dra'
 		    toReject = 1
-		    else
-			toResolve = 1
-			    break;
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
 		case 'elaTotal':
 		val = parseInt(val,10)
-		if(val < 0 || val > 100)
+		if(val < 0 || val > 100){
+		    console.log('failing on elaTotal')
+		    rejectMessage = 'illegal elaTotal'
 		    toReject = 1
-		    else
-			toResolve = 1
-			    break;
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
 		case 'mathTotal':
 		val = parseInt(val,10)
-		if(val < 0 || val > 100)
+		if(val < 0 || val > 100){
+		    console.log('failing on mathTotal')
+		    rejectMessage = 'illegal mathTotal'
 		    toReject = 1
-		    else
-			toResolve = 1
-			    break;
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
 		case 'behaviorObservation':
 		val = parseInt(val,10)
-		if(val < 0 || val > 54)
+		if(val < 0 || val > 54){
+		    console.log('failing in behaviorObservation')
+		    rejectMessgae = 'illegal behaviorObservation'
 		    toReject = 1
-		    else
-			toResolve = 1
-			    break;
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
 		case 'dial4':
 		val = parseInt(val,10)
-		if(val < 0 || val > 105)
+		if(val < 0 || val > 105){
+		    console.log('failing in dail4')
+		    rejectMessage = 'illegal dial4'
 		    toReject = 1
-		    else
-			toResolve = 1
-			    break;
+		}
+		else{
+		    toResolve = 1
+		}
+		break;
 		default:
 		}
 		//outside switch statement
 	    }
 	    //outside else statement
 	    if(toReject === 1){
-		reject('error')
+		reject('error: ' + rejectMessage)
 	    }else if(toResolve === 1){
 		resolve('success')
 	    }else{
-		reject('error')
+		//console.log('both were 0')
+		resolve('success')
 	    }
 	})
 	}
