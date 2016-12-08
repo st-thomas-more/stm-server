@@ -34,7 +34,7 @@ export function getAllStaff(db) {
 export function createStaff(staff, db) {
   return new Promise((resolve, reject) => {
     let data = [staff.emailID, staff.accessLevel, staff.firstName, staff.lastName, staff.gradeTeaching, staff.accessLevel, staff.gradeTeaching]
-    db.query('INSERT INTO `staff` SET ? ON DUPLICATE KEY UPDATE ?;'
+    db.query('INSERT INTO `staff` SET ? ON DUPLICATE KEY UPDATE ?;',
       data,
       function (err) {
         if (err) {
