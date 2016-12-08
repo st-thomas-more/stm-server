@@ -32,7 +32,7 @@ export default ({ config, db }) => resource({
 
   /** POST - Create a new student */
   create(req, res) {
-    studentDAO.createStudent(req.body.student, db)
+    studentDAO.createStudent(db, req.body)
       .then(() => {
         res.sendStatus(201)
       })
@@ -44,7 +44,7 @@ export default ({ config, db }) => resource({
 
   /** PUT / - Update a students info, this expects a json object of all of the students data */
   update(req, res) {
-    studentDAO.updateStudent(req.body.student, db)
+    studentDAO.updateStudent(db, req.body)
       .then(() => {
         res.sendStatus(200)
       })
