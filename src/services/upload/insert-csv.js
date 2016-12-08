@@ -39,6 +39,8 @@ function validateInput(entity) {
 		if (ret !== 'success'){
 			return ret
 		}
+		console.log(ret)
+		console.log(values[i])
 	}
 	return ret
 }
