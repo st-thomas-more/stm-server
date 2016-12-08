@@ -1,5 +1,3 @@
-import * as currentYearDao from './current-year-dao.js'
-
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
     db.query('SELECT student.id, student.firstName, student.lastName, student.sex, section.grade, section.sectionID, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID'
@@ -48,6 +46,41 @@ export function getStudent(db, studentID) {
   })
 }
 
+export function createStudent(db, student) {
+  return new Promise((resolve, reject) => {
+    let studentData = {
+      id: student.id,
+      lastName: student.lastName,
+      firstName: student.firstName,
+      sex: student.sex,
+      dob: student.dob
+    }
+    let takesData = {
+      ID: student.id,
+      sectionID: student.sectionID
+    }
+
+    delete student.lastName
+    delete student.firstName
+    delete student.sex
+    delete student.dob
+    delete student.sectionID
+    delete student.teacher
+    delete student.grade
+
+    db.query('INSERT INTO `student` SET ?;' +
+      'INSERT INTO `ydsd` SET ?; ' +
+      'INSERT INTO `takes` SET ?, year = (SELECT year FROM time);',
+      [studentData, student, takesData], function (err) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+  })
+}
+
 export function updateStudent(db, student) {
   return new Promise((resolve, reject) => {
     const studentUpdate = {
@@ -78,46 +111,11 @@ export function updateStudent(db, student) {
   })
 }
 
-export function deleteStudent(studentID, db) {
+export function deleteStudent(db, studentID) {
   return new Promise((resolve, reject) => {
     db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?; ' +
       'DELETE FROM `takes` WHERE `id` = ?',
       [studentID, studentID, studentID], function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
-export function createStudent(db, student) {
-  return new Promise((resolve, reject) => {
-    let studentData = {
-      id: student.id,
-      lastName: student.lastName,
-      firstName: student.firstName,
-      sex: student.sex,
-      dob: student.dob
-    }
-    let takesData = {
-      ID: student.id,
-      sectionID: student.sectionID
-    }
-    
-    delete student.lastName
-    delete student.firstName
-    delete student.sex
-    delete student.dob
-    delete student.sectionID
-    delete student.teacher
-    delete student.grade
-
-    db.query('INSERT INTO `student` SET ?;' +
-      'INSERT INTO `ydsd` SET ?; ' +
-      'INSERT INTO `takes` SET ?, year = (SELECT year FROM time);',
-      [studentData, student, takesData], function (err) {
         if (err) {
           reject(err)
         } else {

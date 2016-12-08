@@ -56,7 +56,7 @@ export default ({ config, db }) => resource({
 
   /** DELETE /:studentID - Delete a given student based on their id */
   delete(req, res) {
-    studentDAO.deleteStudent(req.params.studentID, db)
+    studentDAO.deleteStudent(db, req.params.studentID)
       .then(() => {
         res.sendStatus(204)
       })
