@@ -66,21 +66,14 @@ export function getStudentsInGrade(grade, db) {
 
 export function getStudentsRisingGrade(grade, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(year => {
-        db.query('SELECT *' +
-          'FROM `student` NATURAL JOIN `ydsd` WHERE `gradeEntering` = ? and year = ?', [grade+1, year],
-          function (err, entities) {
+        db.query('select * from student natural join ydsd where gradeEntering = ? and year = (select year from tiime);',
+          grade, function (err, entities) {
             if (err) {
               reject(err)
             } else {
               resolve(entities)
             }
           })
-      })
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 
@@ -118,28 +111,20 @@ export function getSectionsForPlacement(grade, db) {
 
 export function getSections(grade, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(year => {
-        db.query('SELECT * FROM `section` WHERE `grade` = ? AND `year` = ?', [grade, year], function (err, entities) {
+        db.query('SELECT * FROM `section` WHERE `grade` = ?', grade, function (err, entities) {
           if (err) {
             reject(err)
           } else {
             resolve(entities)
           }
         })
-      })
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 
 export function getGradeForPlacement(grade, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(year => {
-        db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join takes natural join teaches natural join section, ydsd, staff  where teaches.emailID = staff.emailID and student.id = ydsd.id and takes.year = ? and grade = ?;',
-          [year + 1, grade],
+        db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join ydsd natural join takes natural join section natural join teaches, staff where grade = ? and teaches.emailID = staff.emailID and year = (select year + 1 from tiime);',
+          grade,
           function (err, entities) {
             grade = parseInt(grade, 10)
             if (err) {
@@ -175,11 +160,6 @@ export function getGradeForPlacement(grade, db) {
               resolve(result)
             }
           })
-      })
-
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 
