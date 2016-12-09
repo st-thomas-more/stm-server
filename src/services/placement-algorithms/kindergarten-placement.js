@@ -6,24 +6,21 @@ export default function place(db) {
   return getGradeForAlg(0, db)
     .then(data => {
       let students = data.students
-      //console.log("students")
-      //console.log(students)
+
       let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const dial4Weight = .65
       const ageWeight = .35
       const dial4Score = 105
       const behaviorLimit = 5
-	  
-	  // get min and max ages
+
+      // get min and max ages
       let minAge = Number.POSITIVE_INFINITY
       let maxAge = Number.NEGATIVE_INFINITY
 
       for (let student of students) {
-		student.age = getAge(student.dob)
-		//console.log(student.dob)
-		//console.log(student.age)
-		let age = student.age
+        student.age = getAge(student.dob)
+        let age = student.age
         if (age > maxAge) {
           maxAge = age
         } else if (age < minAge) {
@@ -56,8 +53,7 @@ export default function place(db) {
 
       // sort by behavior
       pool.flags.sort((a, b) => { return b.behaviorObservation - a.behaviorObservation })
-      //console.log(data.teachers)
-      //console.log('num sections: ' + data.sections)
+
       // initialize the sections
       let sections = []
       for (let i = 0; i < numSections; i++) {
