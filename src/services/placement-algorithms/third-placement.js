@@ -9,7 +9,6 @@ export default function place(grade, db) {
   return getGradeForAlg(grade, db)
     .then(data => {
       let students = data.students
-      //console.log(data)
       let numSections = data.teachers.length
       //constants for the calculating weighted quantitative score
       const draWeight = .6
@@ -87,7 +86,7 @@ export default function place(grade, db) {
         }
       }
 
-      let placement = { 'grade': 3, 'sections': sections }
+      let placement = { 'grade': grade, 'sections': sections }
       return savePlacement(placement, db)
     })
 }

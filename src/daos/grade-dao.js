@@ -46,19 +46,13 @@ export function getStudentsForPlacement(grade, db) {
 
 export function getStudentsInGrade(grade, db) {
   return new Promise((resolve, reject) => {
-    currentYearDao.getDashYear(db)
-      .then(year => {
-        db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ? and year = ?', [grade, year],
-          function (err, entities) {
-            if (err) {
-              reject(err)
-            } else {
-              resolve(entities)
-            }
-          })
-      })
-      .catch(err => {
-        reject(err)
+    db.query('SELECT `*` FROM `student` NATURAL JOIN `ydsd` NATURAL JOIN `takes` NATURAL JOIN `section` WHERE `grade` = ? and year = (SELECT year FROM time)', [grade],
+      function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
       })
   })
 }
@@ -66,14 +60,14 @@ export function getStudentsInGrade(grade, db) {
 
 export function getStudentsRisingGrade(grade, db) {
   return new Promise((resolve, reject) => {
-        db.query('select * from student natural join ydsd where gradeEntering = ? and year = (select year from time);',
-          grade, function (err, entities) {
-            if (err) {
-              reject(err)
-            } else {
-              resolve(entities)
-            }
-          })
+    db.query('select * from student natural join ydsd where gradeEntering = ? and year = (select year from time);',
+      grade, function (err, entities) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(entities)
+        }
+      })
   })
 }
 
@@ -111,97 +105,97 @@ export function getSectionsForPlacement(grade, db) {
 
 export function getSections(grade, db) {
   return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM `section` WHERE `grade` = ?', grade, function (err, entities) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(entities)
-          }
-        })
+    db.query('SELECT * FROM `section` WHERE `grade` = ?', grade, function (err, entities) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(entities)
+      }
+    })
   })
 }
 
 export function getGradeForPlacement(grade, db) {
   return new Promise((resolve, reject) => {
-        db.query('select *, student.lastName as studentLName, student.firstName as studentFName from section natural join takes natural join student natural join teaches, ydsd, staff where staff.emailID = teaches.emailID and ydsd.id = student.id and grade = ? and section.year = (select year + 1 from time);',
-          grade,
-          function (err, entities) {
-            grade = parseInt(grade, 10)
-            if (err) {
-              reject(err)
-            } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8].indexOf(grade) === -1) {
-              reject(new Error(`Grade ${grade} not found`))
-            } else {
-              let result = {
-                grade: grade,
-                sections: []
-              }
-              for (let i in entities) {
-                let sectionIndex = getSectionIndex(entities[i].sectionID, result.sections)
-                if (sectionIndex === -1) {
-                  result.sections.push({
-                    sectionID: entities[i].sectionID,
-                    students: []
-                  })
-                  sectionIndex = result.sections.length - 1
-                }
-                result.sections[sectionIndex].teacher = {
-                  emailID: entities[i].emailID,
-                  lastName: entities[i].lastName,
-                  firstName: entities[i].firstName
-                }
-                let students = result.sections[sectionIndex].students
-                if (grade === 0) {
-                  students.push(convertToKindJSON(entities[i]))
-                } else {
-                  students.push(convertToStudentJSON(entities[i]))
-                }
-              }
-              resolve(result)
+    db.query('select *, student.lastName as studentLName, student.firstName as studentFName from section natural join takes natural join student natural join teaches, ydsd, staff where staff.emailID = teaches.emailID and ydsd.id = student.id and grade = ? and section.year = (select year + 1 from time);',
+      grade,
+      function (err, entities) {
+        grade = parseInt(grade, 10)
+        if (err) {
+          reject(err)
+        } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8].indexOf(grade) === -1) {
+          reject(new Error(`Grade ${grade} not found`))
+        } else {
+          let result = {
+            grade: grade,
+            sections: []
+          }
+          for (let i in entities) {
+            let sectionIndex = getSectionIndex(entities[i].sectionID, result.sections)
+            if (sectionIndex === -1) {
+              result.sections.push({
+                sectionID: entities[i].sectionID,
+                students: []
+              })
+              sectionIndex = result.sections.length - 1
             }
-          })
+            result.sections[sectionIndex].teacher = {
+              emailID: entities[i].emailID,
+              lastName: entities[i].lastName,
+              firstName: entities[i].firstName
+            }
+            let students = result.sections[sectionIndex].students
+            if (grade === 0) {
+              students.push(convertToKindJSON(entities[i]))
+            } else {
+              students.push(convertToStudentJSON(entities[i]))
+            }
+          }
+          resolve(result)
+        }
+      })
   })
 }
 
 export function getGrade(grade, db) {
   return new Promise((resolve, reject) => {
-        db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join ydsd natural join takes natural join section, teaches natural join staff where teaches.sectionID = takes.sectionID and grade = ? and section.year = (select year from time);',
-          grade,
-          function (err, entities) {
-            grade = parseInt(grade, 10)
-            if (err) {
-              reject(err)
-            } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8].indexOf(grade) === -1) {
-              reject(new Error(`Grade ${grade} not found`))
-            } else {
-              let result = {
-                grade: grade,
-                sections: []
-              }
-              for (let i in entities) {
-                let sectionIndex = getSectionIndex(entities[i].sectionID, result.sections)
-                if (sectionIndex === -1) {
-                  result.sections.push({
-                    sectionID: entities[i].sectionID,
-                    students: []
-                  })
-                  sectionIndex = result.sections.length - 1
-                }
-                result.sections[sectionIndex].teacher = {
-                  emailID: entities[i].emailID,
-                  lastName: entities[i].lastName,
-                  firstName: entities[i].firstName
-                }
-                let students = result.sections[sectionIndex].students
-                if (grade === 0) {
-                  students.push(convertToKindJSON(entities[i]))
-                } else {
-                  students.push(convertToStudentJSON(entities[i]))
-                }
-              }
-              resolve(result)
+    db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join ydsd natural join takes natural join section, teaches natural join staff where teaches.sectionID = takes.sectionID and grade = ? and section.year = (select year from time);',
+      grade,
+      function (err, entities) {
+        grade = parseInt(grade, 10)
+        if (err) {
+          reject(err)
+        } else if ([0, 1, 2, 3, 4, 5, 6, 7, 8].indexOf(grade) === -1) {
+          reject(new Error(`Grade ${grade} not found`))
+        } else {
+          let result = {
+            grade: grade,
+            sections: []
+          }
+          for (let i in entities) {
+            let sectionIndex = getSectionIndex(entities[i].sectionID, result.sections)
+            if (sectionIndex === -1) {
+              result.sections.push({
+                sectionID: entities[i].sectionID,
+                students: []
+              })
+              sectionIndex = result.sections.length - 1
             }
-          })
+            result.sections[sectionIndex].teacher = {
+              emailID: entities[i].emailID,
+              lastName: entities[i].lastName,
+              firstName: entities[i].firstName
+            }
+            let students = result.sections[sectionIndex].students
+            if (grade === 0) {
+              students.push(convertToKindJSON(entities[i]))
+            } else {
+              students.push(convertToStudentJSON(entities[i]))
+            }
+          }
+          resolve(result)
+        }
+      })
   })
 }
 

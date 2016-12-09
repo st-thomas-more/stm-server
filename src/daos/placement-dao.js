@@ -220,48 +220,6 @@ function calculateStats(placement) {
   })
 }
 
-function insertSection(sectionInsert, db) {
-  return new Promise((resolve, reject) => {
-    db.query('INSERT INTO `section` (sectionID,year,grade) VALUES ?;',
-      [sectionInsert],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
-function insertTeaches(teachesInsert, db) {
-  return new Promise((resolve, reject) => {
-    db.query('INSERT INTO `teaches` (emailID,sectionID,year) VALUES ?;',
-      [teachesInsert],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
-function insertTakes(takesInsert, db) {
-  return new Promise((resolve, reject) => {
-    db.query('INSERT INTO `takes` (ID,year,sectionID) VALUES ?;',
-      [takesInsert],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
 export function savePlacement(placement, db) {
   return new Promise((resolve, reject) => {
     calculateStats(placement)
@@ -272,6 +230,7 @@ export function savePlacement(placement, db) {
             for (let i = 0; i < placement.sections.length; i++) {
               sections.push([placement.grade, `${placement.grade}${i}`, year+1])
             }
+
             db.query('REPLACE INTO section (grade, sectionID, year) VALUES ?;', [sections], function (err) {
               if (err) {
                 reject(err)
@@ -308,108 +267,6 @@ export function savePlacement(placement, db) {
       })
       .catch(err => {
         reject(err)
-      })
-  })
-}
-
-// export function savePlacement(placement, db) {
-//   let year = 0
-//   let sectionNum = 0
-//   let gradeSection = ''
-//   let sectionQueries = []
-//   let teachesQueries = []
-//   let studentQueries = []
-
-
-//   let sectionDelete = []
-//   let sectionPromises = []
-//   let teachesPromises = []
-//   let studentPromises = []
-//   let sectionDeletePromises = []
-
-//   return new Promise((resolve, reject) => {
-//     calculateStats(placement)
-//       .then(() => {
-//         currentYearDao.getDashYear(db)
-//           .then(result => {
-//             year = result + 1
-//             for (let section of placement.sections) {
-//               let sectionID = `${placement.grade}${sectionNum.toString()}`
-//               sectionDelete.push(deleteSection(year, sectionID, db))
-//               sectionDelete.push(deleteTeaches(year, sectionID, db))
-//               sectionDelete.push(deleteTakes(year, sectionID, db))
-
-//               sectionNum++
-//               let grade = placement.grade
-//               let emailID = section.teacher.emailID
-//               sectionQueries.push([sectionID, year, grade], )
-//               teachesQueries.push([emailID, sectionID, year], )
-//               for (let student of section.students) {
-//                 let ID = student.id
-//                 studentQueries.push([ID, year, sectionID], )
-//               }
-//             }
-//             sectionPromises.push(insertSection(sectionQueries, db))
-//             teachesPromises.push(insertTeaches(teachesQueries, db))
-//             studentPromises.push(insertTakes(studentQueries, db))
-
-
-//             Promise.all(sectionDelete).then(() => {
-//               Promise.all(sectionPromises).then(() => {
-//                 Promise.all(teachesPromises).then(() => {
-//                   Promise.all(studentPromises).then(() => {
-//                     resolve(placement)
-//                   })
-//                 })
-//               })
-//             })
-//           }).catch(err => {
-//             reject(err)
-//           })
-//       }).catch(err => {
-//         reject(err)
-//       })
-//   })
-// }
-
-function deleteTakes(year, sectionID, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `takes` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;',
-      [year, sectionID],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
-function deleteTeaches(year, sectionID, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `teaches` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;',
-      [year, sectionID],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
-
-function deleteSection(year, sectionID, db) {
-  return new Promise((resolve, reject) => {
-    db.query('SET SQL_SAFE_UPDATES = 0; DELETE FROM `section` WHERE `year` = ? AND `sectionID` = ?; SET SQL_SAFE_UPDATES = 1;',
-      [year, sectionID],
-      function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
       })
   })
 }

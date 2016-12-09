@@ -13,7 +13,7 @@ export default ({ config, db }) => resource({
 
   /** POST / - Run the algorithm */
   create(req, res) {
-    switch (parseInt(req.body.grade)) {
+    switch (parseInt(req.body.grade, 10)) {
       case 0:
         placeKindergarten(db)
           .then(() => {
@@ -25,7 +25,7 @@ export default ({ config, db }) => resource({
           })
         break
       case 1: case 2: case 3:
-        placeThird(parseInt(req.params.grade), db)
+        placeThird(parseInt(req.body.grade, 10), db)
           .then(() => {
             res.sendStatus(200)
           })
@@ -35,7 +35,7 @@ export default ({ config, db }) => resource({
           })
         break
       case 4: case 5: case 6:
-        placeSixth(parseInt(req.params.grade), db)
+        placeSixth(parseInt(req.body.grade, 10), db)
           .then(() => {
             res.sendStatus(200)
           })
