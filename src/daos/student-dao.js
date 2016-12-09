@@ -47,7 +47,7 @@ export function getStudent(db, studentID) {
 
 export function createStudent(db, student) {
   return new Promise((resolve, reject) => {
-    console.log(student)
+
     let studentData = {
       id: student.id,
       lastName: student.lastName,
