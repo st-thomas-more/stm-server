@@ -45,6 +45,7 @@ export function getStudent(db, studentID) {
 
 export function createStudent(db, student) {
   return new Promise((resolve, reject) => {
+    console.log(student)
     let studentData = {
       id: student.id,
       lastName: student.lastName,
@@ -53,7 +54,7 @@ export function createStudent(db, student) {
       dob: student.dob
     }
     let takesData = {
-      ID: student.id,
+      id: student.id,
       sectionID: student.sectionID
     }
 
@@ -66,7 +67,7 @@ export function createStudent(db, student) {
     delete student.grade
 
     db.query('INSERT INTO `student` SET ?;' +
-      'INSERT INTO `ydsd` SET ?; ' +
+      'INSERT INTO `ydsd` SET ?, year = (SELECT year FROM time); ' +
       'INSERT INTO `takes` SET ?, year = (SELECT year FROM time);',
       [studentData, student, takesData], function (err) {
         if (err) {
