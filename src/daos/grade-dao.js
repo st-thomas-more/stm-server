@@ -222,24 +222,23 @@ function convertToStudentJSON(entity) {
     sex: entity.sex,
     dob: entity.dob,
     dial4: entity.dial4,
-    presentTeacher: entity.firstName,
     gradeEntering: entity.gradeEntering,
     asp: entity.asp,
     advancedMath: entity.advancedMath,
     speechAndLanguage: entity.speechAndLanguage,
-    iuReadingSvcs: entity.IUreadingServices,
-    iuMathSvcs: entity.IUmathServices,
+    iuReadingServices: entity.IUreadingServices,
+    iuMathServices: entity.IUmathServices,
     earobics: entity.earobics,
     facultyStudent: entity.facultyStudent,
-    youngest: entity.youngestChild,
-    only: entity.onlyChild,
+    youngestChild: entity.youngestChild,
+    onlyChild: entity.onlyChild,
     newStudent: entity.newStudent,
     medicalConcern: entity.medicalConcern,
     hmp: entity.hmp,
     behavior: entity.behavior,
     workEthic: entity.workEthic,
     dra: entity.dra,
-    wtwBook: entity.WTW,
+    wtw: entity.WTW,
     raz: entity.RAZ,
     ge: entity.ge,
     mathBench: entity.mathBench,
@@ -247,9 +246,14 @@ function convertToStudentJSON(entity) {
     elaTotal: entity.elaTotal,
     extendedEla: entity.extendedEla,
     mathTotal: entity.mathTotal,
-    comments: entity.comments
+    comments: entity.comments,
+    behaviorObservation: entity.behaviorObservation,
+    selfHelp: entity.selfHelp,
+    socialEmotional: entity.socialEmotional,
+    potentialDelay: entity.potentialDelay
   }
 }
+
 
 function getSectionIndex(sectionID, sections) {
   for (let i in sections) {

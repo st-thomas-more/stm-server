@@ -1,6 +1,6 @@
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID, ' +
       'takes.sectionID, grade from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time);',
       function (err, students) {
         if (err) {
@@ -8,8 +8,8 @@ export function getStudents(db) {
         }
         for (let student of students) {
           student.teacher = {
-            firstName: student.teacherFName,
-            lastName: student.teacherLName,
+            firstName: student.teacherFirstName,
+            lastName: student.teacherLastName,
             emailID: student.teacherEmailID
           }
           delete student.teacherFirstName
@@ -24,21 +24,27 @@ export function getStudents(db) {
 
 export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
-    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
-      'takes.sectionID, grade from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time) AND student.id  =?;', studentID,
+    db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
+      'from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID, ydsd where student.id = ydsd.id and takes.year = (select year from time) AND student.id  =?;', studentID,
       function (err, student) {
-        if (err) {
+        if (student.length === 0) {
+          reject(new Error('Student Not Found'))
+        } else if (err) {
           reject(err)
         } else {
           student = student[0]
+          student.firstName = student.studentFName
+          student.lastName = student.studentLName
           student.teacher = {
-            firstName: student.teacherFirstName,
-            lastName: student.teacherLastName,
-            emailID: student.teacherEmailID
+            firstName: student.firstName,
+            lastName: student.lastName,
+            emailID: student.emailID
           }
-          delete student.teacherFirstName
-          delete student.teacherLastName
-          delete student.teacherEmailID
+          delete student.studentFName
+          delete student.studentLName
+          delete student.emailID
+          delete student.accessLevel
+          delete student.gradeTeaching
           resolve(student)
         }
       })

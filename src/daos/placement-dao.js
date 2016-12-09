@@ -1,5 +1,6 @@
 import * as gradeDao from './grade-dao.js'
 import * as currentYearDao from './current-year-dao.js'
+import { getAge } from '../utils/utils'
 
 export function getPlacement(grade, db) {
   return new Promise((resolve, reject) => {
@@ -23,7 +24,7 @@ function calculateStats(placement) {
           const reducer = (stats, student) => {
             stats.behavior += student.behaviorObservation
             stats.dial4 += student.dial4
-            stats.age += student.age
+            stats.age += getAge(student.dob)
             if (student.sex === 'F') {
               stats.females++
             } else {
@@ -59,7 +60,7 @@ function calculateStats(placement) {
       case 3:
         {
           const reducer = (stats, student) => {
-            stats.behavior += student.behaviorScore
+            stats.behavior += student.behaviorObservation
             stats.score += student.weightedScore
             if (student.sex === 'F') {
               stats.females++
@@ -114,7 +115,7 @@ function calculateStats(placement) {
       case 6:
         {
           const reducer = (stats, student) => {
-            stats.behavior += student.behaviorScore
+            stats.behavior += (student.behavior == null) ? 0 : student.behavior
             stats.score += student.weightedScore
             if (student.sex === 'F') {
               stats.females++
