@@ -17,13 +17,16 @@ export function getStaff(emailID, db) {
       })
   })
 }
+
+/*right now there are no teaches in year 2016 so it looks at the teachers that will be there next year*/
 export function getAllStaff(db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT `*` FROM `staff`;',
+    db.query('select *,staff.emailID from staff left outer join teaches on staff.emailID = teaches.emailID and teaches.year = (select year+1 from time)',
       function (err, entities) {
         if (err) {
           reject(err)
         } else {
+          console
           resolve(entities)
         }
       })
