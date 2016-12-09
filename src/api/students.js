@@ -32,7 +32,7 @@ export default ({ config, db }) => resource({
 
   /** POST - Create a new student */
   create(req, res) {
-    studentDAO.createStudent(db, req.body)
+    studentDAO.createStudent(db, req.body.student)
       .then(() => {
         res.sendStatus(201)
       })
