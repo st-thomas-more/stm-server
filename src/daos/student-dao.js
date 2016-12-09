@@ -99,6 +99,8 @@ export function updateStudent(db, student) {
     delete student['teacher']
     delete student['sectionID']
     delete student['grade']
+    delete student['teacherFName']
+    delete student['teacherLName']
 
     db.query('UPDATE student SET ? WHERE id = ?; UPDATE ydsd SET ? WHERE id = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
