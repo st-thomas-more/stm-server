@@ -24,7 +24,7 @@ export function getStudents(db) {
 
 export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
-    db.query('select *, staff.firstName as teacherFirstName, staff.lastName as teacherLastName ' +
+    db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
       'from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID, ydsd where student.id = ydsd.id and takes.year = (select year from time) AND student.id  =?;', studentID,
       function (err, student) {
         if (student.length === 0) {
@@ -33,9 +33,11 @@ export function getStudent(db, studentID) {
           reject(err)
         } else {
           student = student[0]
+          student.firstName = student.studentFName
+          student.lastName = student.studentLName
           student.teacher = {
-            firstName: student.teacherFirstName,
-            lastName: student.teacherLastName,
+            firstName: student.firstName,
+            lastName: student.lastName,
             emailID: student.emailID
           }
           delete student.teacherFirstName
