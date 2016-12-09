@@ -44,7 +44,7 @@ export default ({ config, db }) => resource({
 
   /** PUT / - Update a students info, this expects a json object of all of the students data */
   update(req, res) {
-    studentDAO.updateStudent(db, req.body)
+    studentDAO.updateStudent(db, req.body.student)
       .then(() => {
         res.sendStatus(200)
       })
