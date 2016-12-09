@@ -165,7 +165,7 @@ export function getGradeForPlacement(grade, db) {
 
 export function getGrade(grade, db) {
   return new Promise((resolve, reject) => {
-        db.query('select * from student natural join ydsd natural join takes natural join section, teaches natural join staff where teaches.sectionID = takes.sectionID and grade = ? and section.year = (select year from time);',
+        db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join ydsd natural join takes natural join section, teaches natural join staff where teaches.sectionID = takes.sectionID and grade = ? and section.year = (select year from time);',
           grade,
           function (err, entities) {
             grade = parseInt(grade, 10)

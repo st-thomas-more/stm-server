@@ -1,11 +1,13 @@
 export function getSection(sectionID, db) {
   return new Promise((resolve, reject) => {
-    db.query('select *, student.firstName as studentFName, student.lastName as studentLName' +
-      ' from ydsd natural join student natural join takes natural join section natural join teaches as test, staff where staff.emailID = test.emailID and test.sectionID = ?;',
+    db.query('select *, student.firstName as studentFName, student.lastName as studentLName from student natural join ydsd natural join takes natural join section, teaches natural join staff where teaches.sectionID = takes.sectionID and section.sectionID = ? and section.year = 2016;',
       sectionID, function (err, entities) {
         if (err) {
           reject(err)
         } else {
+          if (entities.length == 0) {
+            reject(new Error('nothing found in section'))
+          }
           let result = {
             sectionID: sectionID,
             students: [],
