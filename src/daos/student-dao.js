@@ -1,6 +1,7 @@
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('select * from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time);',
+    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+      'takes.sectionID, grade from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time);',
       function (err, students) {
         if (err) {
           reject(err)
@@ -23,7 +24,8 @@ export function getStudents(db) {
 
 export function getStudent(db, studentID) {
   return new Promise((resolve, reject) => {
-    db.query('select * from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time); AND student.id  =?', studentID,
+    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFName, staff.lastName as teacherLName, ' +
+      'takes.sectionID, gradefrom (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time); AND student.id  =?', studentID,
       function (err, student) {
         if (err) {
           reject(err)
