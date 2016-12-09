@@ -3,7 +3,6 @@ import csvjson from 'csvjson'
 import * as util from '../../lib/util'
 
 export default function insertCSV(filename, db) {
-	console.log('starting insertCSV....')
 	let data = fs.readFileSync(filename, { encoding: 'utf8' })
 	const options = { delimiter: ',' }
 	let result = csvjson.toObject(data, options)
@@ -14,7 +13,7 @@ export default function insertCSV(filename, db) {
 	let sectionPromises = []
 
 	return new Promise((resolve, reject) => {
-		console.log("above result printout")
+
 		for (let student of result) {
 			validatePromises.push(
 				new Promise((resolve, reject) => {
@@ -43,7 +42,6 @@ export default function insertCSV(filename, db) {
 						delete student.dob
 						studentPromises.push(insertStudent(studentData, db))
 						ydsdPromises.push(insertYdsd(student, db))
-						//sectionPromises.push(insertSection(sectionData,db))
 						takesPromises.push(insertTakes(takesData,db))
 						resolve()
 					})
@@ -54,21 +52,12 @@ export default function insertCSV(filename, db) {
 				)
 			}
 
-			//resolve
-			// console.log('attempting to resolve insertCSV promises')
-			// console.log(studentPromises.length)
-			// console.log(ydsdPromises.length)
-			// console.log(takesPromises.length)
-
 			Promise.all(validatePromises).then(() => {
-				console.log(studentPromises.length)
-				console.log(ydsdPromises.length)
-				console.log(takesPromises.length)
 				Promise.all(studentPromises).then(() => {
 					Promise.all(ydsdPromises).then(() => {
 						Promise.all(sectionPromises).then(() =>{
 							Promise.all(takesPromises).then(() => {
-								console.log('resolved insertCSV successfully')
+								
 								resolve()
 							})
 						})
@@ -197,7 +186,7 @@ export default function insertCSV(filename, db) {
 
 
 		function insertTakes(data, db) {
-			console.log("in insertTakes")
+			
 			return new Promise((resolve, reject) => {
 				db.query(
 					'INSERT INTO `takes` (id, sectionID, year) select * from (select ?, ?, ?) tmp where not exists(select id from takes where id = ? and sectionID = ? and year = ?) limit 1;',
@@ -214,7 +203,7 @@ export default function insertCSV(filename, db) {
 		}
 
 		function insertStudent(data, db) {
-			console.log("in insertstudent")
+			
 			return new Promise((resolve, reject) => {
 				db.query(
 					'Replace `student` SET ?;',
@@ -228,27 +217,11 @@ export default function insertCSV(filename, db) {
 					})
 			})
 		}
-		/*function insertSection(data,db){
-			console.log("in insertSection")
-			return new Promise((resolve, reject) =>{
-				db.query(
-					'Replace`section` SET ?;',
-					data,
-					function (err){
-						if(err){
-							reject(err)
-						}
-						else{
-							resolve()
-						}
-					})
-			})
-		}*/
 
 
 
 		function insertYdsd(data, db) {
-			console.log("in insertYdsd")
+			
 			return new Promise((resolve, reject) => {
 				db.query(
 					'Replace `ydsd` SET ?;',
