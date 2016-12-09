@@ -40,8 +40,8 @@ export function getStudent(db, studentID) {
             lastName: student.lastName,
             emailID: student.emailID
           }
-          delete student.teacherFirstName
-          delete student.teacherLastName
+          delete student.studentFName
+          delete student.studentLName
           delete student.emailID
           delete student.accessLevel
           delete student.gradeTeaching
