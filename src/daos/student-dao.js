@@ -8,8 +8,8 @@ export function getStudents(db) {
         }
         for (let student of students) {
           student.teacher = {
-            firstName: student.teacherFirstName,
-            lastName: student.teacherLastName,
+            firstName: student.teacherFName,
+            lastName: student.teacherLName,
             emailID: student.teacherEmailID
           }
           delete student.teacherFirstName
