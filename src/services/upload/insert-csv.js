@@ -203,6 +203,7 @@ export default function insertCSV(filename, db) {
 					'INSERT INTO `takes` (id, sectionID, year) select * from (select ?, ?, ?) tmp where not exists(select id from takes where id = ? and sectionID = ? and year = ?) limit 1;',
 					[data.id, data.sectionID, data.year, data.id, data.sectionID, data.year], function(err) {
 						if (err) {
+                            console.log(err)
 							reject(err)
 						} else {
 							resolve()
