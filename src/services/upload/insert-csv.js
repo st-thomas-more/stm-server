@@ -41,12 +41,9 @@ export default function insertCSV(filename, db) {
 						delete student.lastName
 						delete student.sex
 						delete student.dob
-						delete student.homeroomTeacher
-						delete student.gradeEntering
-						console.log('adding to arrays')
 						studentPromises.push(insertStudent(studentData, db))
 						ydsdPromises.push(insertYdsd(student, db))
-						sectionPromises.push(insertSection(sectionData,db))
+						//sectionPromises.push(insertSection(sectionData,db))
 						takesPromises.push(insertTakes(takesData,db))
 						resolve()
 					})
@@ -203,8 +200,8 @@ export default function insertCSV(filename, db) {
 			console.log("in insertTakes")
 			return new Promise((resolve, reject) => {
 				db.query(
-					'INSERT INTO `takes` SET ? ON DUPLICATE KEY UPDATE ?;',
-					[data, data], function(err) {
+					'INSERT INTO `takes` (id, sectionID, year) select * from (select ?, ?, ?) tmp where not exists(select id from takes where id = ? and sectionID = ? and year = ?) limit 1;',
+					[data.id, data.sectionID, data.year, data.id, data.sectionID, data.year], function(err) {
 						if (err) {
 							reject(err)
 						} else {
@@ -230,7 +227,7 @@ export default function insertCSV(filename, db) {
 					})
 			})
 		}
-		function insertSection(data,db){
+		/*function insertSection(data,db){
 			console.log("in insertSection")
 			return new Promise((resolve, reject) =>{
 				db.query(
@@ -245,7 +242,7 @@ export default function insertCSV(filename, db) {
 						}
 					})
 			})
-		}
+		}*/
 
 
 
@@ -256,7 +253,7 @@ export default function insertCSV(filename, db) {
 					'INSERT INTO `ydsd` SET ? ON DUPLICATE KEY UPDATE ?;',
 					[data, data], function (err) {
 						if (err) {
-							console.log('error: inserted into ydsd')
+                            console.log(err)
 							reject(err)
 						} else {
 							console.log('successfully inserted into ydsd')
