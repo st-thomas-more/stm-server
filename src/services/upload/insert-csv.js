@@ -113,7 +113,7 @@ export default function insertCSV(filename, db) {
 				} 
 				if(('cogAT' in  student) && student.cogAT !== ''){
 					const cogAT = parseInt(student.cogAT,10)
-					if(cogAT < 0 || cogAT >100 ){
+					if(cogAT < 0 || cogAT >160 ){
 						reject(new Error(`cogAT not in range: ${cogAT}`))
 					}
 				}
@@ -216,8 +216,8 @@ export default function insertCSV(filename, db) {
 			console.log("in insertstudent")
 			return new Promise((resolve, reject) => {
 				db.query(
-					'INSERT INTO `student` SET ? ON DUPLICATE KEY UPDATE ?;',
-					[data, data],
+					'Replace `student` SET ?;',
+					data,
 					function (err) {
 						if (err) {
 							reject(err)
@@ -231,8 +231,8 @@ export default function insertCSV(filename, db) {
 			console.log("in insertSection")
 			return new Promise((resolve, reject) =>{
 				db.query(
-					'INSERT INTO `section` SET ? ON DUPLICATE KEY UPDATE ?;',
-					[data,data],
+					'Replace`section` SET ?;',
+					data,
 					function (err){
 						if(err){
 							reject(err)
@@ -250,8 +250,8 @@ export default function insertCSV(filename, db) {
 			console.log("in insertYdsd")
 			return new Promise((resolve, reject) => {
 				db.query(
-					'INSERT INTO `ydsd` SET ? ON DUPLICATE KEY UPDATE ?;',
-					[data, data], function (err) {
+					'Replace `ydsd` SET ?;',
+					data, function (err) {
 						if (err) {
                             console.log(err)
 							reject(err)

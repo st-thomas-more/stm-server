@@ -33,7 +33,7 @@ export function getAllStaff(db) {
 /* creates or updates a staff and all of its columns*/
 export function createStaff(staff, db) {
   return new Promise((resolve, reject) => {
-    let data = [staff.emailID, staff.accessLevel, staff.firstName, staff.lastName, staff.gradeTeaching, staff.accessLevel, staff.gradeTeaching]
+    let data = [staff,staff]
     db.query('INSERT INTO `staff` SET ? ON DUPLICATE KEY UPDATE ?;',
       data,
       function (err) {
