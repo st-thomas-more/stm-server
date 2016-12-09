@@ -27,9 +27,11 @@ export function getStudent(db, studentID) {
     db.query('select *, staff.firstName as teacherFirstName, staff.lastName as teacherLastName ' +
       'from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID, ydsd where student.id = ydsd.id and takes.year = (select year from time) AND student.id  =?;', studentID,
       function (err, student) {
-        if (err) {
+        if (student.length === 0) {
+          reject(new Error('Student Not Found'))
+        } else if (err) {
           reject(err)
-        } else {         
+        } else {
           student = student[0]
           student.teacher = {
             firstName: student.teacherFirstName,
