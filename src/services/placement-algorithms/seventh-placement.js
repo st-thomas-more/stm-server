@@ -1,11 +1,10 @@
-import { getGradeForAlg } from '../../daos/grade-dao'
+import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place(db) {
-	return getGradeForAlg(7, db)
+export default function place() {
+	return getGrade(7)
 		.then(data => {
 			let students = data.students
-			let numSections = data.teachers.length
 
 			let pool = {
 				girls: [], boys: []
@@ -27,12 +26,10 @@ export default function place(db) {
 
 			// initialize the sections
 			let sections = []
-			for (let i = 0; i < numSections; i++) {
+			for (let i = 0; i < data.sections; i++) {
 				sections.push({
 					teacher: {
-						firstName: data.teachers[i].firstName,
-						lastName: data.teachers[i].lastName,
-						emailID: data.teachers[i].emailID
+						name: data.teachers[i].name
 					},
 					students: [],
 					stats: {}
@@ -51,6 +48,6 @@ export default function place(db) {
 			}
 
 			let placement = { 'grade': 7, 'sections': sections }
-			return savePlacement(placement, db)
+			return savePlacement(placement)
 		})
 }
