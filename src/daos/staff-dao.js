@@ -1,6 +1,3 @@
-import * as currentYearDao from './current-year-dao.js'
-
-
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
     db.query('SELECT `*` FROM `staff` where `emailID` = ?;',

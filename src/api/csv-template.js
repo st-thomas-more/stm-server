@@ -2,7 +2,7 @@ import resource from 'resource-router-middleware'
 import { resolve } from 'path'
 export default ({ config, db }) => resource({
 
-  /** GET / - Return all students */
+  /** GET / - Return the template */
   list(req, res) {
     const options = {
       dotfiles: 'allow',
@@ -17,5 +17,5 @@ export default ({ config, db }) => resource({
         res.status(err.status).send()
       }
     })
-  },
+  }
 })
