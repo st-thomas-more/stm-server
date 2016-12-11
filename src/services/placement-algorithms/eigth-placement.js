@@ -1,11 +1,10 @@
-import { getGradeForAlg } from '../../daos/grade-dao'
+import { getGrade } from '../../daos/grade-dao'
 import { savePlacement } from '../../daos/placement-dao'
 
-export default function place(db) {
-	return getGradeForAlg(8, db)
+export default function place() {
+	return getGrade(8)
 		.then(data => {
 			let students = data.students
-			let numSections = data.teachers.length
 
 			let pool = {
 				girls: [], boys: []
@@ -26,12 +25,10 @@ export default function place(db) {
 
 			// initialize the sections
 			let sections = []
-			for (let i = 0; i < numSections; i++) {
+			for (let i = 0; i < data.sections; i++) {
 				sections.push({
 					teacher: {
-						firstName: data.teachers[i].firstName,
-						lastName: data.teachers[i].lastName,
-						emailID: data.teachers[i].emailID
+						name: data.teachers[i].name
 					},
 					students: [],
 					stats: {}
@@ -41,6 +38,7 @@ export default function place(db) {
 			// distribute the students
 			for (let key in pool) {
 				if (pool.hasOwnProperty(key)) {
+					//sections.sort((a, b) => { return a.students.length - b.students.length })
 					let group = pool[key]
 					let sectionSize = Math.floor(group.length / sections.length)
 					let remainderCount = group.length % sections.length
@@ -53,7 +51,7 @@ export default function place(db) {
 						if (pushCount === secSize) {
 							sectionNum++
 							pushCount = 0
-							if (remainderCount !== 0) {
+							if (remainderCount != 0) {
 								secSize = sectionSize + 1
 								remainderCount--
 							}
@@ -63,6 +61,6 @@ export default function place(db) {
 			}
 
 			let placement = { 'grade': 8, 'sections': sections }
-			return savePlacement(placement, db)
+			return savePlacement(placement)
 		})
 }

@@ -1,114 +1,45 @@
 export function getStudents(db) {
   return new Promise((resolve, reject) => {
-    db.query('select student.id, student.firstName, student.lastName, staff.firstName as teacherFirstName, staff.lastName as teacherLastName, staff.emailID as teacherEmailID, ' +
-      'takes.sectionID, grade from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID where takes.year = (select year from time);',
-      function (err, students) {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd`',
+      function (err, entities) {
         if (err) {
           reject(err)
-        }
-        for (let student of students) {
-          student.teacher = {
-            firstName: student.teacherFirstName,
-            lastName: student.teacherLastName,
-            emailID: student.teacherEmailID
-          }
-          delete student.teacherFirstName
-          delete student.teacherLastName
-          delete student.teacherEmailID
-        }
-        resolve(students)
-      }
-    )
-  })
-}
-
-export function getStudent(db, studentID) {
-  return new Promise((resolve, reject) => {
-    db.query('select *, student.firstName as studentFName, student.lastName as studentLName ' +
-      'from (student natural join takes) left join (section natural join teaches natural join staff) on takes.sectionID = teaches.sectionID, ydsd where student.id = ydsd.id and takes.year = (select year from time) AND student.id  =?;', studentID,
-      function (err, student) {
-        if (student.length === 0) {
-          reject(new Error('Student Not Found'))
-        } else if (err) {
-          reject(err)
         } else {
-          student = student[0]
-          student.firstName = student.studentFName
-          student.lastName = student.studentLName
-          student.teacher = {
-            firstName: student.firstName,
-            lastName: student.lastName,
-            emailID: student.emailID
-          }
-          delete student.studentFName
-          delete student.studentLName
-          delete student.emailID
-          delete student.accessLevel
-          delete student.gradeTeaching
-          resolve(student)
+          resolve(entities)
         }
       })
   })
 }
 
-export function createStudent(db, student) {
+export function getStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-
-    let studentData = {
-      id: student.id,
-      lastName: student.lastName,
-      firstName: student.firstName,
-      sex: student.sex,
-      dob: student.dob
-    }
-    let takesData = {
-      id: student.id,
-      sectionID: student.sectionID
-    }
-
-    delete student.lastName
-    delete student.firstName
-    delete student.sex
-    delete student.dob
-    delete student.sectionID
-    delete student.teacher
-    delete student.grade
-
-    db.query('INSERT INTO `student` SET ?;' +
-      'INSERT INTO `ydsd` SET ?, year = (SELECT year FROM time); ' +
-      'INSERT INTO `takes` SET ?, year = (SELECT year FROM time);',
-      [studentData, student, takesData], function (err) {
+    db.query('SELECT * FROM `student` NATURAL JOIN `ydsd` WHERE `id` = ?', studentID,
+      function (err, entities) {
         if (err) {
           reject(err)
         } else {
-          resolve()
+          resolve(entities)
         }
       })
   })
 }
 
-export function updateStudent(db, student) {
+export function updateStudent(student, db) {
   return new Promise((resolve, reject) => {
-    const studentUpdate = {
+    var studentUpdate = {
       id: student.id,
       lastName: student.lastName,
       firstName: student.firstName,
       sex: student.sex,
-      dob: student.dob
+      dob: student.dob,
+      //dial4: student.dial4
     }
     delete student['lastName']
     delete student['firstName']
     delete student['sex']
     delete student['dob']
-
-    //remove fields added in by student-dao
-    delete student['teacher']
-    delete student['sectionID']
-    delete student['grade']
-    delete student['teacherFName']
-    delete student['teacherLName']
-
-    db.query('UPDATE student SET ? WHERE id = ?; UPDATE ydsd SET ? WHERE id = ?',
+    //delete student['dial4']
+    db.query('UPDATE `student` SET ? WHERE `id` = ?; UPDATE `ydsd` SET ? WHERE `id` = ?',
       [studentUpdate, student.id, student, student.id], function (err) {
         if (err) {
           reject(err)
@@ -119,11 +50,28 @@ export function updateStudent(db, student) {
   })
 }
 
-export function deleteStudent(db, studentID) {
+export function deleteStudent(studentID, db) {
   return new Promise((resolve, reject) => {
-    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?; ' +
-      'DELETE FROM `takes` WHERE `id` = ?',
-      [studentID, studentID, studentID], function (err) {
+    db.query('DELETE FROM `student` WHERE `id` = ?; DELETE FROM `ydsd` WHERE `id` = ?', [studentID, studentID], function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+export function createStudent(student, db) {
+  return new Promise((resolve, reject) => {
+    db.query('INSERT INTO `student` (`id`, `lastName`, `firstName`, `sex`, `dob`, `dial4`) VALUES(?, ?, ?, ?, ?,?);' +
+      'INSERT INTO `ydsd` VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+      [student.id, student.lastName, student.firstName, student.sex, student.dob, student.dial4,
+      student.id, student.year, student.comments, student.homeroomTeacher, student.asp, student.nextMeetingSch,
+      student.advancedMath, student.speechLanguage, student.studentDevelopment, student.mathEnrichment, student.IUreadingServices,
+      student.IUmathServices, student.earobics, student.behavior, student.workEthic, student.youngestChild, student.onlyChild,
+      student.newStudent, student.medicalConcern, student.hmp, student.dra, student.raz, student.wtw, student.iStation, student.mathBench,
+      student.Dibels, student.cogAT, student.IOWA, student.elaTotal, student.ExtendedELA, student.mathTotal, student.facultyStudent], function (err) {
         if (err) {
           reject(err)
         } else {

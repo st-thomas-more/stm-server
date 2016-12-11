@@ -6,6 +6,3 @@
 /src/mock-data/placements/*placement.json
 .env
 .DS_Store
-src/services/upload/uploads/
-*.log
-
