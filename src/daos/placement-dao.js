@@ -1,50 +1,30 @@
-import fs from 'fs'
-import path from 'path'
+import * as gradeDao from './grade-dao.js'
+import * as currentYearDao from './current-year-dao.js'
+import { getAge } from '../utils/utils'
 
-function getPath(grade) {
-  let name
-  switch (grade) {
-    case 0:
-      name = 'kindergarten'
-      break
-    case 1:
-      name = 'first'
-      break
-    case 2:
-      name = 'second'
-      break
-    case 3:
-      name = 'third'
-      break
-    case 4:
-      name = 'fourth'
-      break
-    case 5:
-      name = 'fifth'
-      break
-    case 6:
-      name = 'sixth'
-      break
-    case 7:
-      name = 'seventh'
-      break
-    case 8:
-      name = 'eighth'
-      break
-  }
-  return path.join(__dirname, `../mock-data/placements/${name}-placement.json`)
+export function getPlacement(grade, db) {
+  return new Promise((resolve, reject) => {
+    gradeDao.getGradeForPlacement(grade, db)
+      .then(placement => {
+        calculateStats(placement).then(() => {
+          resolve(placement)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }
 
 function calculateStats(placement) {
-  return new Promise(resolve => {
-    placement.stats = {}
+  return new Promise((resolve, reject) => {
     switch (placement.grade) {
       case 0:
         {
           const reducer = (stats, student) => {
             stats.behavior += student.behaviorObservation
             stats.dial4 += student.dial4
-            stats.age += student.age
+            stats.age += getAge(student.dob)
             if (student.sex === 'F') {
               stats.females++
             } else {
@@ -80,7 +60,7 @@ function calculateStats(placement) {
       case 3:
         {
           const reducer = (stats, student) => {
-            stats.behavior += student.behaviorScore
+            stats.behavior += student.behaviorObservation
             stats.score += student.weightedScore
             if (student.sex === 'F') {
               stats.females++
@@ -135,7 +115,7 @@ function calculateStats(placement) {
       case 6:
         {
           const reducer = (stats, student) => {
-            stats.behavior += student.behaviorScore
+            stats.behavior += (student.behavior == null) ? 0 : student.behavior
             stats.score += student.weightedScore
             if (student.sex === 'F') {
               stats.females++
@@ -235,50 +215,59 @@ function calculateStats(placement) {
         }
         break
       default:
+        reject(new Error(`Invalid placement grade: ${placement.grade}`))
     }
     resolve()
   })
 }
 
-// TODO - replace with calls to database
-export function getPlacement(grade) {
+export function savePlacement(placement, db) {
   return new Promise((resolve, reject) => {
-    const filepath = getPath(grade)
-    fs.readFile(filepath, function (err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(JSON.parse(data))
-      }
-    })
-  })
-}
+    calculateStats(placement)
+      .then(() => {
+        currentYearDao.getDashYear(db)
+          .then(year => {
+            let sections = []
+            for (let i = 0; i < placement.sections.length; i++) {
+              sections.push([placement.grade, `${placement.grade}${i}`, year+1])
+            }
 
-export function savePlacement(placement) {
-  return new Promise((resolve, reject) => {
-    calculateStats(placement).then(() => {
-      const filepath = getPath(placement.grade)
-      fs.writeFile(filepath, JSON.stringify(placement, null, 2), 'utf8', function (err) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(placement)
-        }
+            db.query('REPLACE INTO section (grade, sectionID, year) VALUES ?;', [sections], function (err) {
+              if (err) {
+                reject(err)
+              } else {
+                let teaches = []
+                for (let i = 0; i < placement.sections.length; i++) {
+                  teaches.push([placement.sections[i].teacher.emailID, `${placement.grade}${i}`, year+1])
+                }
+                db.query('REPLACE teaches (emailID, sectionID, year) VALUES ?;', [teaches], function (err) {
+                  if (err) {
+                    reject(err)
+                  } else {
+                    let takes = []
+                    for (let i = 0; i < placement.sections.length; i++) {
+                      for (let student of placement.sections[i].students) {
+                        takes.push([student.id, `${placement.grade}${i}`, year+1])
+                      }
+                    }
+                    db.query('REPLACE takes (id, sectionID, year) VALUES ?;', [takes], function (err) {
+                      if (err) {
+                        reject(err)
+                      } else {
+                        resolve(placement)
+                      }
+                    })
+                  }
+                })
+              }
+            })
+          })
+          .catch(err => {
+            reject(err)
+          })
       })
-    })
-
-  })
-}
-
-export function deletePlacement(grade) {
-  return new Promise((resolve, reject) => {
-    const filepath = getPath(grade)
-    fs.unlink(filepath, function (err) {
-      if (err) {
+      .catch(err => {
         reject(err)
-      } else {
-        resolve()
-      }
-    })
+      })
   })
 }
