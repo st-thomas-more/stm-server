@@ -1,6 +1,6 @@
 export function getStaff(emailID, db) {
   return new Promise((resolve, reject) => {
-    db.query('SELECT `*` FROM `staff` where `emailID` = ?;',
+    db.query('select *,staff.emailID from staff left outer join teaches on staff.emailID = teaches.emailID and teaches.year = (select year+1 from time) where staff.emailID = ?;',
       emailID,
       function (err, entities) {
         if (err) {
